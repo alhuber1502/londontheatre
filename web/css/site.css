@@ -1,0 +1,4963 @@
+/* London Stage, 1660-1800 — broadside / title-page overrides
+   Two themes: "light" (paper) and "dark" (candlelit theatre).
+   Display type is Plantin Condensed Bold; body text is Plantin Regular/Italic. */
+
+/* ---------- Tokens ---------- */
+:root {
+  --radius: 1px;
+  --rule-hair: 1px;
+  --maxw-broadside: 1160px;
+  --maxw-playbill: 760px;
+  --maxw-prose: 720px;
+  --topbar-h: 56px;
+}
+
+[data-theme="light"], :root {
+  /* Legacy cream tokens — retuned so the page reads as layered surfaces
+     (bone-white cards lifted over a warm parchment body, with a cooler
+     stone hero band) instead of one uniform sepia wash. */
+  --paper:        #f1e6cf;   /* body — warm parchment (the "page") */
+  --paper-deep:   #e6d9bd;   /* table zebra, scroll state, soft recess */
+  --paper-shade:  #d9caa9;   /* map canvas, deepest recessed surface */
+  --ink:          #2a1f14;
+  --ink-soft:     #3b2a1a;
+  --ink-faint:    #6b5840;
+  --rule:         #bfa87c;
+  --brick:        #7a2e1f;
+  --brick-deep:   #5e2217;
+  --burgundy:     #8b3a2c;
+  --teal:         #4a6b6e;
+  --gold:         #8a6d2a;
+  --shadow-hair:  rgba(42,31,20,0.12);
+  --shadow-lift:  rgba(42,31,20,0.18);
+  --image-filter: none;
+
+  /* Surface hierarchy — new tokens. Four distinguishable tones:
+       topbar (ink)  >  hero (cool stone)  >  body (parchment)  <  card (bone) */
+  --surface-body:   var(--paper);       /* html/body — warm parchment */
+  --surface-hero:   #e0d6bd;            /* cool stone band — page-head sections */
+  --surface-raised: #faf4e2;            /* card face — bone-white, lifted over body */
+  --surface-sunken: var(--paper-shade); /* deepest recess (map canvas) */
+
+  /* Topbar — intentionally dark in light mode so the page has a firm
+     anchor instead of blending into the cream. */
+  --ink-topbar-bg:        #1d1510;      /* near-black, warm */
+  --ink-topbar-bg-scroll: #140e09;      /* one step darker on scroll */
+  --ink-topbar-fg:        #f1e6cf;      /* ivory — matches body paper */
+  --ink-topbar-fg-soft:   #d9c9a8;      /* muted ivory for nav links */
+  --ink-topbar-fg-faint:  #8a7a5c;      /* separators, dates, muted items */
+  --ink-topbar-rule:      #3a2c1d;      /* border under the bar */
+  --ink-topbar-accent:    #c9a25a;      /* active-nav underline, toggle hover */
+
+  /* Heatmap — five-step brick ramp against the parchment rest state. */
+  --heat-0: #efe3c4;
+  --heat-1: #e2c7a1;
+  --heat-2: #d19c72;
+  --heat-3: #b56a4a;
+  --heat-4: #8f3e28;
+  --heat-5: #5e2217;
+}
+
+[data-theme="dark"] {
+  --paper:        #1a140d;
+  --paper-deep:   #211912;
+  --paper-shade:  #271d14;
+  --ink:          #efe2c8;
+  --ink-soft:     #d9c9a8;
+  --ink-faint:    #a08b66;
+  --rule:         #5a4a30;
+  --brick:        #c56a54;
+  --brick-deep:   #a04a34;
+  --burgundy:     #b35542;
+  --teal:         #7a9a9c;
+  --gold:         #c9a25a;
+  --shadow-hair:  rgba(0,0,0,0.55);
+  --shadow-lift:  rgba(0,0,0,0.7);
+  --image-filter: brightness(0.92) contrast(1.04);
+
+  /* Surface hierarchy in dark mode: the existing three paper tones
+     already form a lifted/recessed scale; map surface tokens to them
+     so shared rules (.rep-card, .map-head, etc.) behave correctly. */
+  --surface-body:   var(--paper);
+  --surface-hero:   var(--paper-deep);
+  --surface-raised: var(--paper-deep);
+  --surface-sunken: var(--paper-shade);
+
+  /* Topbar in dark mode keeps the existing near-black feel but goes
+     through the shared tokens so the rule below doesn't need branches. */
+  --ink-topbar-bg:        #0f0a06;
+  --ink-topbar-bg-scroll: #070402;
+  --ink-topbar-fg:        var(--ink);
+  --ink-topbar-fg-soft:   var(--ink-soft);
+  --ink-topbar-fg-faint:  var(--ink-faint);
+  --ink-topbar-rule:      var(--rule);
+  --ink-topbar-accent:    var(--gold);
+
+  /* Heatmap — same ramp, re-pitched against dark parchment. */
+  --heat-0: #2d2118;
+  --heat-1: #4a3420;
+  --heat-2: #7a4a2d;
+  --heat-3: #a05f3a;
+  --heat-4: #c97a4f;
+  --heat-5: #e5a17a;
+}
+
+/* ---------- Base ---------- */
+html, body {
+  background: var(--surface-body);
+  color: var(--ink);
+}
+body { margin: 0; min-height: 100vh;
+    display: flex;
+    flex-direction: column;}
+html { scroll-behavior: smooth; }
+
+a {
+  color: var(--brick);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 120ms ease, border-bottom-color 120ms ease;
+}
+a:hover,
+a:focus-visible {
+  color: var(--brick-deep);
+  border-bottom-color: var(--brick-deep);
+  outline: none;
+}
+[data-theme="dark"] a:hover,
+[data-theme="dark"] a:focus-visible {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+hr.rule {
+  border: 0;
+  border-top: var(--rule-hair) solid var(--rule);
+  margin: 0;
+}
+
+/* ---------- Sticky header ----------
+   Always dark, regardless of theme. In light mode the bar becomes a
+   near-black anchor against the parchment body; in dark mode it sits
+   one step darker than the page. All colours flow through the
+   --ink-topbar-* tokens so theme switching is handled at the root. */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--ink-topbar-bg);
+  border-bottom: 1px solid var(--ink-topbar-rule);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.35), 0 2px 10px -4px rgba(0,0,0,0.45);
+  transition: box-shadow 160ms ease, background 160ms ease;
+}
+.topbar.is-scrolled {
+  background: var(--ink-topbar-bg-scroll);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.55), 0 6px 16px -6px rgba(0,0,0,0.6);
+}
+.topbar-inner {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+  padding: 0 0;
+  height: var(--topbar-h);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* Site title/mark — reads against the dark topbar in both themes. */
+.topbar-title {
+  border-bottom: none;
+  color: var(--ink-topbar-fg);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  white-space: nowrap;
+  font-size: 1rem;
+  line-height: 1;
+}
+.topbar-title:hover,
+.topbar-title:focus-visible {
+  border-bottom: none;
+  color: var(--ink-topbar-fg);
+}
+.topbar-title .mark-london {
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 1.25rem;
+  color: var(--ink-topbar-fg);
+}
+.topbar-title .mark-stage {
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--ink-topbar-fg);
+  letter-spacing: 0.005em;
+}
+.topbar-title .mark-dates {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-topbar-fg-faint);
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
+/* Nav */
+.topbar-nav {
+  justify-self: right;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+.topbar-nav a {
+  border-bottom: none;
+  color: var(--ink-topbar-fg-soft);
+  padding: 0.15rem 0;
+}
+.topbar-nav a:hover,
+.topbar-nav a:focus-visible {
+  color: var(--ink-topbar-fg);
+  border-bottom-color: transparent;
+}
+.topbar-nav a.is-active {
+  color: var(--ink-topbar-fg);
+  border-bottom: 2px solid var(--ink-topbar-accent);
+  padding-bottom: 1px;
+}
+.topbar-nav a.is-muted {
+  color: var(--ink-topbar-fg-faint);
+  pointer-events: none;
+  opacity: 0.7;
+}
+.topbar-nav .sep {
+  color: var(--ink-topbar-fg-faint);
+  font-size: 0.95rem;
+  line-height: 1;
+  user-select: none;
+}
+
+/* Controls group (nav-toggle + theme-toggle) — the third grid column. */
+.topbar-controls {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Hamburger — hidden at wide viewports, shown below 1150px. */
+.nav-toggle {
+  display: none;
+  width: 40px;
+  height: 32px;
+  padding: 7px 11px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--ink-topbar-rule);
+  border-radius: var(--radius);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 120ms ease;
+}
+.nav-toggle:hover,
+.nav-toggle:focus-visible {
+  border-color: var(--ink-topbar-accent);
+  outline: none;
+}
+.nav-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--ink-topbar-fg-soft);
+  border-radius: 1px;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+.topbar.is-nav-open .nav-toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.topbar.is-nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
+.topbar.is-nav-open .nav-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* Nav collapse at 1150px */
+@media (max-width: 1150px) {
+  .nav-toggle { display: inline-flex; }
+
+  .topbar-inner { position: relative; }
+
+  .topbar-nav {
+    display: none;
+    position: absolute;
+    top: var(--topbar-h);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: var(--ink-topbar-bg-scroll);
+    border-bottom: 1px solid var(--ink-topbar-rule);
+    box-shadow: 0 6px 18px -4px rgba(0,0,0,0.55);
+    z-index: 9;
+  }
+  .topbar.is-nav-open .topbar-nav { display: flex; }
+
+  .topbar-nav a {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--ink-topbar-rule);
+  }
+  .topbar-nav a.is-active { border-bottom-color: var(--ink-topbar-rule); padding-bottom: 0.7rem; }
+  .topbar-nav a:last-of-type { border-bottom: none; }
+  .topbar-nav .sep { display: none; }
+}
+
+/* Theme toggle — lives inside the dark topbar in both themes. */
+.theme-toggle {
+  width: 40px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--ink-topbar-fg);
+  border: 1px solid var(--ink-topbar-rule);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 4px 0 0 0;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  background: rgba(255,255,255,0.06);
+  border-color: var(--ink-topbar-accent);
+  outline: none;
+  color: var(--ink-topbar-accent);
+}
+.theme-toggle .glyph-sun { display: none; }
+.theme-toggle .glyph-moon { display: inline; }
+[data-theme="dark"] .theme-toggle .glyph-sun { display: inline; }
+[data-theme="dark"] .theme-toggle .glyph-moon { display: none; }
+
+@media (max-width: 720px) {
+  .topbar-inner { gap: 0.6rem; padding: 0 0.9rem; }
+  .topbar-title .mark-dates { display: none; }
+}
+
+/* ---------- Broadside hero (home) ---------- */
+.broadside {
+  background: var(--surface-hero);
+  border-bottom: 1px solid var(--rule);
+  padding: 3rem 1.25rem 2.5rem;
+}
+.broadside-inner {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 55fr 45fr;
+  gap: 2rem;
+  align-items: stretch;
+}
+.broadside-plate {
+  border: 1px solid var(--rule);
+  background: var(--surface-raised);
+  overflow: hidden;
+  min-height: 360px;
+  display: flex;
+}
+.broadside-plate img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  max-height: 62vh;
+  object-fit: cover;
+  object-position: center 45%;
+  filter: var(--image-filter);
+}
+
+.titlepage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.25rem 0;
+}
+.titlepage-kicker {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  font-size: .85rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+  margin: 0;
+}
+.titlepage-rule {
+  width: 2rem;
+  height: 0;
+  border-top: 1px solid var(--rule);
+  margin: 0;
+}
+.titlepage-display {
+  margin: 0;
+  color: var(--ink);
+  line-height: 0.95;
+}
+.titlepage-display .line-1,
+.titlepage-display .line-2 {
+  display: block;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.titlepage-display .line-1 {
+  font-size: clamp(2.6rem, 6vw, 4.6rem);
+}
+.titlepage-display .line-2 {
+  font-size: clamp(3.6rem, 8vw, 6.4rem);
+}
+.titlepage-display .line-3 {
+  display: block;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  color: var(--ink-soft);
+  letter-spacing: 0.01em;
+  padding-left: 0.4em;
+  margin-top: 0.25em;
+  line-height: 1.1;
+}
+.titlepage-orn {
+  margin: 0.4rem 0 0;
+  font-size: 1rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.8em;
+  padding-left: 0.1em;
+  line-height: 1;
+  align-self: center;
+}
+.titlepage-standfirst {
+  margin: 0;
+  font-weight: 400;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+/*  max-width: 38ch;*/
+}
+.titlepage-imprint {
+  margin: 0.6rem 0 0;
+  color: var(--ink-faint);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 900px) {
+  .broadside { padding: 1.75rem 1rem 1.75rem; }
+  .broadside-inner {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .broadside-plate { min-height: 240px; }
+  .broadside-plate img { min-height: 240px; max-height: 48vh; }
+  .titlepage { text-align: left; }
+}
+
+/* ---------- Playbill attractions ---------- */
+.attractions {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+  padding: 3rem 1.25rem 1.5rem;
+}
+.attractions-heading {
+  margin: 0 0 1.5rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 1rem;
+  color: var(--ink-faint);
+  text-align: center;
+}
+.attractions-heading::before,
+.attractions-heading::after {
+  content: '';
+  display: inline-block;
+  width: 2rem;
+  height: 1px;
+  background: var(--rule);
+  vertical-align: middle;
+  margin: 0 0.9rem;
+}
+.playbill {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.playbill-row {
+  display: grid;
+  grid-template-columns: 14rem 1fr;
+  column-gap: 2rem;
+  align-items: baseline;
+  padding: 1.5rem 0.25rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink);
+  border-bottom: none;
+  transition: background 140ms ease, color 140ms ease;
+}
+.playbill-row:first-child { border-top: none; }
+.playbill-row:last-child { border-bottom: 1px solid var(--rule); }
+
+.playbill-row .pb-label {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  line-height: 1;
+  color: var(--ink);
+  transition: color 140ms ease;
+  align-self: end;
+}
+.playbill-row .pb-desc {
+  font-weight: 400;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+.playbill-row.is-link { cursor: pointer; }
+.playbill-row.is-link:hover {
+  background: var(--paper-deep);
+  color: var(--ink);
+}
+.playbill-row.is-link:hover .pb-label {
+  color: var(--brick);
+}
+[data-theme="dark"] .playbill-row.is-link:hover .pb-label {
+  color: var(--brick);
+}
+.playbill-row.is-forthcoming {
+  color: var(--ink-faint);
+  cursor: default;
+}
+.playbill-row.is-forthcoming .pb-label {
+  color: var(--ink-faint);
+}
+.playbill-row.is-forthcoming .pb-desc {
+  color: var(--ink-faint);
+}
+.playbill-row.is-forthcoming .pb-desc .pb-forth {
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  margin-left: 0.35em;
+}
+a.playbill-row { border-bottom: none; }
+a.playbill-row:hover,
+a.playbill-row:focus-visible { border-bottom: none; }
+a.playbill-row:focus-visible .pb-label { color: var(--brick); }
+
+@media (max-width: 640px) {
+  .playbill-row {
+    grid-template-columns: 1fr;
+    row-gap: 0.3rem;
+    padding: 1.15rem 0.1rem;
+  }
+}
+
+/* ---------- Ledger strip ---------- */
+.ledger {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 3rem;
+  text-align: center;
+  color: var(--ink);
+}
+.ledger-line {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  gap: 0 1.6rem;
+  row-gap: 1rem;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 1.25rem 0.25rem;
+}
+.ledger-entry {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 7rem;
+}
+.ledger-figure {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 1.3rem;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.ledger-label {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+}
+.ledger-dot {
+  color: var(--ink-faint);
+  font-size: 0.9rem;
+  line-height: 1;
+  align-self: center;
+  user-select: none;
+}
+@media (max-width: 720px) {
+  .ledger-line { gap: 0 1rem; row-gap: 0.9rem; }
+  .ledger-dot { display: none; }
+  .ledger-entry { min-width: 40%; }
+  .ledger-figure { font-size: 1.15rem; }
+}
+
+/* ---------- Map page ---------- */
+.map-head {
+  background: var(--surface-hero);
+  border-bottom: 1px solid var(--rule);
+  padding: 2rem 1.25rem 1.75rem;
+}
+.map-head-inner {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+}
+.map-head-kicker {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: .85rem;
+  color: var(--ink-faint);
+  margin: 0 0 0.6rem;
+}
+.map-head-title {
+  margin: 0 0 0.55rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  line-height: 0.98;
+  color: var(--ink);
+  font-size: clamp(2rem, 4.8vw, 3.2rem);
+}
+.map-head-standfirst {
+  margin: 0;
+  font-weight: 400;
+  color: var(--ink-soft);
+  /* max-width: 60ch; */
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.map-section {
+  position: relative;
+  width: var(--maxw-broadside);
+  margin:auto;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-shade);
+}
+#map {
+/*  width: 100%;*/
+  height: 70vh;
+  min-height: 460px;
+  background: var(--paper-shade);
+  z-index: 0;
+}
+.leaflet-container { font-family: 'Plantin MT Pro', serif; background: var(--paper-shade); }
+.leaflet-control-attribution {
+  background: rgba(244,234,215,0.85) !important;
+  color: var(--ink-faint) !important;
+  font-size: 0.7rem; font-family: 'Plantin MT Pro', serif;
+  border-top: 1px solid var(--rule);
+}
+[data-theme="dark"] .leaflet-control-attribution {
+  background: rgba(26,20,13,0.85) !important;
+  color: var(--ink-faint) !important;
+}
+.leaflet-control-attribution a { color: var(--brick); border-bottom: none; }
+.leaflet-control-zoom a,.leaflet-control-custom a {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  border-color: var(--rule) !important;
+  font-family: 'Plantin MT Pro', serif;
+}
+.leaflet-control-layers a, .leaflet-control-layers-expanded, .leaflet-control-custom a {
+  background-color: var(--paper) !important;
+}
+.leaflet-control-layers-expanded label {
+  color: var(--ink) !important;
+}
+input {
+    accent-color: var(--ink);
+}
+.leaflet-control-zoom a:hover { background: var(--paper-deep) !important; }
+
+.leaflet-popup-content-wrapper {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 1px;
+  box-shadow: 0 2px 6px var(--shadow-lift);
+}
+.leaflet-popup-tip { background: var(--paper); border: 1px solid var(--rule); }
+.leaflet-popup-content { margin: 0.75rem 0.9rem; line-height: 1.45; }
+.popup-name { font-weight: 600; font-size: 1rem; margin: 0 0 0.25rem 0; color: var(--ink); }
+.popup-meta { margin: 0 0 0.35rem 0; font-size: 0.9rem; color: var(--ink-soft); }
+.popup-code { color: var(--ink-faint); font-size: 0.75rem; letter-spacing: 0.05em; margin: 0; }
+.popup-decade { color: var(--brick); font-size: 0.78rem; margin: 0 0 0.35rem 0; letter-spacing: 0.02em; text-transform: none; }
+.popup-link { color: var(--ink); border-bottom: 1px solid var(--rule); }
+.popup-link:hover, .popup-link:focus-visible { color: var(--brick); border-bottom-color: var(--brick); }
+[data-theme="dark"] .popup-link:hover, [data-theme="dark"] .popup-link:focus-visible { color: var(--gold); border-bottom-color: var(--gold); }
+.popup-cta { margin: 0.5rem 0 0; letter-spacing: 0.08em; }
+.popup-cta a { color: var(--brick); }
+[data-theme="dark"] .popup-cta a { color: var(--gold); }
+
+.map-legend {
+  position: absolute; right: 1rem; bottom: 2.1rem;
+  background: rgba(244,234,215,0.92);
+  border: 1px solid var(--rule);
+  padding: 0.55rem 0.75rem;
+  z-index: 500;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  max-width: 220px;
+}
+[data-theme="dark"] .map-legend { background: rgba(26,20,13,0.92); color: var(--ink-soft); }
+.legend-title { color: var(--ink); margin-bottom: 0.25rem; }
+.legend-row { display: flex; align-items: center; gap: 0.5rem; }
+.swatch { display: inline-block; width: 14px; height: 14px; border-radius: 50%; }
+.swatch-exact { background: var(--brick); border: 1px solid var(--brick-deep); }
+.swatch-approx {
+  background: rgba(122,46,31,0.28);
+  border: 1px dashed var(--brick);
+  width: 12px; height: 12px;
+}
+.legend-note { margin-top: 0.3rem; font-stretch: normal; text-transform: none; font-weight: 400; font-style: italic; font-size: 0.72rem; letter-spacing: 0; color: var(--ink-faint); }
+
+/* ---------- Map timeline slider ---------- */
+.map-timeline {
+  position: absolute;
+  left: 1rem; right: 1rem; top: 1rem;
+  z-index: 500;
+  background: rgba(244,234,215,0.94);
+  border: 1px solid var(--rule);
+  padding: 0.6rem 0.9rem 0.5rem;
+  max-width: 720px;
+  margin-left: auto; margin-right: auto;
+  box-shadow: 0 1px 3px var(--shadow-hair);
+  z-index:0;
+}
+.map-timeline-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.map-timeline-row .timeline-track { flex: 1 1 auto; }
+/* Wrap slider + ticks in a column so the ticks span exactly the slider's
+   width, not the full timeline container (which would push 1800 past the
+   slider end). */
+.map-timeline-row .timeline-stack {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+.timeline-stack .timeline-track { flex: 1 1 auto; width: 100%; }
+[data-theme="dark"] .map-timeline { background: rgba(26,20,13,0.92); }
+
+.timeline-label {
+  font-family: 'Plantin MT Pro Condensed', 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  min-width: 5.2rem;
+}
+.timeline-label .tl-decade { color: var(--brick); }
+
+.timeline-count {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+.timeline-toggle {
+  appearance: none;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.timeline-toggle:hover { background: var(--paper-deep); color: var(--ink); }
+.timeline-toggle.is-active { background: var(--brick); color: var(--paper); border-color: var(--brick-deep); }
+
+.timeline-track {
+  width: 100%;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 18px;
+  background: transparent;
+  cursor: pointer;
+}
+.timeline-track:focus { outline: none; }
+.timeline-track::-webkit-slider-runnable-track {
+  height: 3px; background: var(--rule); border-radius: 1px;
+}
+.timeline-track::-moz-range-track {
+  height: 3px; background: var(--rule); border-radius: 1px;
+}
+.timeline-track::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--brick); border: 1px solid var(--brick-deep);
+  margin-top: -6.5px;
+  box-shadow: 0 1px 2px var(--shadow-lift);
+}
+.timeline-track::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--brick); border: 1px solid var(--brick-deep);
+  box-shadow: 0 1px 2px var(--shadow-lift);
+}
+.timeline-track:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.timeline-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.62rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+  /* Padding matches the slider thumb radius (≈9px) so the tick at the
+     extremes lines up with the thumb's centre, not the track edge. */
+  padding: 0 9px;
+  margin-top: 0;
+  font-family: 'Plantin MT Pro', serif;
+}
+.timeline-ticks span { display: inline-block; }
+
+@media (max-width: 640px) {
+  .map-timeline { left: 0.5rem; right: 0.5rem; top: 0.5rem; padding: 0.5rem 0.7rem 0.45rem; }
+  .map-timeline-row { flex-wrap: wrap; gap: 0.5rem 0.6rem; }
+  .timeline-label { font-size: 0.95rem; min-width: 0; }
+  /* On phones, slider stack drops to its own row so the buttons can sit
+     above; the stack itself still keeps its slider+ticks alignment. */
+  .map-timeline-row .timeline-stack { flex: 1 1 100%; order: 5; }
+}
+
+.intro {
+  max-width: var(--maxw-broadside); margin: 0 auto;
+  padding: 2.25rem 1.25rem 2.5rem;
+  color: var(--ink-soft);
+}
+.intro p { margin: 0 0 1rem 0; }
+.intro em { color: var(--ink); }
+.intro-credit { color: var(--ink-faint); font-size: 0.75rem; }
+
+/* ---------- About page hero ---------- */
+.about-head {
+  background: var(--surface-hero);
+  border-bottom: 1px solid var(--rule);
+  padding: 2rem 1.25rem 1.75rem;
+}
+.about-head-inner {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+}
+.about-head-kicker {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: .85rem;
+  color: var(--ink-faint);
+  margin: 0 0 0.6rem;
+}
+.about-head-title {
+  margin: 0 0 0.55rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 0.98;
+  color: var(--ink);
+  font-size: clamp(2rem, 4.8vw, 3.2rem);
+}
+
+/* ---------- Prose ---------- */
+.prose {
+  max-width: var(--maxw-broadside); margin: 0 auto;
+  padding: 2.25rem 1.25rem 2.5rem;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+.prose h2 {
+  font-size: 1.05rem;
+  font-weight: 700; font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  margin: 2.25rem 0 0.6rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--rule);
+}
+.prose h2:first-of-type { margin-top: 0.5rem; }
+.prose p { margin: 0 0 1rem 0; }
+.prose em { color: var(--ink); }
+.prose ul { padding-left: 1.1rem; margin: 0 0 1rem 0; }
+.prose ul li { margin-bottom: 0.25rem;}
+
+.abbr-table {
+  width: auto; border-collapse: collapse;
+  margin: 0.4rem 0 1.25rem;
+  font-size: 0.95rem;
+}
+.abbr-table th, .abbr-table td {
+  padding: 0.4rem 1.25rem 0.4rem 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: baseline;
+  text-align: left;
+}
+.abbr-table thead th { color: var(--ink); }
+.abbr-table td:first-child { color: var(--ink); font-weight: 600; letter-spacing: 0.04em; }
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--rule);
+  background: var(--paper-deep);
+  color: var(--ink-faint);
+  padding: 1.75rem 1.25rem 2.25rem;
+  margin-top: auto !important;
+}
+.footer-inner {
+  max-width: var(--maxw-broadside); margin: 0 auto;
+  text-align: center;
+}
+.footer-line { margin: 0 0 0.6rem 0; font-size: 0.85rem; line-height: 1.6; }
+.footer-line:last-child { margin-bottom: 0; }
+.footer-line em,
+.footer-line cite { color: var(--ink-soft); font-style: italic; }
+.footer-line a { color: var(--ink-soft); }
+.footer-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 3rem;
+  text-align: left;
+  margin-bottom: 1.1rem;
+}
+.footer-col-tagline {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.footer-brand {
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin: 0 0 0.45rem;
+}
+.footer-source-head {
+  font-family: var(--ui-font, sans-serif);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 0.35rem;
+}
+.footer-byline { text-align: center; }
+@media (max-width: 600px) {
+  .footer-cols { grid-template-columns: 1fr; gap: 1rem 0; }
+}
+.hd-logo {
+  height: 1.1em;
+  width: auto;
+  vertical-align: -0.2em;
+  margin-left: 0.2em;
+}
+[data-theme="dark"] .hd-logo { filter: invert(.75) hue-rotate(180deg) brightness(1); }
+
+/* ---------- Repertoire page ---------- */
+.rep-head {
+  background: var(--surface-hero);
+  border-bottom: 1px solid var(--rule);
+  padding: 2rem 1.25rem 1.75rem;
+}
+.rep-head-inner {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+}
+.rep-head-kicker {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: .85rem;
+  color: var(--ink-faint);
+  margin: 0 0 0.6rem;
+}
+.rep-head-title {
+  margin: 0 0 0.55rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  line-height: 0.98;
+  color: var(--ink);
+  font-size: clamp(2rem, 4.8vw, 3.2rem);
+}
+.rep-head-standfirst {
+  margin: 0;
+  font-weight: 400;
+  color: var(--ink-soft);
+  /* max-width: 62ch; */
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+/* --- Featured cards --- */
+.rep-featured {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 1.25rem;
+}
+.rep-section-heading {
+  margin: 0 0 1.5rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 1rem;
+  color: var(--ink-faint);
+  text-align: center;
+}
+.rep-section-heading::before,
+.rep-section-heading::after {
+  content: '';
+  display: inline-block;
+  width: 2rem;
+  height: 1px;
+  background: var(--rule);
+  vertical-align: middle;
+  margin: 0 0.9rem;
+}
+.rep-card-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+}
+.rep-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  border: 1px solid var(--rule);
+  background: var(--surface-raised);
+  padding: 1.1rem 1.15rem 1.15rem;
+  position: relative;
+  box-shadow: 0 1px 0 var(--shadow-hair);
+  transition: border-color 140ms ease, background 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+}
+.rep-card:hover {
+  border-color: var(--ink-faint);
+  background: var(--surface-raised);
+  transform: translateY(-1px);
+  box-shadow: 0 1px 0 var(--shadow-hair), 0 8px 18px -8px var(--shadow-lift);
+}
+.rep-card-tag {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.66rem;
+  color: var(--ink-faint);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+.rep-card-tag::after {
+  content: '';
+  flex: 1 1 auto;
+  border-top: 1px solid var(--rule);
+  transform: translateY(1px);
+}
+.rep-card-title {
+  margin: 0;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.02;
+  color: var(--ink);
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+}
+.rep-card-count {
+  margin: 0;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 1rem;
+  color: var(--brick);
+}
+[data-theme="dark"] .rep-card-count { color: var(--brick); }
+.rep-card-years {
+  margin: 0;
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+}
+.rep-card-theatre {
+  margin: 0.25rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+.rep-card-theatre .rep-card-theatre-code {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  margin-left: 0.4rem;
+}
+
+/* --- Table section --- */
+.rep-table-section {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+.rep-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.25rem;
+  margin: 0 0 1rem;
+  padding: 0.85rem 0 0.9rem;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.rep-search {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 1 1 280px;
+  min-width: 240px;
+}
+.rep-search label {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+.rep-search input {
+  flex: 1 1 auto;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.35rem 0.55rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+.rep-search input:focus {
+  outline: none;
+  border-color: var(--ink-faint);
+  background: var(--paper-deep);
+}
+.rep-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+.rep-chip {
+  appearance: none;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.7rem;
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.rep-chip:hover { background: var(--paper-deep); color: var(--ink); }
+.rep-chip[aria-pressed="true"] {
+  background: var(--brick);
+  color: var(--paper);
+  border-color: var(--brick-deep);
+}
+[data-theme="dark"] .rep-chip[aria-pressed="true"] {
+  background: var(--brick-deep);
+  color: var(--paper);
+  border-color: var(--brick);
+}
+.rep-result-count {
+  margin-left: auto;
+  font-style: italic;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.rep-table-wrap {
+  overflow-x: auto;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.rep-table {
+  width: 100%;
+  /* `separate` is required for `position: sticky` to pin `<th>` cells
+     reliably across browsers — with `collapse`, cells share borders and
+     sticky headers slip behind the first data row on scroll. Cell
+     borders are re-applied individually below. */
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+.rep-table thead th {
+  /* Sticky was previously applied here so the header would pin below
+     the topbar on scroll, but the parent `.rep-table-wrap` has
+     `overflow-x: auto`, which makes it a scroll container and reparents
+     the sticky offset to the wrap's local coordinates. The net effect
+     was that the header rendered permanently offset by one row's
+     height and appeared *below* the first data row. Fixing that
+     properly means restructuring the wrap (or dropping horizontal
+     scroll), so for now the header just sits at the top of the table
+     in normal flow. */
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  padding: 0;
+  vertical-align: bottom;
+}
+.rep-table thead th button {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  width: 100%;
+  text-align: left;
+  padding: 0.55rem 0.6rem 0.55rem 0.6rem;
+  cursor: pointer;
+  color: var(--ink-faint);
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.68rem;
+  line-height: 1.1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.rep-table thead th button:hover { color: var(--ink); }
+.rep-table thead th[aria-sort="ascending"] button,
+.rep-table thead th[aria-sort="descending"] button {
+  color: var(--ink);
+}
+.rep-table thead th button .sort-glyph {
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  line-height: 1;
+}
+.rep-table thead th[aria-sort="ascending"] button .sort-glyph,
+.rep-table thead th[aria-sort="descending"] button .sort-glyph {
+  color: var(--brick);
+}
+.rep-table tbody td {
+  padding: 0.55rem 0.6rem;
+  border-top: 1px solid var(--rule);
+  vertical-align: baseline;
+  line-height: 1.35;
+}
+.rep-table tbody tr:first-child td { border-top: 0; }
+.rep-table tbody tr:nth-child(even) td { background: var(--paper-deep); }
+.rep-table tbody tr:hover td { background: var(--paper-shade); }
+/* Whole-row affordance: the <tr> carries a click handler that navigates
+   to the same place the first-cell <a> would — give it a pointer cursor
+   and a slightly warmer hover so the row reads as clickable at a glance. */
+.rep-table tbody tr.is-row-link { cursor: pointer; }
+.rep-table tbody tr.is-row-link:hover td { background: var(--paper-shade); }
+.rep-table tbody tr.is-row-link:hover .rep-title {
+  color: var(--brick-deep);
+  border-bottom: 1px solid var(--brick-deep);
+}
+[data-theme="dark"] .rep-table tbody tr.is-row-link:hover .rep-title {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+.rep-col-title { min-width: 14rem; }
+.rep-col-title .rep-title {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 1rem;
+  color: var(--ink);
+  line-height: 1.1;
+}
+/* Italic subtitle beneath the title: "John Gay · Comedy" — author names plus
+   a small-caps genre tag. Only renders for works that have TX attribution. */
+.rep-col-title .rep-subtitle {
+  display: block;
+  margin-top: 0.18rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.82rem;
+  line-height: 1.25;
+  color: var(--ink-soft);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.rep-col-title .rep-subtitle-genre {
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+}
+.rep-col-type {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+.rep-col-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.rep-col-num.is-perf { color: var(--ink); }
+.rep-col-num.is-dim { color: var(--ink-soft); }
+
+.rep-col-arc {
+  width: 96px;
+  min-width: 96px;
+  text-align: center;
+  vertical-align: middle;
+}
+/* Non-sortable headers don't get the inner <button> that carries the
+   header padding, so we have to apply the same vertical rhythm here so
+   the "Arc" label sits on the same baseline as Performances/First/Last
+   etc. Letter spacing/typography mirrors the sortable header button. */
+.rep-table thead th.rep-col-arc {
+  padding: 0.55rem 0.6rem;
+  text-align: center;
+  color: var(--ink-faint);
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.68rem;
+  line-height: 1.1;
+  vertical-align: bottom;
+}
+.rep-arc-svg { display: block; margin: 0 auto; overflow: visible; }
+.rep-spark-bar { fill: var(--brick); }
+[data-theme="dark"] .rep-spark-bar { fill: var(--gold); }
+@media (max-width: 640px) {
+  /* Decorative column — hide on phones to keep the table readable
+     without horizontal scroll for the primary numeric data. */
+  .rep-col-arc { display: none; }
+}
+
+.rep-load-more {
+  display: flex;
+  justify-content: center;
+  padding: 1.25rem 0 0;
+}
+.rep-load-more button {
+  appearance: none;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+  padding: 0.55rem 1.25rem;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+.rep-load-more button:hover {
+  background: var(--paper-deep);
+  border-color: var(--ink-faint);
+  color: var(--ink);
+}
+.rep-load-more button[disabled] {
+  opacity: 0.55;
+  cursor: default;
+  pointer-events: none;
+}
+.rep-table-empty,
+.rep-table-error {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  font-style: italic;
+  color: var(--ink-faint);
+}
+.rep-table-error { color: var(--brick); }
+
+@media (max-width: 900px) {
+  .rep-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .rep-card-grid { grid-template-columns: 1fr; }
+  .rep-controls { gap: 0.75rem; }
+  .rep-search { flex: 1 1 100%; }
+  .rep-result-count { margin-left: 0; }
+  /* thead is already in normal flow; sticky was removed above. */
+}
+
+/* ---------- People page ---------- */
+/* The hero, section heading, card grid, controls, chips, search, table,
+   and load-more reuse the .rep-* rules above unchanged. Additions below
+   cover only people-specific pieces: the role-mix bar, the signature
+   line, the tip note, and the deferred-link affordance for names. */
+
+.people-card { gap: 0.5rem; }
+.people-card-signature {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+.people-card-signature em {
+  font-style: italic;
+  color: var(--ink);
+}
+
+/* Role-mix bar: thin proportional strip of the five non-empty categories,
+   separated by hair rules. Tokens only — no new colour values. */
+.role-mix {
+  display: flex;
+  width: 100%;
+  height: 3px;
+  margin-top: 0.5rem;
+  background: var(--paper-shade);
+  border: 1px solid var(--rule);
+  border-radius: 1px;
+  overflow: hidden;
+  cursor: help;
+  line-height: 0;
+}
+.role-mix-seg {
+  display: block;
+  height: 100%;
+  min-width: 1px;
+  border-right: 1px solid var(--paper);
+}
+.role-mix-seg:last-child { border-right: 0; }
+.role-mix-seg.is-named    { background: var(--brick); }
+.role-mix-seg.is-titled   { background: var(--burgundy); }
+.role-mix-seg.is-generic  { background: var(--teal); }
+.role-mix-seg.is-ensemble { background: var(--gold); }
+.role-mix-seg.is-paratext { background: var(--ink-faint); }
+
+/* Table cell variant: the bar sits inside a table cell, so kill the
+   top margin (the cards gave it breathing room), widen the bar, and
+   let its parent cell control width. */
+.people-col-mix { min-width: 9rem; width: 12%; }
+.people-col-mix .role-mix {
+  margin-top: 0;
+  height: 6px;
+  min-width: 6rem;
+  max-width: 11rem;
+}
+
+/* Role-mix bar on the performer detail page: a wider, slightly taller
+   variant sitting beneath the head-sub metadata line. Has a small
+   legend below it so the colours are interpretable at a glance. */
+.performer-head-mix {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.4rem;
+  margin: 0.75rem auto 0;
+  max-width: 32rem;
+  width: 100%;
+}
+.performer-head-mix > div:first-child { width: 100%; }
+.performer-head-mix .role-mix {
+  margin-top: 0;
+  display: flex;
+  width: 100%;
+  height: 7px;
+}
+.performer-head-mix-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.9rem;
+  justify-content: center;
+  color: var(--ink-faint);
+  font-size: 0.65rem;
+}
+.performer-head-mix-legend .role-mix-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.performer-head-mix-legend .role-mix-swatch {
+  width: 8px; height: 8px;
+  border: 1px solid var(--rule);
+}
+[data-theme="dark"] .role-mix-seg { border-right-color: var(--paper); }
+
+/* Legend for the role-mix bar, sitting under the featured grid. */
+.people-card-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1.1rem;
+  margin: 1.25rem 0 0;
+  color: var(--ink-faint);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+}
+.role-mix-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.role-mix-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--rule);
+}
+.role-mix-swatch.is-named    { background: var(--brick); }
+.role-mix-swatch.is-titled   { background: var(--burgundy); }
+.role-mix-swatch.is-generic  { background: var(--teal); }
+.role-mix-swatch.is-ensemble { background: var(--gold); }
+.role-mix-swatch.is-paratext { background: var(--ink-faint); }
+
+/* The short editorial footnote above the table. */
+.people-note {
+  margin: 0 0 0.85rem;
+  color: var(--ink-faint);
+  font-size: 0.72rem;
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  /*max-width: 68ch;*/
+}
+
+/* Signature-role cell: roman, not a display caps. */
+.people-col-sig {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+.people-col-sig .people-sig { color: var(--ink); }
+.people-col-sig .is-dim { color: var(--ink-faint); }
+
+/* Deferred link: performer names look clickable but aren't yet wired.
+   Dotted underline reads as "coming" without promising a destination. */
+.is-link-pending {
+  color: var(--ink);
+  border-bottom: 1px dotted var(--rule);
+  padding-bottom: 1px;
+  cursor: default;
+}
+.rep-table tbody tr:hover .is-link-pending {
+  border-bottom-color: var(--ink-faint);
+}
+
+@media (max-width: 640px) {
+  .people-card-legend { gap: 0.35rem 0.7rem; }
+}
+
+/* ---------- Performer detail ----------
+   Title-page hero for a single performer, a short ledger strip, a
+   decade sparkline, two proportional bar lists, and two compact
+   columns of roles / co-stars. All colours flow through existing
+   tokens so dark mode and the broadside palette handle themselves. */
+
+.performer-head {
+  background: var(--surface-hero);
+  border-bottom: 1px solid var(--rule);
+  padding: 2rem 1.25rem 1.75rem;
+}
+.performer-head-inner {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+}
+.performer-head-kicker {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: .85rem;
+  color: var(--ink-faint);
+  margin: 0 0 0.6rem;
+}
+.performer-head-title {
+  margin: 0 0 0.55rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 0.98;
+  color: var(--ink);
+  font-size: clamp(2rem, 4.8vw, 3.2rem);
+}
+.performer-head-rule {
+  width: 2rem;
+  height: 0;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 0 0 0.8rem;
+}
+.performer-head-sub {
+  margin: 0;
+  font-weight: 400;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+/* "By Author · Composed by Composer" line beneath the work subtitle.
+   Sits a half-step closer to ink than the metadata above it. */
+.work-attribution {
+  margin: 0.45rem 0 0;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.work-attribution .work-person-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--rule);
+}
+.work-attribution .work-person-link:hover {
+  text-decoration-color: var(--ink);
+}
+
+/* Background section: source + editorial notes + TCP full-text links. */
+.work-source,
+.work-notes,
+.work-tcp {
+  margin: 0 0 0.8rem;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.work-source-label,
+.work-tcp-label {
+  margin-right: 0.4rem;
+  color: var(--ink-soft);
+}
+/* "in collection" badge after a TCP link — TCP id points at a multi-play
+   volume rather than a single play edition. */
+.work-tcp-coll {
+  margin-left: 0.25rem;
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+/* Shared section wrapper for performer page. Mirrors the padding/width
+   of .rep-featured / .rep-table-section so detail sections line up
+   with the rest of the site. */
+.rep-section {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+  padding: 2.25rem 1.25rem 0.5rem;
+}
+.rep-section:last-child { padding-bottom: 2.5rem; }
+.rep-section + .rep-section { padding-top: 1.75rem; }
+
+/* Pair two rep-sections side by side (e.g. Milestones + Cast across eras).
+   If one has [hidden], flex ignores it and the other fills the row. */
+.rep-section-pair {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+  padding: 2.25rem 1.25rem 0;
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+.rep-section-pair > .rep-section {
+  flex: 1;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+.rep-section-pair > .rep-section + .rep-section { padding-top: 0; }
+.rep-section + .rep-section-pair,
+.rep-section-pair + .rep-section { padding-top: 1.75rem; }
+@media (max-width: 640px) {
+  .rep-section-pair { flex-direction: column; gap: 1.5rem; }
+}
+
+/* Section heading in the performer detail — a left-aligned, ruled h2
+   instead of the centred dinkus-flanked heading used on landing pages. */
+.rep-h2 {
+  margin: 0 0 1.25rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.82rem;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.5rem;
+}
+
+/* Ledger strip — reuses home-page .ledger layout but with tighter
+   vertical rhythm, no surrounding horizontal rules (the section
+   already has its h2 rule). */
+.performer-ledger {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  gap: 0 1.6rem;
+  row-gap: 1rem;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 1.1rem 0.25rem;
+  margin: 0 0 0.25rem;
+  text-align: center;
+}
+.performer-ledger .ledger-entry { min-width: 8rem; }
+@media (max-width: 640px) {
+  .performer-ledger {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem 1rem;
+  }
+  .performer-ledger .ledger-entry { min-width: 0; }
+}
+
+/* Decade sparkline — inline SVG, full-width inside the section.
+   Bars use --brick; baseline uses --rule. The wrapping figure also
+   carries a bottom axis-label row for every-other decade. */
+.performer-sparkline {
+  margin: 0;
+  padding: 0.5rem 0 0;
+}
+.performer-sparkline svg {
+  display: block;
+  width: 100%;
+  height: 180px;
+  overflow: visible;
+}
+.performer-sparkline .spark-bar {
+  fill: var(--brick);
+  transition: fill 120ms ease;
+}
+.performer-sparkline .spark-bar.is-empty { fill: var(--rule); opacity: 0.45; }
+.performer-sparkline .spark-bar:hover { fill: var(--brick-deep); }
+[data-theme="dark"] .performer-sparkline .spark-bar:hover { fill: var(--gold); }
+.performer-sparkline .spark-baseline { stroke: var(--rule); stroke-width: 1; }
+.performer-sparkline .spark-label {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.66rem;
+  fill: var(--ink-faint);
+}
+.performer-sparkline .spark-active {
+  font-family: 'Plantin MT Pro', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  fill: var(--ink-soft);
+}
+
+/* Horizontal bar list — used for "Top theatres". Each row is a grid
+   with a left-aligned label, a bar that grows from the left, and a
+   right-aligned count. The bar sits in the background so the label
+   overlays it cleanly. */
+.performer-bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+.performer-bar-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem 0.55rem 0.6rem;
+  border-bottom: 1px solid var(--rule);
+  isolation: isolate;
+}
+.performer-bar-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--bar-w, 0%);
+  background: var(--brick);
+  opacity: 0.14;
+  z-index: -1;
+  transition: opacity 140ms ease;
+}
+[data-theme="dark"] .performer-bar-row::before { opacity: 0.22; }
+.performer-bar-row:hover::before { opacity: 0.24; }
+[data-theme="dark"] .performer-bar-row:hover::before { opacity: 0.32; }
+.performer-bar-label {
+  color: var(--ink);
+  font-size: 0.96rem;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+.performer-bar-label .bar-code {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  margin-left: 0.45rem;
+}
+.performer-bar-count {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+/* Roles played — two columns on desktop, single column below 720px.
+   Each item is a ruled row with the role name on the left and the
+   count as a trailing metadata-label figure on the right. */
+.performer-roles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  columns: 2;
+  column-gap: 2rem;
+  column-rule: 1px solid var(--rule);
+}
+.performer-roles li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.45rem 0.1rem;
+  border-top: 1px solid var(--rule);
+  break-inside: avoid;
+}
+.performer-roles li:first-child,
+.performer-roles li:nth-child(n + 0):first-child { border-top: 0; }
+.performer-role-name {
+  color: var(--ink);
+  font-size: 0.96rem;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  border-bottom-color: transparent;
+}
+a.performer-role-name:hover,
+a.performer-role-name:focus-visible {
+  color: var(--brick-deep);
+  border-bottom-color: var(--brick-deep);
+}
+[data-theme="dark"] a.performer-role-name:hover,
+[data-theme="dark"] a.performer-role-name:focus-visible {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.performer-role-count {
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* Whole-row click affordance on the custom `<ol>`/`<ul>` lists that
+   carry an internal `<a>` on the title. The inner anchor remains the
+   canonical keyboard/screen-reader link; this just extends the mouse
+   target so clicking the count or whitespace also navigates. */
+.performer-roles li.is-row-link,
+.performer-costars li.is-row-link { cursor: pointer; }
+.performer-roles li.is-row-link:hover,
+.performer-costars li.is-row-link:hover { background: var(--paper-deep); }
+.performer-roles li.is-row-link:hover .performer-role-name,
+.performer-costars li.is-row-link:hover > a {
+  color: var(--brick-deep);
+  border-bottom-color: var(--brick-deep);
+}
+[data-theme="dark"] .performer-roles li.is-row-link:hover .performer-role-name,
+[data-theme="dark"] .performer-costars li.is-row-link:hover > a {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+@media (max-width: 720px) {
+  .performer-roles { columns: 1; column-rule: 0; }
+}
+
+/* Co-stars — same rhythm as the bar list but with no proportional bar;
+   each name links to that performer's detail page. */
+.performer-costars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+.performer-costars li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--rule);
+}
+.performer-costars a {
+  color: var(--ink);
+  border-bottom: 1px solid transparent;
+  font-size: 0.96rem;
+  letter-spacing: 0.01em;
+}
+.performer-costars a:hover,
+.performer-costars a:focus-visible {
+  color: var(--brick);
+  border-bottom-color: var(--brick);
+}
+[data-theme="dark"] .performer-costars a:hover,
+[data-theme="dark"] .performer-costars a:focus-visible {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.performer-costars .performer-costar-count {
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---- Benefit nights list ---- */
+.performer-benefit-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.4rem 0 0.8rem;
+  border-top: 1px solid var(--rule);
+}
+.performer-benefit-row {
+  display: grid;
+  grid-template-columns: 9.5rem 1fr auto;
+  gap: 0.3rem 1rem;
+  align-items: baseline;
+  padding: 0.5rem 0.1rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.96rem;
+  letter-spacing: 0.01em;
+}
+.performer-benefit-date a {
+  color: var(--brick);
+  font-style: italic;
+  border-bottom: 1px solid transparent;
+  text-decoration: none;
+}
+.performer-benefit-date a:hover,
+.performer-benefit-date a:focus-visible {
+  border-bottom-color: var(--brick);
+}
+.performer-benefit-venue a {
+  color: var(--ink);
+  border-bottom: 1px solid transparent;
+  text-decoration: none;
+}
+.performer-benefit-venue a:hover,
+.performer-benefit-venue a:focus-visible {
+  color: var(--brick-deep);
+  border-bottom-color: var(--brick-deep);
+}
+[data-theme="dark"] .performer-benefit-date a { color: var(--gold); }
+[data-theme="dark"] .performer-benefit-date a:hover,
+[data-theme="dark"] .performer-benefit-date a:focus-visible,
+[data-theme="dark"] .performer-benefit-venue a:hover,
+[data-theme="dark"] .performer-benefit-venue a:focus-visible {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.performer-benefit-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.05rem;
+  text-align: right;
+  min-width: 7rem;
+}
+.performer-benefit-dr {
+  font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.performer-benefit-bd {
+  /* font family/weight/caps from .metadata-label */
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--burgundy);
+}
+[data-theme="dark"] .performer-benefit-bd { color: var(--gold); }
+.benefit-expand-btn {
+  display: block;
+  margin-top: 0.6rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--brick);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.benefit-expand-btn:hover,
+.benefit-expand-btn:focus-visible { color: var(--brick-deep); }
+[data-theme="dark"] .benefit-expand-btn { color: var(--gold); }
+[data-theme="dark"] .benefit-expand-btn:hover,
+[data-theme="dark"] .benefit-expand-btn:focus-visible { color: var(--paper); }
+@media (max-width: 560px) {
+  .performer-benefit-row {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    row-gap: 0.1rem;
+  }
+  .performer-benefit-venue { grid-column: 1; grid-row: 1; }
+  .performer-benefit-date  { grid-column: 1; grid-row: 2; font-size: 0.85em; color: var(--ink-faint); }
+  .performer-benefit-amount { grid-column: 2; grid-row: 1 / 3; }
+}
+
+.performer-pairing-label {
+  color: var(--ink);
+  font-size: 0.96rem;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+.performer-pairing-label .bar-code {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  margin-left: 0.45rem;
+}
+/* Genre tag on Signature works (venue.html). Same condensed-caps as the
+   ptype label, but a hair more colour so the two read as a pair, not a
+   duplicate. Distinguished by a leading dot separator. */
+.performer-pairing-label .bar-code.venue-work-genre {
+  color: var(--ink-soft);
+  margin-left: 0.3rem;
+}
+.performer-pairing-label .bar-code.venue-work-genre::before {
+  content: '\00b7';
+  margin-right: 0.3rem;
+  color: var(--ink-faint);
+}
+/* Inline year range following a linked name — reads as a running
+   caption rather than a code badge, so digits keep their rhythm and
+   don't get uppercase letter-spacing. */
+.performer-pairing-tenure {
+  font-family: 'Plantin MT Pro', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.82rem;
+  letter-spacing: 0;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+
+/* Venue page — programming-mix bar (share of ptypes at this playhouse). */
+.venue-mix { margin: 0.8rem 0 0; }
+.venue-mix-bar {
+  display: flex;
+  width: 100%;
+  height: 14px;
+  background: var(--paper-shade);
+  border: 1px solid var(--rule);
+  border-radius: 1px;
+  overflow: hidden;
+  cursor: help;
+  line-height: 0;
+}
+.venue-mix-seg {
+  display: block;
+  height: 100%;
+  min-width: 1px;
+  border-right: 1px solid var(--paper);
+}
+.venue-mix-seg:last-child { border-right: 0; }
+[data-theme="dark"] .venue-mix-seg { border-right-color: var(--paper); }
+.venue-mix-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  margin: 0.75rem 0 0;
+  color: var(--ink-faint);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+}
+.venue-mix-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.venue-mix-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--rule);
+}
+.venue-mix-figure { color: var(--ink-soft); }
+
+/* Role-profile section on performer.html — a taller, numbered echo of
+   the thin .role-mix strip in the head. Bar geometry mirrors
+   .venue-mix-bar; the segments inside reuse .role-mix-seg (so
+   colours, dividers and the dark-theme rule at the .role-mix-seg
+   block all carry over). The legend below reuses .venue-mix-legend
+   / .venue-mix-key / .venue-mix-figure so counts + percentages line
+   up with the venue page. */
+.role-type-fig {
+  margin: 0.8rem 0 0;
+  padding: 0;
+}
+/* Cast-across-eras grid on work.html — a compact decade-by-performer
+   matrix. Filled squares (brick/gold) encode relative activity within
+   each performer's run; faint outline squares hold the grid open in
+   decades the performer was absent. Uses display:table for column
+   alignment; the name column is truncated via the inner <a> because
+   table-cell width hints don't actually clip overflow. */
+.cast-grid-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0.6rem 0 0;
+}
+.cast-grid {
+  display: table;
+  border-collapse: collapse;
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.96rem;
+  white-space: nowrap;
+}
+.cast-grid-head,
+.cast-grid-row { display: table-row; }
+.cast-grid-head-name,
+.cast-grid-cell-name {
+  display: table-cell;
+  padding: 0 12px 0 0;
+  text-align: right;
+  vertical-align: middle;
+  color: var(--ink-soft);
+}
+/* table-cell width is a hint, not a clip; constrain the inner anchor
+   so long names ellipsis cleanly without expanding the column. */
+.cast-grid-cell-name a {
+  display: inline-block;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 120ms ease, border-bottom-color 120ms ease;
+}
+.cast-grid-cell-name a:hover {
+  color: var(--brick);
+  border-bottom-color: var(--brick);
+}
+[data-theme="dark"] .cast-grid-cell-name a:hover {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.cast-grid-head-decade,
+.cast-grid-cell-decade {
+  display: table-cell;
+  width: 22px;
+  padding: 1px 2px;
+  text-align: center;
+  vertical-align: middle;
+}
+.cast-grid-head-decade {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.66rem;
+  color: var(--ink-faint);
+  padding-bottom: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.cast-grid-row {
+  height: 30px;
+  transition: background-color 140ms ease;
+}
+.cast-grid-row:hover .cast-grid-cell-name,
+.cast-grid-row:hover .cast-grid-cell-decade {
+  background: var(--paper-deep);
+}
+.cast-grid-row:hover .cast-cell-dot { opacity: 1 !important; }
+.cast-grid-row:hover .cast-cell-empty { opacity: 0.5; }
+.cast-cell-dot {
+  display: block;
+  width: 14px;
+  height: 14px;
+  background: var(--brick);
+  border-radius: 2px;
+  margin: auto;
+  transition: opacity 140ms ease;
+}
+.cast-cell-empty {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  margin: auto;
+  opacity: 0.28;
+  transition: opacity 140ms ease;
+}
+[data-theme="dark"] .cast-cell-dot { background: var(--gold); }
+
+.role-type-bar {
+  display: flex;
+  width: 100%;
+  height: 14px;
+  background: var(--paper-shade);
+  border: 1px solid var(--rule);
+  border-radius: 1px;
+  overflow: hidden;
+  cursor: help;
+  line-height: 0;
+}
+
+.venue-mix-seg.is-p,    .venue-mix-swatch.is-p    { background: var(--brick); }
+.venue-mix-seg.is-a,    .venue-mix-swatch.is-a    { background: var(--burgundy); }
+.venue-mix-seg.is-d,    .venue-mix-swatch.is-d    { background: var(--teal); }
+.venue-mix-seg.is-s,    .venue-mix-swatch.is-s    { background: var(--gold); }
+.venue-mix-seg.is-m,    .venue-mix-swatch.is-m    { background: var(--brick-deep); }
+.venue-mix-seg.is-b,    .venue-mix-swatch.is-b    { background: #8b6e5c; }
+.venue-mix-seg.is-e,    .venue-mix-swatch.is-e    { background: var(--ink-soft); }
+.venue-mix-seg.is-i,    .venue-mix-swatch.is-i    { background: #a8895c; }
+.venue-mix-seg.is-o,    .venue-mix-swatch.is-o    { background: var(--ink-faint); }
+.venue-mix-seg.is-u,    .venue-mix-swatch.is-u    { background: var(--rule); }
+
+/* Footnote under the roles section — same treatment as .people-note. */
+.performer-note {
+  margin: 0.9rem 0 0;
+  color: var(--ink-faint);
+  font-size: 0.82rem;
+  font-style: italic;
+  letter-spacing: 0.01em;
+  /* max-width: 68ch; */
+  text-transform: none;
+  font-weight: 400;
+}
+
+/* Not-found blank state — a title-page-styled recess. */
+.performer-missing {
+  max-width: var(--maxw-prose);
+  margin: 2rem auto 3rem;
+  padding: 2.5rem 1.5rem;
+  border: 1px solid var(--rule);
+  background: var(--surface-raised);
+  text-align: center;
+  color: var(--ink-soft);
+}
+.performer-missing h2 {
+  margin: 0 0 0.6rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 1.2rem;
+  color: var(--ink);
+}
+.performer-missing p { margin: 0 0 1rem; font-style: italic; }
+.performer-missing a {
+  color: var(--brick);
+  border-bottom: 1px solid var(--brick);
+}
+
+/* ---------- Calendar heatmap ---------- */
+.calendar-figure {
+  position: relative; /* tooltip is absolute-positioned against this */
+  margin: 1.4rem auto 0.6rem;
+  max-width: 1500px;
+  padding: 0;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 0 var(--shadow-hair);
+}
+.calendar-scroll {
+  position: relative;
+  overflow-x: auto;
+  padding: 0.6rem 0.8rem 0.8rem;
+}
+.calendar-svg {
+  display: block;
+  min-width: 960px;
+  width: 100%;
+  height: auto;
+  font-family: 'Plantin MT Pro', serif;
+}
+.calendar-row-bg {
+  fill: var(--heat-0);
+  opacity: 0.55;
+}
+.calendar-cell {
+  /* No `fill` here: CSS `fill` would override the per-cell `fill` attribute
+     set in JS and flatten every cell to the same colour. The bucketed fill
+     comes from calendar.js `fillFor(count, max)`. */
+  cursor: pointer;
+  shape-rendering: crispEdges;
+  transition: opacity 120ms ease;
+}
+.calendar-cell:hover { opacity: 0.78; }
+.calendar-month-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: var(--ink-faint);
+  font-stretch: condensed;
+  font-weight: 600;
+}
+.calendar-month-rule {
+  stroke: var(--rule);
+  stroke-width: 0.5;
+  opacity: 0.6;
+}
+.calendar-year-label {
+  font-size: 10px;
+  fill: var(--ink-faint);
+  font-style: italic;
+}
+.calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.8rem 0.9rem;
+  border-top: 1px solid var(--rule);
+  margin-top: 0.2rem;
+  flex-wrap: wrap;
+  color: var(--ink-faint);
+}
+.calendar-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  border: 1px solid var(--rule);
+}
+.calendar-legend-sep {
+  margin: 0 0.25rem;
+  color: var(--rule);
+}
+.calendar-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  box-shadow: 0 2px 6px var(--shadow-lift);
+  padding: 0.4rem 0.6rem;
+  /* Body rhythm rather than label-caps so dates & counts stay legible,
+     even when the tooltip markup is appended with .metadata-label. */
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 400;
+  font-stretch: normal;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  max-width: 18rem;
+  z-index: 20; /* above the sticky topbar (z-index 10) */
+}
+.calendar-tooltip-date {
+  display: block;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.82rem;
+  color: var(--brick-deep);
+  margin-bottom: 0.1rem;
+}
+[data-theme="dark"] .calendar-tooltip-date { color: var(--gold); }
+.calendar-tooltip-count {
+  display: block;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+.calendar-tooltip-cta {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--ink-faint);
+  font-style: italic;
+  font-size: 0.75rem;
+}
+
+.calendar-picker {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  max-width: var(--maxw-prose);
+  margin: 0.8rem auto 0;
+  padding: 0.4rem 0;
+}
+.calendar-picker-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 8rem;
+}
+.calendar-picker-field span {
+  color: var(--ink-faint);
+  font-size: 0.75rem;
+}
+.calendar-picker-field .form-select {
+  /* Use background-color (not shorthand) so Bootstrap's caret SVG stays in place. */
+  background-color: var(--surface-raised);
+  color: var(--ink);
+  border-color: var(--rule);
+  font-family: 'Plantin MT Pro', serif;
+}
+[data-theme="dark"] .calendar-picker-field .form-select {
+  /* Bootstrap's default caret is a dark chevron; in dark mode it vanishes
+     against the paper-deep background, so repaint it in ivory. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23d9c9a8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+}
+.calendar-picker-field .form-select:focus {
+  border-color: var(--ink-faint);
+  box-shadow: none;
+  outline: none;
+}
+.calendar-picker #cp-go {
+  /* Styled to match the site's other small actions (rep-chip, rep-load-more)
+     rather than the Bootstrap outline-dark default so it reads the same in
+     light and dark. */
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+  line-height: 1;
+  padding: 0.5rem 0.9rem;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+.calendar-picker #cp-go:hover,
+.calendar-picker #cp-go:focus-visible {
+  background: var(--brick);
+  border-color: var(--brick-deep);
+  color: var(--paper);
+  outline: none;
+}
+[data-theme="dark"] .calendar-picker #cp-go:hover,
+[data-theme="dark"] .calendar-picker #cp-go:focus-visible {
+  background: var(--brick-deep);
+  border-color: var(--brick);
+  color: var(--paper);
+}
+.calendar-picker-note {
+  /* Reads as a running caption — override any metadata-label shoutiness
+     that the HTML hand may apply. */
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 400;
+  font-stretch: normal;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.9rem;
+  color: var(--ink-faint);
+  font-style: italic;
+  padding-bottom: 0.35rem;
+}
+
+/* ---------- Day / this-day view ---------- */
+.day-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  /*max-width: var(--maxw-prose);*/
+  margin: 0 auto 1.2rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.day-nav-link {
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+}
+.day-nav-link:hover,
+.day-nav-link:focus-visible { color: var(--brick-deep); }
+#day-mmdd {
+  font-style: italic;
+  color: var(--brick);
+}
+
+.day-bills {
+  max-width: var(--maxw-prose);
+  margin: 0 auto;
+}
+.day-bills-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.2rem 0 1.2rem;
+  border-top: 1px solid var(--rule);
+}
+.day-bill {
+  padding: 0.7rem 0.2rem 0.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+.day-bill-venue {
+  margin: 0 0 0.15rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+.day-bill-venue a {
+  color: var(--ink-soft);
+  border-bottom-color: transparent;
+}
+.day-bill-venue a:hover,
+.day-bill-venue a:focus-visible {
+  color: var(--brick-deep);
+  border-bottom-color: var(--brick-deep);
+}
+[data-theme="dark"] .day-bill-venue a:hover,
+[data-theme="dark"] .day-bill-venue a:focus-visible {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+/* "at King's" pill rendered next to the resident venue name when the
+   company performed at another house — e.g. DL during the 1791–94 rebuild. */
+.day-bill-displaced {
+  display: inline-block;
+  margin-left: 0.45rem;
+  padding: 0.02rem 0.35rem;
+  border: 1px solid var(--rule);
+  background: var(--paper-deep);
+  color: var(--ink-faint);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  vertical-align: 0.08em;
+}
+.day-bill-displaced a {
+  color: var(--ink-faint);
+  border-bottom-color: transparent;
+}
+.day-bill-displaced a:hover,
+.day-bill-displaced a:focus-visible {
+  color: var(--brick-deep);
+  border-bottom-color: var(--brick-deep);
+}
+[data-theme="dark"] .day-bill-displaced a:hover,
+[data-theme="dark"] .day-bill-displaced a:focus-visible {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.day-bill-title {
+  margin: 0 0 0.2rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 1.1rem;
+  color: var(--ink);
+  line-height: 1.35;
+}
+.day-bill-title a {
+  color: var(--brick);
+  border-bottom-color: transparent;
+}
+.day-bill-title a:hover,
+.day-bill-title a:focus-visible {
+  color: var(--brick-deep);
+  border-bottom-color: var(--brick-deep);
+}
+[data-theme="dark"] .day-bill-title a {
+  color: var(--brick);
+}
+[data-theme="dark"] .day-bill-title a:hover,
+[data-theme="dark"] .day-bill-title a:focus-visible {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.day-bill-meta {
+  margin: 0;
+  color: var(--ink-faint);
+}
+.day-bill-extras {
+  margin: 0.25rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.1rem 0;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+.day-bill-curtain { white-space: nowrap; }
+.day-bill-prices  { display: inline-flex; flex-wrap: wrap; gap: 0; }
+.day-bill-price-item { white-space: nowrap; }
+.day-bill-halfprice  { white-space: nowrap; }
+.day-bill-benefit {
+  font-style: normal;
+  color: var(--paper);
+  background: var(--brick-deep);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: 'Plantin MT Pro', serif;
+  padding: 0.15em 0.45em 0.1em;
+  border-radius: 2px;
+  white-space: nowrap;
+  vertical-align: baseline;
+  margin-right: 0.25rem;
+}
+.day-extras-sep { color: var(--rule); }
+.day-bill-ab {
+  margin: 0.2rem 0 0;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  /* The running figure text should read as quiet body text;
+     undo the .metadata-label display treatment on the paragraph and
+     re-apply it only to the inline label / deficit badge below. */
+  font-weight: 400;
+  font-stretch: normal;
+  text-transform: none;
+  letter-spacing: 0;
+  font-style: italic;
+}
+.day-bill-ab-label {
+  /* .metadata-label supplies family/weight/caps/condensed; restore them
+     here so the "Account-book" tag reads as an archival small-caps label. */
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-style: normal;
+  color: var(--ink-soft);
+  margin-right: 0.25rem;
+}
+.day-bill-ab-deficit {
+  display: inline-block;
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  color: var(--burgundy);
+  margin-left: 0.3rem;
+}
+.day-ab-attribution {
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+.day-ab-attribution a {
+  color: var(--brick);
+  border-bottom: 1px solid transparent;
+  text-decoration: none;
+}
+.day-ab-attribution a:hover { border-bottom-color: var(--brick); }
+.day-reform-note {
+  font-style: italic;
+  color: var(--ink-faint);
+  border-left: 2px solid var(--brick);
+  padding-left: 0.6rem;
+  margin-top: 0.5rem;
+}
+.day-reform-note a {
+  color: var(--brick);
+  border-bottom: 1px solid transparent;
+}
+.day-reform-note a:hover { border-bottom-color: var(--brick); }
+
+.day-year-group {
+  max-width: var(--maxw-prose);
+  margin: 0 auto 1.6rem;
+}
+.day-year-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin: 1.1rem 0 0.35rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--ink-faint);
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  color: var(--ink);
+  letter-spacing: 0.08em;
+}
+.day-year-head a {
+  color: var(--ink);
+  border-bottom-color: transparent;
+}
+.day-year-head a:hover,
+.day-year-head a:focus-visible {
+  color: var(--brick-deep);
+  border-bottom-color: var(--brick-deep);
+}
+[data-theme="dark"] .day-year-head a:hover,
+[data-theme="dark"] .day-year-head a:focus-visible {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.day-year-count {
+  color: var(--ink-faint);
+  font-weight: 400;
+  font-size: 0.75rem;
+}
+
+/* Screen-reader-only helper for headings whose contents are already present visually. */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Date-range slider (Repertoire, People) ---------- */
+.range-filter {
+  margin: 0.4rem 0 1rem;
+  padding: 0.75rem 0.9rem 0.6rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+}
+.range-filter-legend {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 0 0 0.4rem;
+  color: var(--ink-soft);
+}
+.range-filter-label {
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+  color: var(--ink);
+}
+.range-filter-readout {
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.85rem;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+.range-filter-reset {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.7rem;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+}
+.range-filter-reset:hover { border-color: var(--ink); color: var(--ink); }
+
+.range-filter-rail {
+  position: relative;
+  height: 28px;
+  margin: 0.1rem 0 0.4rem;
+}
+.range-filter-track,
+.range-filter-fill {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 3px;
+  pointer-events: none;
+}
+.range-filter-track {
+  left: 0; right: 0;
+  background: var(--rule);
+  opacity: 0.7;
+}
+.range-filter-fill {
+  background: var(--brick);
+  left: 0; width: 100%;
+}
+/* Both range inputs are layered on top of the rail; only the thumb is
+   visible so the rail graphics underneath show through. */
+.range-filter-rail input[type="range"] {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: none;
+}
+.range-filter-rail input[type="range"]::-webkit-slider-runnable-track {
+  height: 3px;
+  background: transparent;
+  border: 0;
+}
+.range-filter-rail input[type="range"]::-moz-range-track {
+  height: 3px;
+  background: transparent;
+  border: 0;
+}
+.range-filter-rail input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--brick-deep);
+  cursor: pointer;
+  margin-top: -6px;
+  pointer-events: auto;
+  box-shadow: 0 1px 2px var(--shadow-lift);
+}
+.range-filter-rail input[type="range"]::-moz-range-thumb {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--brick-deep);
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 1px 2px var(--shadow-lift);
+}
+.range-filter-rail input[type="range"]:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--brick);
+  outline-offset: 2px;
+}
+.range-filter-rail input[type="range"]:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--brick);
+  outline-offset: 2px;
+}
+.range-filter-hint {
+  color: var(--ink-faint);
+  font-size: 0.7rem;
+  font-style: italic;
+  margin: 0.2rem 0 0;
+}
+.range-filter-hint em { font-style: normal; font-weight: 700; letter-spacing: 0.02em; }
+
+/* Columns that can't be recomputed inside the range (e.g. distinct-performer
+   count, signature role) are dimmed when the slider is active, and carry
+   a title tooltip explaining why. */
+.rep-table td .is-stale {
+  color: var(--ink-faint);
+  opacity: 0.65;
+  border-bottom: 1px dotted var(--rule);
+  cursor: help;
+}
+
+/* Year cells become buttons that focus the slider on that decade. */
+.rep-year-focus {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border-bottom: 1px dotted var(--rule);
+}
+.rep-year-focus:hover,
+.rep-year-focus:focus-visible {
+  color: var(--brick-deep);
+  border-bottom-color: var(--brick-deep);
+}
+[data-theme="dark"] .rep-year-focus:hover,
+[data-theme="dark"] .rep-year-focus:focus-visible {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+/* ---------- Performer-page caveat banner ---------- */
+.performer-caveat {
+  max-width: var(--maxw-broadside);
+  margin: 1rem auto 1.2rem;
+  padding: 0.7rem 1.25rem 0.7rem calc(1.25rem - 3px);
+  background: var(--paper-deep);
+  border-left: 3px solid var(--burgundy);
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-style: italic;
+  line-height: 1.45;
+}
+.performer-caveat strong {
+  display: block;
+  margin: 0 0 0.1rem;
+  font-style: normal;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.7rem;
+  color: var(--ink);
+}
+
+/* ---------- Milestone list (performer.html, work.html) ---------- */
+.milestone-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.milestone-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.milestone-entry:first-child { border-top: 1px solid var(--rule); }
+.milestone-badge {
+  flex: 0 0 auto;
+  font-size: 0.64rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-family: 'Plantin MT Pro', serif;
+  color: var(--paper);
+  background: var(--brick);
+  padding: 0.18em 0.5em 0.12em;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.milestone-badge.is-farewell { background: var(--ink-faint); }
+.milestone-badge.is-role     { background: var(--brick-deep); }
+.milestone-detail {
+  font-size: 0.88rem;
+  color: var(--ink);
+  line-height: 1.4;
+}
+a.milestone-date {
+  color: var(--brick);
+  font-style: italic;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+a.milestone-date:hover { border-color: var(--brick); }
+.milestone-cast {
+  color: var(--ink-faint);
+  font-size: 0.85em;
+}
+
+/* ---------- Receipts page ---------- */
+.receipts-venue-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.55rem;
+  margin: 1rem 0 1rem;
+}
+.receipts-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.6rem 0.25rem 0.45rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.8rem;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+.receipts-pill:hover {
+  border-color: var(--ink-soft);
+  color: var(--ink);
+}
+.receipts-pill.is-active {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: var(--paper-deep);
+}
+.receipts-pill:not(.is-active) .receipts-pill-label { text-decoration: line-through; text-decoration-color: var(--rule); text-decoration-thickness: 1px; color: var(--ink-faint); }
+.receipts-pill:not(.is-active) .receipts-pill-swatch { opacity: 0.25; }
+.receipts-pill:focus-visible { outline: 1px solid var(--brick); outline-offset: 2px; }
+.receipts-pill-swatch {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border: 1px solid var(--rule);
+}
+.receipts-pill-label {
+  font-weight: 700;
+  font-stretch: condensed;
+}
+.receipts-pill-count {
+  color: var(--ink-faint);
+  font-size: 0.7rem;
+}
+
+.receipts-chart {
+  position: relative;
+  margin: 0.4rem 0 0.25rem;
+  padding: 0.6rem 0.4rem 0.2rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 0 var(--shadow-hair);
+}
+.receipts-hit { cursor: crosshair; }
+.receipts-tooltip {
+  position: absolute;
+  min-width: 12rem;
+  max-width: 18rem;
+  padding: 0.55rem 0.75rem 0.6rem;
+  background: var(--paper);
+  border: 1px solid var(--ink-faint);
+  box-shadow: 0 4px 14px var(--shadow-lift);
+  color: var(--ink-soft);
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+  z-index: 5;
+  text-transform: none;
+  font-weight: 400;
+}
+.receipts-tooltip p { margin: 0; }
+.receipts-tip-venue {
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  margin-bottom: 0.1rem !important;
+}
+.receipts-tip-venue a {
+  color: var(--ink);
+  border-bottom: 0;
+}
+.receipts-tip-season {
+  font-style: italic;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  margin-bottom: 0.25rem !important;
+}
+.receipts-tip-primary {
+  color: var(--ink);
+  font-size: 0.86rem;
+  line-height: 1.3;
+}
+.receipts-tip-primary strong {
+  font-weight: 700;
+  font-stretch: condensed;
+  letter-spacing: 0.02em;
+}
+.receipts-tip-relation {
+  margin-left: 0.3rem;
+  padding: 0 0.3rem;
+  border: 1px solid var(--rule);
+  background: var(--paper-deep);
+  color: var(--ink-faint);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-style: normal;
+  vertical-align: 0.08em;
+}
+.receipts-tip-iqr {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-style: italic;
+  margin-top: 0.1rem !important;
+}
+.receipts-tip-secondary {
+  color: var(--ink-faint);
+  font-size: 0.72rem;
+  font-style: italic;
+  margin-top: 0.15rem !important;
+}
+.receipts-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: 'Plantin MT Pro', serif;
+}
+.receipts-grid {
+  stroke: var(--rule);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+  opacity: 0.45;
+}
+.receipts-grid.is-vertical { opacity: 0.25; }
+.receipts-axis {
+  stroke: var(--ink-faint);
+  stroke-width: 1;
+}
+.receipts-axis-label {
+  fill: var(--ink-faint);
+  font-size: 10px;
+  font-family: 'Plantin MT Pro', serif;
+  letter-spacing: 0.02em;
+}
+.receipts-band {
+  opacity: 0.12;
+  stroke: none;
+}
+[data-theme="dark"] .receipts-band { opacity: 0.18; }
+.receipts-line {
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0.95;
+}
+.receipts-dot {
+  opacity: 0.9;
+  transition: r 0.12s ease;
+}
+.receipts-dot:hover { opacity: 1; }
+.receipts-line-ab {
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 4 3;
+  opacity: 0.6;
+}
+.receipts-dot-ab {
+  stroke-width: 1.5;
+  opacity: 0.85;
+}
+.receipts-dot-ab:hover { opacity: 1; }
+[data-theme="dark"] .receipts-line-ab { opacity: 0.8; }
+.receipts-chart-legend {
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+.receipts-legend-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+}
+.receipts-legend-swatch {
+  display: inline-block;
+  width: 12px; height: 2px;
+  border-radius: 1px;
+}
+
+/* Top / low-receipts lists — account-book rows: rank / entry / leader / total. */
+.receipts-source-toggle {
+  display: inline-flex;
+  margin: 0.5rem 0 0.75rem;
+}
+.receipts-source-btn {
+  font-family: var(--ui-font, sans-serif);
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.75rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink-faint);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.receipts-source-btn:first-child { border-radius: 2px 0 0 2px; }
+.receipts-source-btn:last-child  { border-radius: 0 2px 2px 0; margin-left: -1px; }
+.receipts-source-btn:hover { background: var(--paper-deep); color: var(--ink); }
+.receipts-source-btn.is-active { background: var(--brick); color: var(--paper); border-color: var(--brick-deep); }
+.receipts-source-btn:focus-visible { outline: 1px solid var(--brick); outline-offset: 2px; }
+.receipts-top {
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0;
+}
+.receipts-top .receipts-row {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) 1fr 7.5rem;
+  gap: 0.5rem 0.9rem;
+  align-items: baseline;
+  padding: 0.55rem 0 0.4rem;
+  border-bottom: 1px dotted var(--rule);
+}
+.receipts-top .receipts-row:first-child {
+  border-top: 1px solid var(--ink-faint);
+}
+.receipts-top .receipts-row:last-child {
+  border-bottom: 1px solid var(--ink-faint);
+}
+.receipts-row-rank {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: right;
+  padding-right: 0.15rem;
+}
+.receipts-row-leader {
+  align-self: baseline;
+  height: 1em;
+  border-bottom: 1px dotted var(--rule);
+  transform: translateY(-0.25em);
+  min-width: 1rem;
+}
+.receipts-row-amount {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  font-size: 1.08rem;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-align: right;
+  font-variant-numeric: tabular-nums lining-nums;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.05rem;
+}
+.receipts-deficiency-ledger {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  margin: 0.2rem 0 0.8rem;
+}
+.receipts-deficiency-ledger .ledger-entry { min-width: 0; }
+.receipts-deficiency-chart {
+  margin: 0.4rem 0 0.8rem;
+  padding: 0.5rem 0.4rem 0.2rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 0 var(--shadow-hair);
+}
+.receipts-deficiency-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: 'Plantin MT Pro', serif;
+}
+.receipts-row-ab {
+  font-family: var(--ui-font, sans-serif);
+  font-weight: 400;
+  font-stretch: normal;
+  font-size: 0.65rem;
+  letter-spacing: 0.01em;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
+}
+.receipts-row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+.receipts-row-title {
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.95rem;
+  color: var(--ink);
+  display: flex;
+  gap: 0.55rem;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.receipts-row-title a {
+  color: var(--ink);
+  border-bottom: 1px solid transparent;
+}
+.receipts-row-title a:hover,
+.receipts-row-title a:focus-visible {
+  color: var(--brick-deep);
+  border-bottom-color: var(--brick-deep);
+}
+[data-theme="dark"] .receipts-row-title a:hover,
+[data-theme="dark"] .receipts-row-title a:focus-visible {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.receipts-row-meta {
+  color: var(--ink-faint);
+  font-size: 0.72rem;
+}
+.receipts-row-meta a {
+  color: var(--ink-faint);
+  border-bottom-color: transparent;
+}
+.receipts-row-meta a:hover,
+.receipts-row-meta a:focus-visible {
+  color: var(--brick-deep);
+  border-bottom-color: var(--brick-deep);
+}
+.receipts-flag {
+  display: inline-block;
+  padding: 0.05rem 0.35rem;
+  border: 1px solid var(--rule);
+  color: var(--ink-faint);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--paper-deep);
+}
+
+@media (max-width: 720px) {
+  .receipts-top .receipts-row {
+    grid-template-columns: 2rem minmax(0, 1fr) 6rem;
+    gap: 0.35rem 0.6rem;
+  }
+  .receipts-row-leader { display: none; }
+  .receipts-row-amount { font-size: 0.95rem; }
+  .receipts-row-title { font-size: 0.88rem; }
+  .receipts-chart { padding: 0.4rem 0.1rem 0.1rem; }
+}
+@media (max-width: 480px) {
+  .receipts-row-rank { display: none; }
+  .receipts-top .receipts-row {
+    grid-template-columns: minmax(0, 1fr) 5.5rem;
+  }
+}
+
+/* ---------- Venue page: receipts strip ---------- */
+.venue-receipts {
+  /*margin: 0.8rem 0 0;*/
+}
+.venue-receipts-ledger {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.6rem;
+  margin: 0.2rem 0 0.8rem;
+}
+.venue-receipts-ledger .ledger-entry { min-width: 0; }
+.venue-receipts-chart {
+  margin: 0.4rem 0 0.2rem;
+  padding: 0.5rem 0.4rem 0.2rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+}
+.venue-receipts-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: 'Plantin MT Pro', serif;
+}
+.venue-receipts-deep {
+  margin: 1rem 0 0;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--ink-faint);
+}
+.venue-receipts-deep a {
+  color: var(--brick);
+  border-bottom: 1px solid var(--brick);
+}
+.venue-expenses-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.75rem;
+  margin: 0.4rem 0 0.7rem;
+}
+.venue-exp-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+}
+.venue-exp-swatch {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.venue-expenses-chart {
+  margin: 0.4rem 0 0.2rem;
+  padding: 0.5rem 0.4rem 0.2rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+}
+.venue-expenses-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: 'Plantin MT Pro', serif;
+}
+
+/* Work page — account-book box-office chart */
+.work-ab-chart {
+  margin: 0.5rem 0 0.3rem;
+  padding: 0.5rem 0.4rem 0.5rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+}
+.work-ab-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: 'Plantin MT Pro', serif;
+}
+.ab-baseline {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+.ab-tick {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+.ab-tick-label {
+  fill: var(--ink-faint);
+  font-size: 9px;
+  font-family: 'Plantin MT Pro', serif;
+}
+.ab-dot {
+  transition: opacity 0.15s;
+}
+.ab-dot-cg { fill: var(--gold); }
+.ab-dot-dl { fill: var(--brick); }
+.ab-dot.drng-out { opacity: 0.12; }
+.ab-legend {
+  display: flex;
+  gap: 1rem;
+  margin: 0.35rem 0 0;
+  padding: 0;
+}
+.ab-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+.ab-legend-swatch {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+
+/* DataTables overrides for the receipts table on the venue page. The default
+   DataTables search box is a bit too prominent for this context, so we
+   tone it down to match the site's other small actions. */
+div.dt-search input, div.dt-length select {
+    background: var(--paper-deep);
+    color: var(--ink-faint);
+}
+.page-item:not(.disabled) .page-link {
+    background: var(--paper);
+    color: var(--ink);
+}
+.page-item.disabled .page-link {
+    background: var(--paper-deep);
+    color: var(--ink-faint);
+}
+.page-item .page-link:hover {
+    background: var(--brick);
+    color: var(--paper);
+}
+.active>.page-link, .page-link.active {
+    z-index: 3;
+    color: var(--bs-pagination-active-color) !important;
+    background-color: var(--brick-deep) !important;
+    border-color: var(--brick-deep) !important;
+}
+
+/* =====================================================================
+   Graph / Networks page
+   Mirrors .map-head / .map-section / .map-timeline / .map-legend so the
+   network page reads as the same cartographer's hand as the gazetteer.
+   ===================================================================== */
+
+/* Page head — shares surface, padding and type with .map-head */
+.graph-head {
+    background: var(--surface-hero);
+    border-bottom: 1px solid var(--rule);
+    padding: 2rem 1.25rem 1.75rem;
+}
+.graph-head-inner {
+    max-width: var(--maxw-broadside);
+    margin: 0 auto;
+}
+.graph-head-kicker {
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 700;
+    font-stretch: condensed;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: .85rem;
+    color: var(--ink-faint);
+    margin: 0 0 0.6rem;
+}
+.graph-head-title {
+    margin: 0 0 0.55rem;
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 700;
+    font-stretch: condensed;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 0.98;
+    color: var(--ink);
+    font-size: clamp(2rem, 4.8vw, 3.2rem);
+}
+.graph-head-standfirst {
+    margin: 0;
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 400;
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    line-height: 1.5;
+}
+
+/* Canvas section — mirrors .map-section: centred broadside block.
+   Sigma paints its own canvas background (--paper) via JS; the CSS
+   background here only shows for a frame before sigma initialises and
+   at the seam around the WebGL canvas. Using --paper keeps both in
+   register across theme changes. */
+.graph-section {
+    position: relative;
+    width: 100%;
+    max-width: var(--maxw-broadside);
+    margin: 0 auto;
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    overflow: hidden;
+    border: 1px dotted;
+    border-top: none;
+}
+#graph-canvas {
+    width: 100%;
+    height: calc(100vh - var(--topbar-h) - 140px);
+    min-height: 460px;
+    max-height: 780px;
+    display: block;
+    background: var(--paper);
+    z-index: 0;
+}
+
+/* Controls panel — top-left overlay, same translucent-paper treatment
+   as .map-timeline so the canvas reads faintly through. */
+.graph-controls {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 9;
+    background: rgba(244,234,215,0.94);
+    border: 1px solid var(--rule);
+    padding: 0.6rem 0.9rem 0.55rem;
+    width: 345px;
+    max-width: calc(100% - 2rem);
+    box-shadow: 0 1px 3px var(--shadow-hair);
+}
+[data-theme="dark"] .graph-controls { background: rgba(26,20,13,0.92); }
+
+/* Mode tabs — segmented control, sharing the visual grammar
+   of .timeline-toggle. With six modes the row wraps to two rows of three
+   on the 345px panel; on a single row when the panel is wider. */
+.graph-mode-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-bottom: 0.55rem;
+}
+.graph-mode-tab {
+    flex: 1 1 calc(33.333% - 0.25rem);
+    min-width: 0;
+    appearance: none;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    color: var(--ink-soft);
+    font-family: 'Plantin MT Pro', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.4rem;
+    cursor: pointer;
+    line-height: 1;
+    white-space: nowrap;
+    border-radius: 0;
+    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.graph-mode-tab:hover:not(.is-active) {
+    background: var(--paper-deep);
+    color: var(--ink);
+}
+.graph-mode-tab.is-active {
+    background: var(--brick);
+    color: var(--paper);
+    border-color: var(--brick-deep);
+}
+[data-theme="dark"] .graph-mode-tab.is-active {
+    color: var(--ink);
+}
+
+/* Decade row — echoes .timeline-label + .timeline-track + .timeline-ticks */
+.graph-decade-row {
+    margin-top: 0.15rem;
+}
+.graph-decade-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.2rem;
+}
+.graph-decade-word {
+    /* Override .metadata-label sizing to sit quietly in the panel. */
+    font-size: 0.7rem !important;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+}
+.graph-decade-label {
+    font-family: 'Plantin MT Pro Condensed', 'Plantin MT Pro', serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--brick);
+    letter-spacing: 0.01em;
+}
+[data-theme="dark"] .graph-decade-label { color: var(--gold); }
+
+/* Reuse the map timeline slider styling for pixel parity. */
+.graph-decade-slider {
+    width: 100%;
+    margin: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 18px;
+    background: transparent;
+    cursor: pointer;
+}
+.graph-decade-slider:focus { outline: none; }
+.graph-decade-slider::-webkit-slider-runnable-track {
+    height: 3px; background: var(--rule); border-radius: 1px;
+}
+.graph-decade-slider::-moz-range-track {
+    height: 3px; background: var(--rule); border-radius: 1px;
+}
+.graph-decade-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--brick); border: 1px solid var(--brick-deep);
+    margin-top: -6.5px;
+    box-shadow: 0 1px 2px var(--shadow-lift);
+}
+.graph-decade-slider::-moz-range-thumb {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--brick); border: 1px solid var(--brick-deep);
+    box-shadow: 0 1px 2px var(--shadow-lift);
+}
+.graph-decade-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Plantin MT Pro', serif;
+    font-size: 0.62rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+    padding: 0 6px;
+    margin-top: 0.1rem;
+}
+
+/* All-eras toggle — a subtle pill checkbox sitting beneath the slider.
+   Visually quieter than the primary mode tabs (no brick fill when idle);
+   when pressed it ghosts on with an inked rule and gold/brick accent so
+   the user reads it as "the slider is currently disabled, full era is on". */
+.graph-alleras-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.45rem;
+}
+.graph-all-btn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--ink-faint);
+    font-family: 'Plantin MT Pro', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 999px;
+    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.graph-all-btn:hover {
+    color: var(--ink);
+    border-color: var(--ink-faint);
+}
+.graph-all-btn[aria-pressed="true"] {
+    background: var(--paper-deep);
+    color: var(--brick);
+    border-color: var(--brick);
+}
+.graph-all-btn[aria-pressed="true"]:hover {
+    background: var(--paper-shade);
+    color: var(--brick-deep);
+}
+[data-theme="dark"] .graph-all-btn[aria-pressed="true"] {
+    background: var(--paper-deep);
+    color: var(--gold);
+    border-color: var(--gold);
+}
+[data-theme="dark"] .graph-all-btn[aria-pressed="true"]:hover {
+    background: var(--paper-shade);
+    color: var(--gold);
+}
+.graph-all-btn:focus-visible {
+    outline: 2px solid var(--brick);
+    outline-offset: 2px;
+}
+[data-theme="dark"] .graph-all-btn:focus-visible {
+    outline-color: var(--gold);
+}
+
+/* Search row */
+.graph-search-row {
+    margin-top: 0.45rem;
+}
+.graph-search-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink);
+    font-family: 'Plantin MT Pro', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    padding: 0.2rem 0.1rem;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 120ms ease;
+}
+.graph-search-input::placeholder {
+    color: var(--ink-faint);
+    font-style: italic;
+}
+.graph-search-input:focus {
+    border-bottom-color: var(--brick);
+}
+[data-theme="dark"] .graph-search-input:focus {
+    border-bottom-color: var(--gold);
+}
+/* Hide the browser's built-in 'x' clear button — blur already clears */
+.graph-search-input::-webkit-search-cancel-button { display: none; }
+
+/* Node count caption — a running caption, italic, not shouty. */
+.graph-stats {
+    margin-top: 0.4rem;
+    font-family: 'Plantin MT Pro', serif !important;
+    font-weight: 400 !important;
+    font-stretch: normal !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-size: 0.72rem !important;
+    font-style: italic;
+    color: var(--ink-faint);
+    line-height: 1.35;
+    min-height: 1.1em;
+}
+
+/* Loading indicator */
+.graph-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 400;
+    background: rgba(244,234,215,0.94);
+    border: 1px solid var(--rule);
+    padding: 0.6rem 1.1rem;
+    font-family: 'Plantin MT Pro', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    pointer-events: none;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px var(--shadow-hair);
+}
+[data-theme="dark"] .graph-loading { background: rgba(26,20,13,0.92); }
+
+/* Node info panel — top-right overlay, same translucent paper as controls */
+.graph-info {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 9;
+    background: rgba(244,234,215,0.94);
+    border: 1px solid var(--rule);
+    padding: 0.75rem 0.9rem 0.85rem;
+    width: 240px;
+    max-width: calc(100% - 2rem);
+    box-shadow: 0 1px 3px var(--shadow-hair);
+}
+[data-theme="dark"] .graph-info { background: rgba(26,20,13,0.92); }
+.graph-info-close {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.4rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.15rem;
+    color: var(--ink-faint);
+    line-height: 1;
+    padding: 0.15rem 0.25rem;
+}
+.graph-info-close:hover { color: var(--brick); }
+[data-theme="dark"] .graph-info-close:hover { color: var(--gold); }
+.gi-type {
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 700;
+    font-stretch: condensed;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+    padding-right: 1.25rem; /* clear of close button */
+}
+.gi-name {
+    font-family: 'Plantin MT Pro Condensed', 'Plantin MT Pro', serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.25;
+    color: var(--ink);
+    margin: 0 0 0.35rem;
+    word-break: break-word;
+    letter-spacing: 0.01em;
+}
+.gi-count {
+    font-family: 'Plantin MT Pro', serif;
+    font-style: italic;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    margin-bottom: 0.5rem;
+    line-height: 1.35;
+}
+.gi-link {
+    font-family: 'Plantin MT Pro', serif;
+    font-size: 0.78rem;
+    color: var(--brick);
+    border-bottom: 1px solid transparent;
+    transition: color 120ms ease, border-bottom-color 120ms ease;
+}
+.gi-link:hover {
+    color: var(--brick-deep);
+    border-bottom-color: var(--brick-deep);
+}
+[data-theme="dark"] .gi-link { color: var(--gold); }
+[data-theme="dark"] .gi-link:hover {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+}
+
+/* Legend — bottom-right overlay, same tone & cadence as .map-legend */
+.graph-legend {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 500;
+    background: rgba(244,234,215,0.92);
+    border: 1px solid var(--rule);
+    padding: 0.55rem 0.75rem;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    font-size: 0.72rem;
+    max-width: 220px;
+    box-shadow: 0 1px 3px var(--shadow-hair);
+}
+[data-theme="dark"] .graph-legend { background: rgba(26,20,13,0.92); color: var(--ink-soft); }
+.graph-legend-title {
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 700;
+    font-stretch: condensed;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+}
+.graph-legend .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 400;
+    font-stretch: normal;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    margin-bottom: 0.15rem;
+}
+.graph-legend .legend-row:last-child { margin-bottom: 0; }
+
+/* Intro below graph — shares .intro layout; tune vertical rhythm. */
+.graph-intro {
+    padding-top: 2rem;
+    padding-bottom: 2.25rem;
+}
+.graph-intro strong {
+    font-family: 'Plantin MT Pro Condensed', 'Plantin MT Pro', serif;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+}
+
+/* ---------- Responsive: narrow viewports ----------
+   At phone widths the top-right info panel collides with the top-left
+   controls. Stack info below the controls, pin legend to bottom-left,
+   and shrink canvas to keep the intro visible without tall scrolling. */
+@media (max-width: 720px) {
+    .graph-controls {
+        top: 0.5rem; left: 0.5rem;
+        width: calc(100% - 1rem);
+        padding: 0.55rem 0.7rem 0.5rem;
+    }
+    .graph-mode-tab { font-size: 0.66rem; padding: 0.3rem 0.3rem; letter-spacing: 0.04em; }
+    .graph-all-btn { font-size: 0.66rem; padding: 0.25rem 0.6rem; }
+    .graph-info {
+        top: auto;
+        right: 0.5rem;
+        bottom: 3.5rem;
+        width: auto;
+        max-width: calc(100% - 1rem);
+        left: 0.5rem;
+    }
+    .graph-legend {
+        right: 0.5rem;
+        bottom: 0.5rem;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.68rem;
+        max-width: calc(100% - 1rem);
+    }
+    #graph-canvas {
+        height: calc(100vh - var(--topbar-h) - 100px);
+        min-height: 420px;
+    }
+}
+
+/* ============================================================
+   Games — The Evening's Amusements
+   ============================================================
+   Semantic state surfaces. The rest of the site is token-driven;
+   these two pairs are the only new tokens the games need and are
+   scoped here so other components can adopt them later without
+   reaching for hard-coded hex. */
+:root, [data-theme="light"] {
+    --state-success-bg:     #e8f3ec;
+    --state-success-ink:    #1e4a2c;
+    --state-success-rule:   #4a8c60;
+    --state-danger-bg:      #f8ece9;
+    --state-danger-ink:     var(--brick-deep);
+    --state-danger-rule:    var(--brick);
+}
+[data-theme="dark"] {
+    --state-success-bg:     #1e3728;
+    --state-success-ink:    #a8e0bc;
+    --state-success-rule:   #5aaa76;
+    --state-danger-bg:      #3a1c18;
+    --state-danger-ink:     #e8b0a0;
+    --state-danger-rule:    #c06050;
+}
+
+/* ── Lobby ─────────────────────────────────────────────────── */
+
+.games-lobby {
+    background: var(--surface-hero);
+    border-bottom: 1px solid var(--rule);
+    padding: 2.5rem 1rem 3rem;
+}
+
+.games-lobby-inner {
+    max-width: var(--maxw-broadside);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+@media (max-width: 900px) {
+    .games-lobby-inner {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.game-card {
+    background: var(--surface-raised);
+    border: 1px solid var(--rule);
+    padding: 1.75rem 1.5rem 1.4rem;
+    cursor: pointer;
+    transition: box-shadow 0.15s, transform 0.12s, border-color 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    outline: none;
+}
+
+.game-card:hover {
+    box-shadow: 0 4px 16px var(--shadow-lift);
+    transform: translateY(-2px);
+    border-color: var(--brick);
+}
+
+.game-card:focus-visible {
+    outline: 2px solid var(--brick);
+    outline-offset: 2px;
+    box-shadow: 0 4px 16px var(--shadow-lift);
+}
+
+.game-card:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px var(--shadow-hair);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .game-card,
+    .game-card:hover,
+    .game-card:active { transform: none; transition: box-shadow 0.15s, border-color 0.15s; }
+}
+
+.game-card-num {
+    color: var(--brick);
+    /* .metadata-label supplies the display family / weight / caps;
+       only size + tracking are overridden here. */
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.1rem;
+}
+
+.game-card-title {
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 700;
+    font-stretch: condensed;
+    letter-spacing: 0.02em;
+    font-size: 1.45rem;
+    color: var(--ink);
+    line-height: 1.15;
+}
+
+.game-card-desc {
+    font-family: 'Plantin MT Pro', serif;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin: 0;
+    flex: 1;
+}
+
+.game-card-cta {
+    font-size: 0.72rem;
+    color: var(--brick);
+    letter-spacing: 0.07em;
+    margin-top: 0.3rem;
+}
+
+/* ── Arena ─────────────────────────────────────────────────── */
+
+.games-arena {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 2rem 1rem 3rem;
+}
+
+.game-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--rule);
+}
+
+.game-back {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--brick);
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 700;
+    font-stretch: condensed;
+    font-size: 0.72rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 120ms ease;
+}
+
+.game-back:hover { color: var(--brick-deep); text-decoration: underline; }
+.game-back:focus-visible {
+    outline: 1px solid var(--brick);
+    outline-offset: 2px;
+}
+[data-theme="dark"] .game-back:hover { color: var(--gold); }
+
+.game-title-label {
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 700;
+    font-stretch: condensed;
+    letter-spacing: 0.02em;
+    font-size: 1.1rem;
+    color: var(--ink);
+    flex: 1;
+}
+
+.game-score {
+    /* .metadata-label supplies family/weight/caps; override only size + colour. */
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+}
+
+.game-round {
+    /* .metadata-label supplies family/weight/caps; override only size + colour. */
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.07em;
+    margin-bottom: 1.5rem;
+}
+
+.game-question {
+    font-family: 'Plantin MT Pro', serif;
+    font-size: 1.2rem;
+    line-height: 1.45;
+    color: var(--ink);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Cast / context block */
+.game-cast {
+    margin: 0 auto 1.25rem;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.9rem 1.2rem;
+    background: var(--paper-deep);
+    border-left: 3px solid var(--brick);
+}
+
+.game-cast-name {
+    font-family: 'Plantin MT Pro', serif;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    line-height: 1.4;
+}
+
+/* Options */
+.game-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-top: 0.25rem;
+}
+
+.game-options-label {
+    /* .metadata-label supplies family/weight/caps. */
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.07em;
+    margin: 0 0 0.15rem;
+}
+
+.game-option {
+    width: 100%;
+    background: var(--surface-raised);
+    border: 1px solid var(--rule);
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-family: 'Plantin MT Pro', serif;
+    font-size: 0.97rem;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.1s, border-color 0.1s, color 0.1s;
+    line-height: 1.35;
+}
+
+.game-option:not(:disabled):hover {
+    background: var(--paper-deep);
+    border-color: var(--brick);
+}
+
+.game-option:focus-visible {
+    outline: 1px solid var(--brick);
+    outline-offset: 2px;
+}
+
+.game-option:disabled { cursor: default; }
+
+.game-option.is-correct {
+    background: var(--state-success-bg);
+    border-color: var(--state-success-rule);
+    color: var(--state-success-ink);
+    font-weight: 600;
+}
+
+.game-option.is-wrong {
+    background: var(--state-danger-bg);
+    border-color: var(--state-danger-rule);
+    color: var(--state-danger-ink);
+}
+
+/* Feedback strip */
+.game-feedback {
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    font-family: 'Plantin MT Pro', serif;
+    font-style: italic;
+}
+
+.game-feedback.is-correct {
+    background: var(--state-success-bg);
+    color: var(--state-success-ink);
+    border-left: 3px solid var(--state-success-rule);
+}
+
+.game-feedback.is-wrong {
+    background: var(--state-danger-bg);
+    color: var(--state-danger-ink);
+    border-left: 3px solid var(--state-danger-rule);
+}
+
+/* Next button — shares the "solid brick" pill grammar with .game-btn-primary */
+.game-next,
+.game-btn-primary {
+    display: inline-block;
+    background: var(--brick);
+    color: var(--paper);
+    border: 1px solid var(--brick-deep);
+    padding: 0.6rem 1.8rem;
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 700;
+    font-stretch: condensed;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.game-next { display: block; margin: 1.25rem auto 0; }
+
+.game-next:hover,
+.game-btn-primary:hover {
+    background: var(--brick-deep);
+    border-color: var(--brick-deep);
+}
+
+.game-next:focus-visible,
+.game-btn-primary:focus-visible {
+    outline: 2px solid var(--brick);
+    outline-offset: 2px;
+}
+
+[data-theme="dark"] .game-next,
+[data-theme="dark"] .game-btn-primary { color: var(--ink); }
+
+/* ── End screen ────────────────────────────────────────────── */
+
+.games-end {
+    max-width: 480px;
+    margin: 3rem auto;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    background: var(--surface-raised);
+    border: 1px solid var(--rule);
+}
+
+.games-end-label {
+    /* .metadata-label supplies family/weight/caps. */
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    margin-bottom: 0.25rem;
+}
+
+.games-end-score {
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 700;
+    font-stretch: condensed;
+    letter-spacing: 0.02em;
+    font-size: 3.5rem;
+    color: var(--brick);
+    line-height: 1;
+    margin: 0 0 0.6rem;
+}
+
+.games-end-msg {
+    font-family: 'Plantin MT Pro', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink-soft);
+    margin: 0 0 1.75rem;
+}
+
+.games-end-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.game-btn-secondary {
+    background: none;
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    padding: 0.6rem 1.5rem;
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 700;
+    font-stretch: condensed;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.game-btn-secondary:hover {
+    border-color: var(--ink-soft);
+    color: var(--ink);
+    background: var(--paper-deep);
+}
+
+.game-btn-secondary:focus-visible {
+    outline: 1px solid var(--brick);
+    outline-offset: 2px;
+}
+
+/* ── Loading ────────────────────────────────────────────────── */
+
+.games-loading {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--ink-faint);
+    font-family: 'Plantin MT Pro', serif;
+    font-style: italic;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+    .games-lobby-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .game-card {
+        padding: 1.25rem 1.1rem 1.1rem;
+    }
+
+    .game-question {
+        font-size: 1.05rem;
+    }
+
+    .games-arena {
+        padding: 1.5rem 0.75rem 2.5rem;
+    }
+
+    .games-end {
+        margin: 1.5rem 0.75rem;
+        padding: 2rem 1.1rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .game-header {
+        flex-wrap: wrap;
+        gap: 0.5rem 0.75rem;
+    }
+    .game-title-label {
+        order: 3;
+        flex-basis: 100%;
+        font-size: 1rem;
+    }
+    .games-end-score { font-size: 2.75rem; }
+}
+
+/* ===== Decade-range picker — performer / work / venue detail pages ===== */
+
+.drng-wrap {
+  margin-top: 1rem;
+  padding: 0 0.25rem;
+}
+
+.drng-label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+.drng-word {
+  font-size: 0.65rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.drng-range-label {
+  font-family: 'Plantin MT Pro Condensed', 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--brick);
+  letter-spacing: 0.01em;
+}
+[data-theme="dark"] .drng-range-label { color: var(--gold); }
+
+.drng-track-wrap {
+  position: relative;
+  height: 28px;
+  display: flex;
+  align-items: center;
+}
+.drng-track-bg {
+  position: absolute;
+  left: 0; right: 0;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    var(--rule) 0%,
+    var(--rule) var(--drng-lo, 0%),
+    var(--brick) var(--drng-lo, 0%),
+    var(--brick) var(--drng-hi, 100%),
+    var(--rule) var(--drng-hi, 100%),
+    var(--rule) 100%
+  );
+}
+[data-theme="dark"] .drng-track-bg {
+  background: linear-gradient(
+    to right,
+    var(--rule) 0%,
+    var(--rule) var(--drng-lo, 0%),
+    var(--gold) var(--drng-lo, 0%),
+    var(--gold) var(--drng-hi, 100%),
+    var(--rule) var(--drng-hi, 100%),
+    var(--rule) 100%
+  );
+}
+.drng-range {
+  position: absolute;
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 28px;
+  background: transparent;
+  pointer-events: none;
+  cursor: pointer;
+}
+.drng-range::-webkit-slider-runnable-track {
+  height: 3px;
+  background: transparent;
+  border: 0;
+}
+.drng-range::-moz-range-track {
+  height: 3px;
+  background: transparent;
+  border: 0;
+}
+.drng-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: all;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--brick);
+  border: 1px solid var(--brick-deep);
+  box-shadow: 0 1px 2px var(--shadow-lift);
+  cursor: grab;
+  margin-top: -6.5px;
+  transition: transform 80ms ease;
+}
+.drng-range::-webkit-slider-thumb:active { transform: scale(1.12); cursor: grabbing; }
+.drng-range::-moz-range-thumb {
+  pointer-events: all;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--brick);
+  border: 1px solid var(--brick-deep);
+  box-shadow: 0 1px 2px var(--shadow-lift);
+  cursor: grab;
+  transition: transform 80ms ease;
+}
+.drng-range::-moz-range-thumb:active { transform: scale(1.12); cursor: grabbing; }
+[data-theme="dark"] .drng-range::-webkit-slider-thumb {
+  background: var(--gold);
+  border-color: var(--brick-deep);
+}
+[data-theme="dark"] .drng-range::-moz-range-thumb {
+  background: var(--gold);
+  border-color: var(--brick-deep);
+}
+.drng-range:focus-visible { outline: none; }
+.drng-range:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--brick);
+  outline-offset: 2px;
+}
+.drng-range:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--brick);
+  outline-offset: 2px;
+}
+[data-theme="dark"] .drng-range:focus-visible::-webkit-slider-thumb { outline-color: var(--gold); }
+[data-theme="dark"] .drng-range:focus-visible::-moz-range-thumb     { outline-color: var(--gold); }
+
+.drng-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.62rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+  margin-top: 0.15rem;
+  padding: 0 8px;
+}
+/* Absolute-positioned variant used by the arc overlay (16 decade ticks
+   placed by percentage). The legacy work / performer / venue pages use
+   plain <span> children with flex space-between — both patterns coexist. */
+.drng-ticks { position: relative; }
+.drng-ticks .drng-tick {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.drng-all-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.6rem;
+}
+.drng-all-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-faint);
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 999px;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.drng-all-btn:hover {
+  color: var(--ink);
+  border-color: var(--ink-faint);
+}
+.drng-all-btn[aria-pressed="true"] {
+  background: var(--paper-deep);
+  color: var(--brick);
+  border-color: var(--brick);
+}
+.drng-all-btn[aria-pressed="true"]:hover {
+  background: var(--paper-shade);
+  color: var(--brick-deep);
+  border-color: var(--brick-deep);
+}
+[data-theme="dark"] .drng-all-btn[aria-pressed="true"] {
+  background: var(--paper-deep);
+  color: var(--gold);
+  border-color: var(--gold);
+}
+[data-theme="dark"] .drng-all-btn[aria-pressed="true"]:hover {
+  background: var(--paper-shade);
+  color: var(--gold);
+  border-color: var(--gold);
+}
+.drng-all-btn:focus-visible {
+  outline: 2px solid var(--brick);
+  outline-offset: 2px;
+}
+[data-theme="dark"] .drng-all-btn:focus-visible { outline-color: var(--gold); }
+
+/* Sparkline bars dim when outside the selected range */
+.performer-sparkline .spark-bar.drng-out,
+#work-sparkline .spark-bar.drng-out {
+  fill: var(--rule);
+  opacity: 0.4;
+}
+.performer-sparkline .spark-bar.drng-in,
+#work-sparkline .spark-bar.drng-in {
+  opacity: 1;
+}
+/* Cast-across-eras grid: dim out-of-range decade columns */
+.cast-grid-head-decade,
+.cast-grid-cell-decade {
+  transition: opacity 0.15s;
+}
+.cast-grid-head-decade.drng-out,
+.cast-grid-cell-decade.drng-out {
+  opacity: 0.15;
+}
+
+/* Finance charts on venue.html (CG/DL): receipts dots + stacked expense
+   bars dim when the decade slider excludes that season. */
+#venue-receipts-chart .receipts-dot,
+#venue-expenses-chart .venue-exp-bar {
+  transition: opacity 0.15s;
+}
+#venue-receipts-chart .receipts-dot.drng-out { opacity: 0.18; }
+#venue-expenses-chart .venue-exp-bar.drng-out { opacity: 0.18; }
+
+/* ── Arc view overlay ──────────────────────────────────────────────── */
+/* Heading row: keep the centred .rep-section-heading flowing as before,
+   then float the trigger button above it on the right. The hairline
+   rules built into .rep-section-heading::before/::after still resolve
+   symmetrically because the heading occupies the full row width. */
+.rep-section-heading-row {
+  position: relative;
+  margin: 0 0 1.5rem;
+}
+.rep-section-heading-row .rep-section-heading { margin: 0; }
+.arc-view-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  appearance: none;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.7rem;
+  padding: 0.3rem 0.7rem;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.arc-view-btn:hover,
+.arc-view-btn:focus-visible {
+  background: var(--brick);
+  color: var(--paper);
+  border-color: var(--brick-deep);
+  outline: none;
+}
+[data-theme="dark"] .arc-view-btn:hover,
+[data-theme="dark"] .arc-view-btn:focus-visible {
+  background: var(--brick-deep);
+  color: var(--paper);
+  border-color: var(--brick);
+}
+@media (max-width: 640px) {
+  /* On narrow screens the absolute-positioned button overlaps the
+     centred heading. Fall back to a stacked layout. */
+  .rep-section-heading-row { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+  .arc-view-btn { position: static; transform: none; }
+}
+
+.arc-section {
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+  padding: 2rem 2rem 4rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+.arc-section[hidden] { display: none; }
+
+.arc-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.arc-overlay-h2 {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 1.35rem;
+  line-height: 1.05;
+  margin: 0 0 0.25rem;
+  color: var(--ink);
+}
+.arc-overlay-sub {
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin: 0;
+  /*max-width: 60ch;*/
+  line-height: 1.45;
+}
+.arc-back-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+.arc-back-btn:hover,
+.arc-back-btn:focus-visible {
+  color: var(--ink);
+  border-color: var(--ink-soft);
+  background: var(--paper-deep);
+  outline: none;
+}
+
+.arc-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  align-items: flex-end;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rule);
+  flex-shrink: 0;
+}
+.arc-ctrl-group { display: flex; flex-direction: column; gap: 0.35rem; }
+.arc-ctrl-label {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+}
+.arc-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.arc-sort-sel {
+  appearance: none;
+  background: var(--paper-deep);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.84rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.arc-sort-sel:focus-visible { outline: 2px solid var(--brick); outline-offset: 2px; }
+[data-theme="dark"] .arc-sort-sel:focus-visible { outline-color: var(--gold); }
+.arc-minperf-range {
+  display: block;
+  width: 130px;
+  accent-color: var(--brick);
+}
+[data-theme="dark"] .arc-minperf-range { accent-color: var(--gold); }
+
+.arc-drng-wrap { flex-shrink: 0; margin-bottom: 0.4rem; }
+
+.arc-status {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  margin: 0.1rem 0 0.4rem;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Grid wrapper — scrolls independently */
+.arc-grid-outer {
+  border-top: 1px solid var(--rule);
+}
+.arc-col-heads {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  column-gap: 0.5rem;
+  position: sticky;
+  top: var(--topbar-h);
+  z-index: 2;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  padding: 0.35rem 0 0.3rem;
+}
+.arc-col-spacer { display: block; }
+.arc-col-cells {
+  display: grid;
+  grid-template-columns: repeat(var(--ncols, 16), 1fr);
+  gap: 1px;
+}
+.arc-cell-head {
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 0; /* allow truncation inside the auto-sized grid track */
+}
+.arc-grid { padding: 0.25rem 0 2.5rem; }
+.arc-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  align-items: center;
+  column-gap: 0.5rem;
+  min-height: 18px;
+  transition: background-color 120ms ease;
+}
+.arc-row:hover { background: var(--paper-deep); }
+.arc-row:hover .arc-label {
+  color: var(--brick);
+  border-bottom-color: var(--brick);
+}
+[data-theme="dark"] .arc-row:hover .arc-label {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.arc-label {
+  display: inline-block;
+  max-width: 100%;
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.78rem;
+  line-height: 1.25;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 0.35rem 0 0.5rem;
+  border-bottom: 1px solid transparent;
+  transition: color 120ms ease, border-bottom-color 120ms ease;
+}
+.arc-cells {
+  display: grid;
+  grid-template-columns: repeat(var(--ncols, 16), 1fr);
+  gap: 1px;
+  padding: 1px 0;
+}
+.arc-cell {
+  height: 8px;
+  background: var(--brick);
+  opacity: var(--opa, 0);
+}
+.arc-cell-empty { height: 8px; }
+[data-theme="dark"] .arc-cell { background: var(--gold); }
+.arc-empty {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+@media (max-width: 640px) {
+  .arc-section { padding: 1.25rem 1rem 3rem; }
+  .arc-col-heads,
+  .arc-row { grid-template-columns: 110px 1fr; }
+  .arc-label { font-size: 0.7rem; padding-left: 0.25rem; }
+}

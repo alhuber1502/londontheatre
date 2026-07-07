@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Networks &mdash; London Theatre, 1660&ndash;1800</title>
+  <meta name="description" content="Six network views of the London stage, 1660–1800: theatres, co-casting, programme pairings, work casts, full ecosystem, and venue competition — by decade or across the full era.">
+
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/site.css">
+
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('ls-theme');
+        var theme = stored;
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {
+        document.documentElement.dataset.theme = 'light';
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <header class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a class="topbar-title" href="./index.html" aria-label="London Theatre, 1660 to 1800, home">
+        <span class="mark-london">London</span><span class="mark-stage">Theatre</span><span class="mark-dates">1660&ndash;1800</span>
+      </a>
+      <nav class="topbar-nav metadata-label" id="topbar-nav" aria-label="Primary">
+        <a href="./index.html">Home</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./map.html">Map</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./calendar.html">Calendar</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./repertoire.html">Repertoire</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./people.html">People</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./receipts.html">Receipts</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./graphs.html" class="is-active">Networks</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./games.html">Games</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./about.html">About</a>
+      </nav>
+      <div class="topbar-controls">
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="topbar-nav">
+          <span></span><span></span><span></span>
+        </button>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+          <span class="glyph-moon" aria-hidden="true">&#9790;</span>
+          <span class="glyph-sun" aria-hidden="true">&#9728;</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="graph-head" aria-labelledby="page-title">
+    <div class="graph-head-inner">
+      <p class="graph-head-kicker">The Connexions of the Stage</p>
+      <h1 id="page-title" class="graph-head-title">Networks</h1>
+      <p class="graph-head-standfirst">Six views of theatrical relation — by decade or across the full era: playhouses and players; who shared the stage with whom; which plays were billed together; which performers dominated which works; the full three-way ecosystem; and which venues competed for the same talent.</p>
+    </div>
+  </section>
+
+  <main>
+
+    <section class="graph-section" aria-label="Network graph of the London stage">
+
+      <!-- Controls (overlaid top-left) -->
+      <div class="graph-controls" role="group" aria-label="Graph controls">
+        <div class="graph-mode-tabs" role="tablist" aria-label="Network view">
+          <button class="graph-mode-tab is-active" data-mode="theatres" role="tab" aria-selected="true">Theatres</button>
+          <button class="graph-mode-tab" data-mode="casting" role="tab" aria-selected="false">Co&#8209;casting</button>
+          <button class="graph-mode-tab" data-mode="pairings" role="tab" aria-selected="false">Programme</button>
+          <button class="graph-mode-tab" data-mode="works" role="tab" aria-selected="false">Works</button>
+          <button class="graph-mode-tab" data-mode="ecosystem" role="tab" aria-selected="false">Ecosystem</button>
+          <button class="graph-mode-tab" data-mode="venues" role="tab" aria-selected="false">Venues</button>
+        </div>
+        <div class="graph-decade-row" id="graph-decade-row" role="group" aria-label="Select decade" hidden>
+          <div class="graph-decade-header">
+            <span class="metadata-label graph-decade-word">Decade:</span>
+            <span id="graph-decade-label" class="graph-decade-label">1760s</span>
+          </div>
+          <input type="range" id="graph-decade-slider" class="graph-decade-slider"
+                 min="1660" max="1790" step="10" value="1760"
+                 aria-label="Decade" aria-valuetext="1760s">
+          <div class="graph-decade-ticks" aria-hidden="true">
+            <span>1660</span><span>1700</span><span>1740</span><span>1780</span>
+          </div>
+        </div>
+        <div class="graph-alleras-row">
+          <button type="button" id="graph-all-toggle" class="graph-all-btn is-active" aria-pressed="true">All eras (1660&ndash;1800)</button>
+        </div>
+        <div class="graph-search-row">
+          <input type="search" id="graph-search" class="graph-search-input metadata-label"
+                 placeholder="Search nodes…" aria-label="Search nodes by name"
+                 autocomplete="off" list="graph-search-suggestions">
+          <datalist id="graph-search-suggestions"></datalist>
+        </div>
+        <div class="graph-stats metadata-label" id="graph-stats" aria-live="polite" aria-atomic="true"></div>
+      </div>
+
+      <!-- Sigma canvas container -->
+      <div id="graph-canvas" role="img" aria-label="Network graph — click a node to view details"></div>
+
+      <!-- Loading indicator -->
+      <div class="graph-loading" id="graph-loading" role="status" aria-live="polite">
+        <span class="graph-loading-text">Rendering network&hellip;</span>
+      </div>
+
+      <!-- Node info panel -->
+      <aside class="graph-info" id="graph-info" hidden aria-label="Node details">
+        <button type="button" class="graph-info-close" id="graph-info-close" aria-label="Close node details">&times;</button>
+        <div id="graph-info-content"></div>
+      </aside>
+
+      <!-- Legend (overlaid bottom-right) -->
+      <div class="graph-legend metadata-label" id="graph-legend" aria-hidden="true">
+        <div class="graph-legend-title">Key</div>
+        <div id="graph-legend-content"></div>
+      </div>
+
+    </section>
+
+    <section class="intro graph-intro">
+      <p>
+        <strong>Theatres</strong> maps each performer to the playhouses where they worked, a bipartite graph of houses and players weighted by appearances.
+        <strong>Co&#8209;casting</strong> draws a line between every pair of performers who shared a stage more than twice, revealing the ensembles that gave each house its character.
+        <strong>Programme</strong> connects each mainpiece to the afterpieces it was billed with: a map of the evening&rsquo;s typical architecture.
+        <strong>Works</strong> links performers to the plays and entertainments they appeared in most, showing who &ldquo;owned&rdquo; a role or repertoire.
+        <strong>Ecosystem</strong> places all three node types, playhouses, performers, and works, in a single graph, tracing the full web of theatrical relations.
+        <strong>Venues</strong> connects playhouses by the performers they shared, revealing which houses competed for the same talent and which operated in separate worlds.
+      </p>
+      <p class="intro-credit metadata-label">
+        Graphs show the top nodes by activity. Toggle <em>All eras</em> to aggregate across the full 1660&ndash;1800 period instead of a single decade.
+        Node size is proportional to performances recorded; edge weight to shared appearances. Drag to pan; scroll to zoom; click a node to navigate to its detail page.
+        Data sparse before 1700 as cast lists are thin in the earliest seasons.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col-tagline">
+          <p class="footer-brand">London Theatre, 1660&ndash;1800</p>
+          <p class="footer-line">
+            A digital companion to the history of professional theatre in London, 1660&ndash;1800:
+            repertoire, receipts, performers, and playhouses.
+          </p>
+          <p class="footer-line"><a href="about.html">About this project &rarr;</a></p>
+        </div>
+        <div class="footer-col-sources">
+          <p class="footer-source-head">Data sources</p>
+          <p class="footer-line">
+            <cite>London Stage Database</cite>. University of Oregon,
+            <a href="https://londonstagedatabase.uoregon.edu/" rel="noopener" target="_blank" class="external">londonstagedatabase.uoregon.edu</a>.
+            Accessed 10&nbsp;Jun.&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+          <p class="footer-line">
+            <cite>Theatronomics: the Business of Theatre, 1732&ndash;1809</cite>
+            (O&rsquo;Shaughnessy&nbsp;et&nbsp;al., 2025),
+            <a href="https://theatronomics.com/" rel="noopener" target="_blank" class="external">theatronomics.com</a>.
+            Accessed 6&nbsp;May&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+        </div>
+      </div>
+      <p class="footer-line footer-byline">
+        Website by <a href="https://hubers.org.uk/" target="_blank" rel="noopener" class="external"><img src="https://hubers.org.uk/images/logo/cropped-hd-logo-1.png" alt="Huber Digital" class="hd-logo"></a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- graphology + sigma 3 loaded as ES modules inside graphs.js -->
+  <script type="module" src="js/graphs.js"></script>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      var root = document.documentElement;
+
+      function syncButton() {
+        var t = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = t === 'dark' ? 'light' : 'dark';
+        btn.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+        btn.setAttribute('aria-label', 'Switch to ' + next + ' mode');
+      }
+      syncButton();
+
+      btn.addEventListener('click', function () {
+        var cur = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = cur === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('ls-theme', next); } catch (e) {}
+        syncButton();
+        if (window.__graphsThemeChange) window.__graphsThemeChange(next);
+      });
+
+      var topbar = document.querySelector('.topbar');
+      function onScroll() {
+        if (!topbar) return;
+        if (window.scrollY > 4) topbar.classList.add('is-scrolled');
+        else topbar.classList.remove('is-scrolled');
+      }
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
+
+  <script src="js/site.js"></script>
+</body>
+</html>

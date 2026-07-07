@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Venues &mdash; London Theatre, 1660&ndash;1800</title>
+  <meta name="description" content="An interactive map of the playhouses, fair-booths and concert rooms that staged the London theatrical season between 1660 and 1800.">
+
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/site.css">
+
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('ls-theme');
+        var theme = stored;
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {
+        document.documentElement.dataset.theme = 'light';
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <header class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a class="topbar-title" href="./index.html" aria-label="The London Theatre, 1660 to 1800, home">
+        <span class="mark-london">London</span><span class="mark-stage">Theatre</span><span class="mark-dates">1660&ndash;1800</span>
+      </a>
+      <nav class="topbar-nav metadata-label" id="topbar-nav" aria-label="Primary">
+        <a href="./index.html">Home</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./map.html" class="is-active">Map</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./calendar.html">Calendar</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./repertoire.html">Repertoire</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./people.html">People</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./receipts.html">Receipts</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./graphs.html">Networks</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./games.html">Games</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./about.html">About</a>
+      </nav>
+      <div class="topbar-controls">
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="topbar-nav">
+          <span></span><span></span><span></span>
+        </button>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+          <span class="glyph-moon" aria-hidden="true">&#9790;</span>
+          <span class="glyph-sun" aria-hidden="true">&#9728;</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="map-head" aria-labelledby="page-title">
+    <div class="map-head-inner">
+      <p class="map-head-kicker">A Gazetteer of the Playhouses</p>
+      <h1 id="page-title" class="map-head-title">Map of Venues</h1>
+      <p class="map-head-standfirst">Two hundred and thirty-four playhouses, fair-booths, pleasure gardens and concert rooms that hosted the metropolitan theatrical season across one hundred and forty seasons.</p>
+    </div>
+  </section>
+
+  <main>
+    <section class="map-section" aria-label="Map of London theatre venues">
+      <div id="map" role="application" aria-label="Interactive map"></div>
+
+      <div class="map-timeline" role="group" aria-label="Filter venues by decade">
+        <div class="map-timeline-row">
+          <span class="timeline-label" aria-live="polite">
+            <span class="tl-decade" id="tl-decade">All decades</span>
+          </span>
+          <div class="timeline-stack">
+            <input type="range" class="timeline-track" id="tl-slider"
+                   min="1660" max="1800" step="10" value="1660"
+                   aria-label="Decade" disabled>
+            <div class="timeline-ticks" aria-hidden="true">
+              <span>1660</span><span>1680</span><span>1700</span><span>1720</span><span>1740</span><span>1760</span><span>1780</span><span>1800</span>
+            </div>
+          </div>
+          <button type="button" class="timeline-toggle is-active" id="tl-all" aria-pressed="true">All</button>
+          <span class="timeline-count" id="tl-count">&mdash;</span>
+        </div>
+      </div>
+
+      <div class="map-legend metadata-label" aria-hidden="true">
+        <div class="legend-title">Precision</div>
+        <div class="legend-row"><span class="swatch swatch-exact"></span>Exact site</div>
+        <div class="legend-row"><span class="swatch swatch-approx"></span>Approximate</div>
+        <div class="legend-note">Marker size &propto; performances recorded</div>
+      </div>
+    </section>
+
+    <section class="intro">
+      <p>
+        This map plots the venues named in <em>The London Stage,
+        1660&ndash;1800</em> against the streets of modern London. Each mark
+        stands for one house, a royal patent theatre, a booth erected at
+        Bartholomew Fair, a tavern room, or a garden stage, sized to the
+        number of performances recorded there. Filled marks denote a surviving
+        footprint or street address; lighter, dashed marks a district known only
+        in approximate terms. Hover or tap a mark to read the venue, its span of
+        activity, and the abbreviation used in the printed calendars.  Two
+        historical maps, John Strype's updated 1720 edition of Stow and John
+        Rocque's 1746 map of London, the most detailed contemporary surveys, are
+        available as overlays.  Details on wards, parishes, and places in
+        Rocque's map are also available for orientation.
+      </p>
+      <p class="intro-credit metadata-label">
+        Of the two hundred and thirty-four houses named in the calendars, one hundred and eighty-one are here set upon the map; the remaining fifty-three, chiefly fair-booths, tavern rooms and short-lived pleasure-garden stages, are known by name alone and await their bearings.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col-tagline">
+          <p class="footer-brand">London Theatre, 1660&ndash;1800</p>
+          <p class="footer-line">
+            A digital companion to the history of professional theatre in London, 1660&ndash;1800:
+            repertoire, receipts, performers, and playhouses.
+          </p>
+          <p class="footer-line"><a href="about.html">About this project &rarr;</a></p>
+        </div>
+        <div class="footer-col-sources">
+          <p class="footer-source-head">Data sources</p>
+          <p class="footer-line">
+            <cite>London Stage Database</cite>. University of Oregon,
+            <a href="https://londonstagedatabase.uoregon.edu/" rel="noopener" target="_blank" class="external">londonstagedatabase.uoregon.edu</a>.
+            Accessed 10&nbsp;Jun.&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+          <p class="footer-line">
+            <cite>Theatronomics: the Business of Theatre, 1732&ndash;1809</cite>
+            (O&rsquo;Shaughnessy&nbsp;et&nbsp;al., 2025),
+            <a href="https://theatronomics.com/" rel="noopener" target="_blank" class="external">theatronomics.com</a>.
+            Accessed 6&nbsp;May&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+        </div>
+      </div>
+      <p class="footer-line footer-byline">
+        Website by <a href="https://hubers.org.uk/" target="_blank" rel="noopener" class="external"><img src="https://hubers.org.uk/images/logo/cropped-hd-logo-1.png" alt="Huber Digital" class="hd-logo"></a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-hash@0.2.1/leaflet-hash.js"></script>
+  <script src="js/map.js"></script>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      var root = document.documentElement;
+
+      function syncButton() {
+        var t = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = t === 'dark' ? 'light' : 'dark';
+        btn.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+        btn.setAttribute('aria-label', 'Switch to ' + next + ' mode');
+      }
+      syncButton();
+
+      btn.addEventListener('click', function () {
+        var cur = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = cur === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('ls-theme', next); } catch (e) {}
+        syncButton();
+      });
+
+      var topbar = document.querySelector('.topbar');
+      function onScroll() {
+        if (!topbar) return;
+        if (window.scrollY > 4) topbar.classList.add('is-scrolled');
+        else topbar.classList.remove('is-scrolled');
+      }
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
+  <script src="js/site.js"></script>
+</body>
+</html>

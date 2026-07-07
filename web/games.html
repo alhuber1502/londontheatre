@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Games &mdash; London Theatre, 1660&ndash;1800</title>
+  <meta name="description" content="Nine diversions drawn from 141 seasons of London theatre: Whose Cast?, Name the Decade, Fill the Bill, Box Office or Bust?, Whose House?, Debut Decade, Play&rsquo;s Home, Long Runner or Flash?, and Opening Night.">
+
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/site.css">
+
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('ls-theme');
+        var theme = stored;
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {
+        document.documentElement.dataset.theme = 'light';
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <header class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a class="topbar-title" href="./index.html" aria-label="London Theatre, 1660 to 1800, home">
+        <span class="mark-london">London</span><span class="mark-stage">Theatre</span><span class="mark-dates">1660&ndash;1800</span>
+      </a>
+      <nav class="topbar-nav metadata-label" id="topbar-nav" aria-label="Primary">
+        <a href="./index.html">Home</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./map.html">Map</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./calendar.html">Calendar</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./repertoire.html">Repertoire</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./people.html">People</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./receipts.html">Receipts</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./graphs.html">Networks</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./games.html" class="is-active">Games</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./about.html">About</a>
+      </nav>
+      <div class="topbar-controls">
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="topbar-nav">
+          <span></span><span></span><span></span>
+        </button>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+          <span class="glyph-moon" aria-hidden="true">&#9790;</span>
+          <span class="glyph-sun" aria-hidden="true">&#9728;</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="graph-head" aria-labelledby="page-title">
+    <div class="graph-head-inner">
+      <p class="graph-head-kicker">The Evening&rsquo;s Amusements</p>
+      <h1 id="page-title" class="graph-head-title">Games</h1>
+      <p class="graph-head-standfirst">Nine diversions drawn from 141 seasons of London theatre. Choose a game below to begin.</p>
+    </div>
+  </section>
+
+  <main>
+
+    <!-- Game lobby: choose a game -->
+    <section class="games-lobby" id="games-lobby" aria-label="Choose a game">
+      <div class="games-lobby-inner">
+
+        <div class="game-card" data-game="whoseCast" role="button" tabindex="0"
+             aria-label="Play Whose Cast?">
+          <div class="game-card-num metadata-label">I</div>
+          <div class="game-card-title">Whose Cast?</div>
+          <p class="game-card-desc">Four performers shared the stage. Which play were they in?</p>
+          <span class="game-card-cta metadata-label">Play &rarr;</span>
+        </div>
+
+        <div class="game-card" data-game="nameTheDecade" role="button" tabindex="0"
+             aria-label="Play Name the Decade">
+          <div class="game-card-num metadata-label">II</div>
+          <div class="game-card-title">Name the Decade</div>
+          <p class="game-card-desc">A play title is given. In which decade was it most often staged?</p>
+          <span class="game-card-cta metadata-label">Play &rarr;</span>
+        </div>
+
+        <div class="game-card" data-game="fillTheBill" role="button" tabindex="0"
+             aria-label="Play Fill the Bill">
+          <div class="game-card-num metadata-label">III</div>
+          <div class="game-card-title">Fill the Bill</div>
+          <p class="game-card-desc">A mainpiece is named. Which afterpiece was it most often paired with?</p>
+          <span class="game-card-cta metadata-label">Play &rarr;</span>
+        </div>
+
+        <div class="game-card" data-game="boxOffice" role="button" tabindex="0"
+             aria-label="Play Box Office or Bust?">
+          <div class="game-card-num metadata-label">IV</div>
+          <div class="game-card-title">Box Office or Bust?</div>
+          <p class="game-card-desc">Two nights at the same theatre. Which evening took more at the box office?</p>
+          <span class="game-card-cta metadata-label">Play &rarr;</span>
+        </div>
+
+        <div class="game-card" data-game="whoseHouse" role="button" tabindex="0"
+             aria-label="Play Whose House?">
+          <div class="game-card-num metadata-label">V</div>
+          <div class="game-card-title">Whose House?</div>
+          <p class="game-card-desc">A performer and a decade are given. At which playhouse did they appear most often?</p>
+          <span class="game-card-cta metadata-label">Play &rarr;</span>
+        </div>
+
+        <div class="game-card" data-game="debutDecade" role="button" tabindex="0"
+             aria-label="Play Debut Decade">
+          <div class="game-card-num metadata-label">VI</div>
+          <div class="game-card-title">Debut Decade</div>
+          <p class="game-card-desc">A performer&rsquo;s name is given. In which decade did they first appear on the London stage?</p>
+          <span class="game-card-cta metadata-label">Play &rarr;</span>
+        </div>
+
+        <div class="game-card" data-game="playsHome" role="button" tabindex="0"
+             aria-label="Play Play's Home">
+          <div class="game-card-num metadata-label">VII</div>
+          <div class="game-card-title">Play&rsquo;s Home</div>
+          <p class="game-card-desc">A mainpiece and a decade are given. At which playhouse was it most often staged?</p>
+          <span class="game-card-cta metadata-label">Play &rarr;</span>
+        </div>
+
+        <div class="game-card" data-game="longRunner" role="button" tabindex="0"
+             aria-label="Play Long Runner or Flash?">
+          <div class="game-card-num metadata-label">VIII</div>
+          <div class="game-card-title">Long Runner or Flash?</div>
+          <p class="game-card-desc">Two plays from the same era. Which racked up more performances across all 141 seasons?</p>
+          <span class="game-card-cta metadata-label">Play &rarr;</span>
+        </div>
+
+        <div class="game-card" data-game="openingNight" role="button" tabindex="0"
+             aria-label="Play Opening Night">
+          <div class="game-card-num metadata-label">IX</div>
+          <div class="game-card-title">Opening Night</div>
+          <p class="game-card-desc">A play&rsquo;s title is given. In which decade did it first appear on the London stage?</p>
+          <span class="game-card-cta metadata-label">Play &rarr;</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Game arena: active game -->
+    <section class="games-arena" id="games-arena" hidden aria-label="Active game">
+      <div class="game-header">
+        <button type="button" class="game-back" id="game-back" aria-label="Return to game selection">&larr; Games</button>
+        <span class="game-title-label" id="game-title-label"></span>
+        <span class="game-score metadata-label" id="game-score" aria-live="polite" aria-atomic="true"></span>
+      </div>
+      <div class="game-round metadata-label" id="game-round" aria-live="polite"></div>
+      <div class="game-question" id="game-question" role="heading" aria-level="2"></div>
+      <div class="game-cast" id="game-cast" aria-label="Cast list"></div>
+      <div class="game-options" id="game-options" role="group" aria-label="Answer options"></div>
+      <div class="game-feedback" id="game-feedback" hidden role="status" aria-live="polite"></div>
+      <button type="button" class="game-next" id="game-next" hidden>Next &rarr;</button>
+    </section>
+
+    <!-- End screen -->
+    <section class="games-end" id="games-end" hidden aria-label="Game over">
+      <p class="games-end-label metadata-label">Score</p>
+      <p class="games-end-score" id="games-end-score"></p>
+      <p class="games-end-msg" id="games-end-msg"></p>
+      <div class="games-end-actions">
+        <button type="button" class="game-btn-primary" id="games-play-again">Play again</button>
+        <button type="button" class="game-btn-secondary" id="games-change">Choose another game</button>
+      </div>
+    </section>
+
+    <!-- Loading indicator -->
+    <div class="games-loading" id="games-loading" hidden role="status" aria-live="polite">
+      <span>Loading questions&hellip;</span>
+    </div>
+
+    <section class="intro graph-intro">
+      <p>
+        <strong>Whose Cast?</strong> draws on the co-casting graph: four performers linked to
+        the same work in a given decade. <strong>Name the Decade</strong> uses each
+        work&rsquo;s decade-by-decade performance count to find its peak era.
+        <strong>Fill the Bill</strong> tests knowledge of the mainpiece&ndash;afterpiece
+        pairings that shaped each evening&rsquo;s programme. <strong>Box Office or Bust?</strong>
+        sets two nights from the same venue&rsquo;s season against each other, one a
+        strong earner, one a lean night. <strong>Whose House?</strong> tests knowledge of
+        which playhouse a given performer called home in a given decade.
+        <strong>Debut Decade</strong> traces careers to their first recorded appearance.
+        <strong>Play&rsquo;s Home</strong> asks the same question of the repertoire: at which
+        house was a given mainpiece most often staged in a given decade?
+        <strong>Long Runner or Flash?</strong> pits two contemporary plays against each other by
+        their total performances across all 141 seasons.
+        <strong>Opening Night</strong> traces plays to their first recorded London appearance.
+      </p>
+      <p class="intro-credit metadata-label">
+        Ten rounds per game. Questions are drawn at random from a pre-built bank.
+        Data sparse before 1710; questions are drawn from the 1710s&ndash;1790s.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col-tagline">
+          <p class="footer-brand">London Theatre, 1660&ndash;1800</p>
+          <p class="footer-line">
+            A digital companion to the history of professional theatre in London, 1660&ndash;1800:
+            repertoire, receipts, performers, and playhouses.
+          </p>
+          <p class="footer-line"><a href="about.html">About this project &rarr;</a></p>
+        </div>
+        <div class="footer-col-sources">
+          <p class="footer-source-head">Data sources</p>
+          <p class="footer-line">
+            <cite>London Stage Database</cite>. University of Oregon,
+            <a href="https://londonstagedatabase.uoregon.edu/" rel="noopener" target="_blank" class="external">londonstagedatabase.uoregon.edu</a>.
+            Accessed 10&nbsp;Jun.&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+          <p class="footer-line">
+            <cite>Theatronomics: the Business of Theatre, 1732&ndash;1809</cite>
+            (O&rsquo;Shaughnessy&nbsp;et&nbsp;al., 2025),
+            <a href="https://theatronomics.com/" rel="noopener" target="_blank" class="external">theatronomics.com</a>.
+            Accessed 6&nbsp;May&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+        </div>
+      </div>
+      <p class="footer-line footer-byline">
+        Website by <a href="https://hubers.org.uk/" target="_blank" rel="noopener" class="external"><img src="https://hubers.org.uk/images/logo/cropped-hd-logo-1.png" alt="Huber Digital" class="hd-logo"></a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/games.js"></script>
+
+  <script>
+    (function () {
+      var btn  = document.getElementById('theme-toggle');
+      var root = document.documentElement;
+
+      function syncButton() {
+        var t    = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = t === 'dark' ? 'light' : 'dark';
+        btn.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+        btn.setAttribute('aria-label', 'Switch to ' + next + ' mode');
+      }
+      syncButton();
+
+      btn.addEventListener('click', function () {
+        var cur  = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = cur === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('ls-theme', next); } catch (e) {}
+        syncButton();
+      });
+
+      var topbar = document.querySelector('.topbar');
+      function onScroll() {
+        if (!topbar) return;
+        topbar.classList.toggle('is-scrolled', window.scrollY > 4);
+      }
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
+
+  <script src="js/site.js"></script>
+</body>
+</html>

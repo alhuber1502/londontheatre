@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Receipts &mdash; London Theatre, 1660&ndash;1800</title>
+  <meta name="description" content="Per-performance box-office takings at the London theatres, 1705&ndash;1800 &mdash; median nightly receipts by season, the top-grossing and most modest nights, drawn from the London Stage calendars.">
+
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/site.css">
+
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('ls-theme');
+        var theme = stored;
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {
+        document.documentElement.dataset.theme = 'light';
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <header class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a class="topbar-title" href="./index.html" aria-label="London Theatre, 1660 to 1800, home">
+        <span class="mark-london">London</span><span class="mark-stage">Theatre</span><span class="mark-dates">1660&ndash;1800</span>
+      </a>
+      <nav class="topbar-nav metadata-label" id="topbar-nav" aria-label="Primary">
+        <a href="./index.html">Home</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./map.html">Map</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./calendar.html">Calendar</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./repertoire.html">Repertoire</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./people.html">People</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./receipts.html" class="is-active">Receipts</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./graphs.html">Networks</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./games.html">Games</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./about.html">About</a>
+      </nav>
+      <div class="topbar-controls">
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="topbar-nav">
+          <span></span><span></span><span></span>
+        </button>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+          <span class="glyph-moon" aria-hidden="true">&#9790;</span>
+          <span class="glyph-sun" aria-hidden="true">&#9728;</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="receipts-main" aria-live="polite">
+    <section class="performer-head" id="receipts-head" aria-labelledby="receipts-title">
+      <div class="performer-head-inner">
+        <p class="performer-head-kicker">At the Box-Office</p>
+        <h1 id="receipts-title" class="performer-head-title">Receipts of the House</h1>
+        <p class="performer-head-sub" id="receipts-subtitle">&nbsp;</p>
+      </div>
+    </section>
+
+    <section class="rep-section" id="receipts-stats" aria-labelledby="stats-heading" hidden>
+      <h2 id="stats-heading" class="rep-h2">At a glance</h2>
+      <div class="performer-ledger" id="receipts-ledger" role="list"></div>
+      <p class="performer-note metadata-label">
+        Takings are expressed in pre-decimal pounds, shillings and pence, twenty shillings to the pound, twelve pence to the shilling. Figures below are a lower bound: they come from a pattern-match over the managers' own marginal notes in the printed calendars, and any page that phrased receipts idiosyncratically will have slipped through the net.
+      </p>
+    </section>
+
+    <section class="rep-section" id="receipts-chart-section" aria-labelledby="chart-heading" hidden>
+      <h2 id="chart-heading" class="rep-h2">Median nightly take, season by season</h2>
+      <p class="performer-note metadata-label">
+        Each line plots the median take of a single theatre across one season &mdash; a more honest centre than the mean, which is pulled upward by benefit nights and royal commands. For Covent Garden and Drury Lane, a dashed line shows the account-book door receipts; the solid line is the press-reported figure. The gap between them is part of the story.
+      </p>
+      <div class="receipts-venue-filter" id="receipts-venue-filter" role="group" aria-label="Filter by playhouse"></div>
+      <figure class="receipts-chart" id="receipts-chart" aria-label="Median nightly receipts by season"></figure>
+      <p class="receipts-chart-legend metadata-label" id="receipts-chart-legend"></p>
+    </section>
+
+    <section class="rep-section" id="receipts-top-section" aria-labelledby="top-heading" hidden>
+      <h2 id="top-heading" class="rep-h2">The highest takes on record</h2>
+      <div class="receipts-source-toggle" role="group" aria-label="Data source">
+        <button class="receipts-source-btn is-active" data-source="ls">Press reports</button>
+        <button class="receipts-source-btn" data-source="ab">Account books</button>
+      </div>
+      <p class="performer-note metadata-label" id="top-desc-ls">
+        The twenty-five largest single-night receipts transcribed in the
+        calendars. Benefit nights, performances whose profits went to a named
+        player or manager, are flagged, because they cluster at the top
+        of the list.
+        For Covent Garden and Drury Lane nights within 1732&ndash;1809, a
+        second figure in smaller type shows the Door Receipts from the
+        account books &mdash; the treasurer&rsquo;s own record
+        of money taken at the door, which often differs from the figure
+        printed in the newspapers.
+      </p>
+      <p class="performer-note metadata-label" id="top-desc-ab" hidden>
+        The twenty-five largest single-night door receipts in the Theatronomics
+        account books, restricted to Drury Lane and Covent Garden within the
+        London Stage period (to 1800). Where a press figure for the same night
+        survives in the calendars it is shown in smaller type &mdash; and will
+        usually agree, because the nights that rank highest by account-book
+        receipts are the same steady earners the press reported accurately. The
+        dramatic disagreements between ledger and newspaper fall on benefit
+        nights, where pre-sold tickets and the beneficiary&rsquo;s own
+        collections inflated the press figure far above the door take: those
+        nights head the press list but do not appear here.
+      </p>
+      <ol class="receipts-top" id="receipts-top"></ol>
+    </section>
+
+    <section class="rep-section" id="receipts-low-section" aria-labelledby="low-heading" hidden>
+      <h2 id="low-heading" class="rep-h2">The slimmest evenings</h2>
+      <p class="performer-note metadata-label">
+        The ten smallest takings on the same ledger, a few guineas for a ghost house on a wet Wednesday.
+        Account-book figures are shown in smaller type where available.
+      </p>
+      <ol class="receipts-top" id="receipts-low"></ol>
+    </section>
+
+    <section class="rep-section" id="receipts-deficiency-section" aria-labelledby="deficiency-heading" hidden>
+      <h2 id="deficiency-heading" class="rep-h2">Benefit deficiencies</h2>
+      <p class="performer-note metadata-label" id="receipts-deficiency-intro"></p>
+      <div class="performer-ledger receipts-deficiency-ledger" id="receipts-deficiency-ledger" role="list"></div>
+      <figure class="receipts-deficiency-chart" id="receipts-deficiency-chart" aria-label="Benefit deficiencies by decade"></figure>
+      <p class="performer-note metadata-label">
+        Account-book data: <em>Theatronomics: the Business of Theatre,
+        1732&ndash;1809</em> (O&rsquo;Shaughnessy&nbsp;et&nbsp;al., 2025),
+        <a href="https://theatronomics.com/" rel="noopener" target="_blank" class="external">theatronomics.com</a>,
+        CC&nbsp;BY-NC&nbsp;4.0.
+      </p>
+    </section>
+
+    <section class="rep-section" id="receipts-method-section" aria-labelledby="method-heading">
+      <h2 id="method-heading" class="rep-h2">On the data</h2>
+      <p class="performer-note">
+        The printed <em>London Stage</em> calendars preserve, alongside the
+        bills of the evening, the managers' own notes on the night's takings.
+        Those notes 
+        have been parsed back into machine-readable totals. Vol.&nbsp;II and III
+        entries sometimes split receipts into <em>money</em> (cash at the door)
+        and <em>tickets</em> (paper distributed in advance); both are summed.
+        For ledger-grade analysis that reconciles with Treasurer's accounts and
+        house charges, the <a href="https://theatronomics.com/"
+        rel="noopener" target="_blank" class="external">Theatronomics</a> project (NUI
+        Galway) is the definitive source for Drury Lane and Covent Garden from
+        1732; these pages are complementary, per-performance grain across
+        all venues that reported a take, including Lincoln's Inn Fields, the
+        Queen's, the Haymarket and the smaller houses.
+      </p>
+    </section>
+
+    <div class="performer-missing" id="receipts-missing" hidden>
+      <h2>Receipts unavailable</h2>
+      <p>The receipts aggregate could not be loaded. Please reload the page or try again later.</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col-tagline">
+          <p class="footer-brand">London Theatre, 1660&ndash;1800</p>
+          <p class="footer-line">
+            A digital companion to the history of professional theatre in London, 1660&ndash;1800:
+            repertoire, receipts, performers, and playhouses.
+          </p>
+          <p class="footer-line"><a href="about.html">About this project &rarr;</a></p>
+        </div>
+        <div class="footer-col-sources">
+          <p class="footer-source-head">Data sources</p>
+          <p class="footer-line">
+            <cite>London Stage Database</cite>. University of Oregon,
+            <a href="https://londonstagedatabase.uoregon.edu/" rel="noopener" target="_blank" class="external">londonstagedatabase.uoregon.edu</a>.
+            Accessed 10&nbsp;Jun.&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+          <p class="footer-line">
+            <cite>Theatronomics: the Business of Theatre, 1732&ndash;1809</cite>
+            (O&rsquo;Shaughnessy&nbsp;et&nbsp;al., 2025),
+            <a href="https://theatronomics.com/" rel="noopener" target="_blank" class="external">theatronomics.com</a>.
+            Accessed 6&nbsp;May&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+        </div>
+      </div>
+      <p class="footer-line footer-byline">
+        Website by <a href="https://hubers.org.uk/" target="_blank" rel="noopener" class="external"><img src="https://hubers.org.uk/images/logo/cropped-hd-logo-1.png" alt="Huber Digital" class="hd-logo"></a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/receipts.js"></script>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      var root = document.documentElement;
+
+      function syncButton() {
+        var t = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = t === 'dark' ? 'light' : 'dark';
+        btn.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+        btn.setAttribute('aria-label', 'Switch to ' + next + ' mode');
+      }
+      syncButton();
+
+      btn.addEventListener('click', function () {
+        var cur = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = cur === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('ls-theme', next); } catch (e) {}
+        syncButton();
+      });
+
+      var topbar = document.querySelector('.topbar');
+      function onScroll() {
+        if (!topbar) return;
+        if (window.scrollY > 4) topbar.classList.add('is-scrolled');
+        else topbar.classList.remove('is-scrolled');
+      }
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
+  <script src="js/site.js"></script>
+</body>
+</html>

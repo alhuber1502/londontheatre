@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>London Theatre, 1660&ndash;1800</title>
+  <meta name="description" content="A public-engagement window onto 52,617 theatrical performances recorded in the London Stage Calendar, 1660-1800.">
+
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="css/home.css">
+
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('ls-theme');
+        var theme = stored;
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {
+        document.documentElement.dataset.theme = 'light';
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <header class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a class="topbar-title" href="./index.html" aria-label="London Theatre, 1660 to 1800, home">
+        <span class="mark-london">London</span><span class="mark-stage">Theatre</span><span class="mark-dates">1660&ndash;1800</span>
+      </a>
+      <nav class="topbar-nav metadata-label" id="topbar-nav" aria-label="Primary">
+        <a href="./index.html" class="is-active">Home</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./map.html">Map</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./calendar.html">Calendar</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./repertoire.html">Repertoire</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./people.html">People</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./receipts.html">Receipts</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./graphs.html">Networks</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./games.html">Games</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./about.html">About</a>
+      </nav>
+      <div class="topbar-controls">
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="topbar-nav">
+          <span></span><span></span><span></span>
+        </button>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+          <span class="glyph-moon" aria-hidden="true">&#9790;</span>
+          <span class="glyph-sun" aria-hidden="true">&#9728;</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero" id="hero" data-variant="overlay" aria-labelledby="page-title">
+    <img class="hero-image"
+         src="images/ycba_e41422c1-a3d0-42b6-b8ef-21614f228114.jpg"
+         alt="Thomas Rowlandson, An Audience watching a Play at Drury Lane Theatre — pit and boxes populated by caricatured figures in 1780s dress.">
+    <div class="hero-wash" aria-hidden="true"></div>
+
+    <div class="hero-frame">
+      <p class="hero-kicker">A Public&ndash;Engagement Gazetteer</p>
+
+      <h1 id="page-title" class="hero-title">
+        <span class="ht-london">London</span><span class="ht-theatre">Theatre</span>
+      </h1>
+
+      <div class="hero-dates">
+        <span class="hero-dates-rule" aria-hidden="true"></span>
+        <span class="hero-dates-range"><em>in</em> one hundred and forty seasons, <strong>1660&#8202;&ndash;&#8202;1800</strong></span>
+        <p class="hero-dates-standfirst">
+          Playhouses, patent theatres and pleasure gardens: <em>fifty-two
+          thousand nights</em> of performance, made visual.<br/>
+          <small style="font-style: normal;"><a href="https://londonstagedatabase.uoregon.edu/" class="external" target="_blank">Powered by the London Stage Database</a></small>
+        </p>
+      </div>
+    </div>
+
+    <figcaption class="hero-caption">
+      <strong>Plate</strong>
+      After Thomas Rowlandson, <em>An Audience watching a Play at Drury Lane Theatre</em>.
+      <a href="https://collections.britishart.yale.edu/" rel="noopener" target="_blank" class="external">Yale Center for British Art</a>, Paul Mellon Collection (public domain).
+    </figcaption>
+
+    <span class="hero-scroll" aria-hidden="true">Scroll</span>
+  </section>
+  <!-- companion strip used only by the "masked" variant -->
+  <aside class="hero-masked-strip" aria-hidden="true">
+    <img src="images/ycba_e41422c1-a3d0-42b6-b8ef-21614f228114.jpg" alt="">
+  </aside>
+
+  <main>
+
+    <section class="attractions" aria-labelledby="attractions-heading">
+      <h2 id="attractions-heading" class="attractions-heading">The Evening&rsquo;s Attractions</h2>
+      <ul class="playbill">
+        <li>
+          <a class="playbill-row is-link" href="./map.html">
+            <span class="pb-label">Map</span>
+            <span class="pb-desc">Every playhouse, booth, and pleasure garden plotted across the city, with a decade-by-decade timeline of theatrical activity from the first Restoration licences to the century&rsquo;s end.</span>
+          </a>
+        </li>
+        <li>
+          <a class="playbill-row is-link" href="./calendar.html">
+            <span class="pb-label">Calendar</span>
+            <span class="pb-desc">Day by day across 141 years, 1659&ndash;1800. Each cell is a night at the theatre; deeper colour records a busier house. Filter by playhouse or decade to trace a season in full.</span>
+          </a>
+        </li>
+        <li>
+          <a class="playbill-row is-link" href="./repertoire.html">
+            <span class="pb-label">Repertoire</span>
+            <span class="pb-desc">Plays, operas, pantomimes, and drolls: searchable by title, genre, and season, with performance tallies, first-night dates, and the theatres that staged each work.</span>
+          </a>
+        </li>
+        <li>
+          <a class="playbill-row is-link" href="./people.html">
+            <span class="pb-label">People</span>
+            <span class="pb-desc">A dramatis personae of the actresses, actors, child performers, and companies who filled the cast columns, with appearance counts, active decades, and the houses where they worked.</span>
+          </a>
+        </li>
+        <li>
+          <a class="playbill-row is-link" href="./receipts.html">
+            <span class="pb-label">Receipts</span>
+            <span class="pb-desc">A ninety-five-year ledger of box-office takings at Drury Lane and Covent Garden: record nights, benefit performances, seasonal medians, and the long run of nightly revenue from 1660 to 1776.</span>
+          </a>
+        </li>
+        <li>
+          <a class="playbill-row is-link" href="./graphs.html">
+            <span class="pb-label">Networks</span>
+            <span class="pb-desc">Six network views of theatrical connexion, by decade or across the full era: playhouses and their players; co-casting partnerships; mainpiece&ndash;afterpiece pairings; works and their performers; and more.</span>
+          </a>
+        </li>
+        <li>
+          <a class="playbill-row is-link" href="./games.html">
+            <span class="pb-label">Games</span>
+            <span class="pb-desc">Nine diversions drawn from 141 seasons: identify a cast, place a play in its decade, match a mainpiece to its afterpiece, pit two box-office nights against each other, and more.</span>
+          </a>
+        </li>
+        <li>
+          <a class="playbill-row is-link" href="./about.html">
+            <span class="pb-label">About</span>
+            <span class="pb-desc">The dataset, its sources, the limits of the record, and the grain of its reading.</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="ledger" aria-label="By the numbers">
+      <div class="ledger-line">
+        <div class="ledger-entry">
+          <span class="ledger-figure" data-stat="events">&mdash;</span>
+          <span class="ledger-label">Event-days</span>
+        </div>
+        <span class="ledger-dot" aria-hidden="true">&middot;</span>
+        <div class="ledger-entry">
+          <span class="ledger-figure" data-stat="performances">&mdash;</span>
+          <span class="ledger-label">Piece-performances</span>
+        </div>
+        <span class="ledger-dot" aria-hidden="true">&middot;</span>
+        <div class="ledger-entry">
+          <span class="ledger-figure" data-stat="works">&mdash;</span>
+          <span class="ledger-label">Distinct works</span>
+        </div>
+        <span class="ledger-dot" aria-hidden="true">&middot;</span>
+        <div class="ledger-entry">
+          <span class="ledger-figure" data-stat="performers">&mdash;</span>
+          <span class="ledger-label">Named performers</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col-tagline">
+          <p class="footer-brand">London Theatre, 1660&ndash;1800</p>
+          <p class="footer-line">
+            A digital companion to the history of professional theatre in London, 1660&ndash;1800:
+            repertoire, receipts, performers, and playhouses.
+          </p>
+          <p class="footer-line"><a href="about.html">About this project &rarr;</a></p>
+        </div>
+        <div class="footer-col-sources">
+          <p class="footer-source-head">Data sources</p>
+          <p class="footer-line">
+            <cite>London Stage Database</cite>. University of Oregon,
+            <a href="https://londonstagedatabase.uoregon.edu/" rel="noopener" target="_blank" class="external">londonstagedatabase.uoregon.edu</a>.
+            Accessed 10&nbsp;Jun.&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+          <p class="footer-line">
+            <cite>Theatronomics: the Business of Theatre, 1732&ndash;1809</cite>
+            (O&rsquo;Shaughnessy&nbsp;et&nbsp;al., 2025),
+            <a href="https://theatronomics.com/" rel="noopener" target="_blank" class="external">theatronomics.com</a>.
+            Accessed 6&nbsp;May&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+        </div>
+      </div>
+      <p class="footer-line footer-byline">
+        Website by <a href="https://hubers.org.uk/" target="_blank" rel="noopener" class="external"><img src="https://hubers.org.uk/images/logo/cropped-hd-logo-1.png" alt="Huber Digital" class="hd-logo"></a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script>
+    // Theme toggle
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      var root = document.documentElement;
+      function syncButton() {
+        var t = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = t === 'dark' ? 'light' : 'dark';
+        btn.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+        btn.setAttribute('aria-label', 'Switch to ' + next + ' mode');
+      }
+      syncButton();
+      btn.addEventListener('click', function () {
+        var cur = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = cur === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('ls-theme', next); } catch (e) {}
+        syncButton();
+      });
+
+      var topbar = document.querySelector('.topbar');
+      var body = document.body;
+      function onScroll() {
+        if (!topbar) return;
+        var y = window.scrollY;
+        if (y > 4) topbar.classList.add('is-scrolled');
+        else topbar.classList.remove('is-scrolled');
+        if (y > 60) body.classList.add('is-scrolled');
+        else body.classList.remove('is-scrolled');
+      }
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
+
+  <script>
+    // Stats from data/stats.json
+    (function () {
+      var nf = new Intl.NumberFormat('en-GB');
+      fetch('data/stats.json', { cache: 'no-cache' })
+        .then(function (r) { if (!r.ok) throw new Error('stats.json ' + r.status); return r.json(); })
+        .then(function (s) {
+          var map = {
+            events: s.events,
+            performances: s.performances,
+            works: s.works,
+            performers: s.performers
+          };
+          document.querySelectorAll('[data-stat]').forEach(function (el) {
+            var k = el.getAttribute('data-stat');
+            if (typeof map[k] === 'number') el.textContent = nf.format(map[k]);
+          });
+        })
+        .catch(function (err) { console.warn('Could not load stats.json:', err); });
+    })();
+  </script>
+
+  <script src="js/site.js"></script>
+</body>
+</html>

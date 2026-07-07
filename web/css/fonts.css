@@ -1,0 +1,121 @@
+
+/* FONTS */
+
+/* 1. LIGHT (Weight 300) */
+@font-face {
+  font-family: 'Plantin MT Pro';
+  src: url('fonts/PlantinMTProLight.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plantin MT Pro';
+  src: url('fonts/PlantinMTProLightIt.woff2') format('woff2');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* 2. REGULAR (Weight 400) */
+@font-face {
+  font-family: 'Plantin MT Pro';
+  src: url('fonts/PlantinMTProRg.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plantin MT Pro';
+  src: url('fonts/PlantinMTProRgIt.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* 3. SEMI-BOLD (Weight 600) */
+@font-face {
+  font-family: 'Plantin MT Pro';
+  src: url('fonts/PlantinMTProSmBd.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plantin MT Pro';
+  src: url('fonts/PlantinMTProSemiBdIt.woff2') format('woff2');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* 4. BOLD (Weight 700) */
+@font-face {
+  font-family: 'Plantin MT Pro';
+  src: url('fonts/PlantinMTProBold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plantin MT Pro';
+  src: url('fonts/PlantinMTProBoldIt.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* 5. CONDENSED BOLD (Weight 700 + Condensed) */
+@font-face {
+  font-family: 'Plantin MT Pro';
+  src: url('fonts/PlantinMTProCnBd.woff2') format('woff2');
+  font-weight: 700;
+  font-stretch: condensed;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* GLOBAL STYLES */
+
+body {
+  font-family: 'Plantin MT Pro', serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* Standard bolding uses Semi-Bold (SmBd) */
+strong, b {
+  font-weight: 600;
+}
+
+/* Standard emphasis uses Semi-Bold Italic (SemiBdIt) */
+em, i {
+  font-style: italic;
+}
+
+.condensed-bold {
+  font-weight: 700;
+  font-stretch: condensed;
+  letter-spacing: 0.02em; /* Condensed fonts benefit from tiny bit of spacing */
+  text-transform: uppercase;
+}
+
+/* Use this if you want an even lighter 'Semi-Bold' feel for headings */
+h1, h2, h3 {
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+}
+
+.metadata-label {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase; /* Plantin Condensed Bold looks very "archival" in all-caps */
+  font-size: 0.9rem;
+}
+

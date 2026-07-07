@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /data/
+Disallow: /css/
+Disallow: /js/
+
+Sitemap: https://londontheatre.prisms.digital/sitemap.xml

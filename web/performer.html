@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Performer &mdash; London Theatre, 1660&ndash;1800</title>
+  <meta name="description" content="A single performer's appearances, roles, theatres and frequent co-stars drawn from the London Stage calendars, 1660&ndash;1800.">
+
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/site.css">
+
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('ls-theme');
+        var theme = stored;
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {
+        document.documentElement.dataset.theme = 'light';
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <header class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a class="topbar-title" href="./index.html" aria-label="London Theatre, 1660 to 1800, home">
+        <span class="mark-london">London</span><span class="mark-stage">Theatre</span><span class="mark-dates">1660&ndash;1800</span>
+      </a>
+      <nav class="topbar-nav metadata-label" id="topbar-nav" aria-label="Primary">
+        <a href="./index.html">Home</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./map.html">Map</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./calendar.html">Calendar</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./repertoire.html">Repertoire</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./people.html" class="is-active">People</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./receipts.html">Receipts</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./graphs.html">Networks</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./games.html">Games</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./about.html">About</a>
+      </nav>
+      <div class="topbar-controls">
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="topbar-nav">
+          <span></span><span></span><span></span>
+        </button>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+          <span class="glyph-moon" aria-hidden="true">&#9790;</span>
+          <span class="glyph-sun" aria-hidden="true">&#9728;</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="performer-main" aria-live="polite">
+    <section class="performer-head" id="performer-head" aria-labelledby="performer-title" hidden>
+      <div class="performer-head-inner">
+        <p class="performer-head-kicker">From the Dramatis Personae</p>
+        <h1 id="performer-title" class="performer-head-title">&nbsp;</h1>
+        <p class="performer-head-sub" id="performer-subtitle">&nbsp;</p>
+      </div>
+    </section>
+
+    <aside class="performer-caveat" id="performer-caveat" role="note" hidden>
+      <strong>A note on identity</strong>
+      <span id="performer-caveat-body"></span>
+    </aside>
+
+    <section class="rep-section" id="performer-stats" aria-labelledby="stats-heading" hidden>
+      <h2 id="stats-heading" class="rep-h2">At a glance</h2>
+      <div class="performer-ledger" id="performer-ledger" role="list">
+        <!-- ledger entries injected by js -->
+      </div>
+    </section>
+
+    <section class="rep-section" id="performer-type-section" aria-labelledby="type-heading" hidden>
+      <h2 id="type-heading" class="rep-h2">Role profile</h2>
+      <figure class="role-type-fig" id="performer-type-fig" aria-label="Role profile breakdown"></figure>
+      <p class="performer-note">
+        <strong>Named</strong> &mdash; character identified by name &middot;
+        <strong>Titled</strong> &mdash; by title only (&ldquo;the King&rdquo;) &middot;
+        <strong>Generic</strong> &mdash; by type (&ldquo;a Soldier&rdquo;) &middot;
+        <strong>Ensemble</strong> &mdash; chorus or group part &middot;
+        <strong>Paratext</strong> &mdash; prologue or epilogue speaker
+      </p>
+    </section>
+
+    <section class="rep-section" id="performer-milestones-section" aria-labelledby="milestones-heading" hidden>
+      <h2 id="milestones-heading" class="rep-h2">Milestones</h2>
+      <ul class="milestone-list" id="performer-milestones" role="list"></ul>
+    </section>
+
+    <section class="rep-section" id="performer-decade-section" aria-labelledby="decade-heading" hidden>
+      <h2 id="decade-heading" class="rep-h2">Appearances by decade</h2>
+      <figure class="performer-sparkline" id="performer-sparkline">
+        <!-- inline SVG injected by js -->
+      </figure>
+      <div class="drng-wrap" id="performer-drng" hidden>
+        <div class="drng-label-row">
+          <span class="drng-word">Filter by era</span>
+          <span class="drng-range-label" id="performer-drng-label">All decades</span>
+        </div>
+        <div class="drng-track-wrap">
+          <div class="drng-track-bg" id="performer-drng-bg"></div>
+          <input type="range" class="drng-range" id="performer-drng-from"
+            min="0" max="15" step="1" value="0" aria-label="Range start decade">
+          <input type="range" class="drng-range" id="performer-drng-to"
+            min="0" max="15" step="1" value="15" aria-label="Range end decade">
+        </div>
+        <div class="drng-ticks" id="performer-drng-ticks"></div>
+        <div class="drng-all-row">
+          <button type="button" class="drng-all-btn" id="performer-drng-all"
+            aria-pressed="true">All decades</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="rep-section" id="performer-theatres-section" aria-labelledby="theatres-heading" hidden>
+      <h2 id="theatres-heading" class="rep-h2">Top theatres</h2>
+      <ol class="performer-bars" id="performer-theatres"></ol>
+    </section>
+
+    <section class="rep-section" id="performer-roles-section" aria-labelledby="roles-heading" hidden>
+      <h2 id="roles-heading" class="rep-h2">Roles played</h2>
+      <ol class="performer-roles" id="performer-roles"></ol>
+      <p class="performer-note metadata-label" id="performer-roles-note" hidden>
+        Shows the forty most-performed roles; the full repertory extends beyond this list.
+      </p>
+    </section>
+
+    <section class="rep-section" id="performer-costars-section" aria-labelledby="costars-heading" hidden>
+      <h2 id="costars-heading" class="rep-h2">Often on stage with</h2>
+      <ol class="performer-costars" id="performer-costars"></ol>
+    </section>
+
+    <section class="rep-section" id="performer-benefit-section" aria-labelledby="benefit-heading" hidden>
+      <h2 id="benefit-heading" class="rep-h2">At the benefit</h2>
+      <p class="performer-note metadata-label" id="performer-benefit-intro"></p>
+      <ol class="performer-benefit-list" id="performer-benefit-list"></ol>
+    </section>
+
+    <div class="performer-missing" id="performer-missing" hidden>
+      <h2 id="missing-heading">Not in the dramatis personae</h2>
+      <p id="missing-body">We could not find a performer by that name in the London Stage calendars.</p>
+      <p><a href="./people.html">Return to the People index</a></p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col-tagline">
+          <p class="footer-brand">London Theatre, 1660&ndash;1800</p>
+          <p class="footer-line">
+            A digital companion to the history of professional theatre in London, 1660&ndash;1800:
+            repertoire, receipts, performers, and playhouses.
+          </p>
+          <p class="footer-line"><a href="about.html">About this project &rarr;</a></p>
+        </div>
+        <div class="footer-col-sources">
+          <p class="footer-source-head">Data sources</p>
+          <p class="footer-line">
+            <cite>London Stage Database</cite>. University of Oregon,
+            <a href="https://londonstagedatabase.uoregon.edu/" rel="noopener" target="_blank" class="external">londonstagedatabase.uoregon.edu</a>.
+            Accessed 10&nbsp;Jun.&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+          <p class="footer-line">
+            <cite>Theatronomics: the Business of Theatre, 1732&ndash;1809</cite>
+            (O&rsquo;Shaughnessy&nbsp;et&nbsp;al., 2025),
+            <a href="https://theatronomics.com/" rel="noopener" target="_blank" class="external">theatronomics.com</a>.
+            Accessed 6&nbsp;May&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+        </div>
+      </div>
+      <p class="footer-line footer-byline">
+        Website by <a href="https://hubers.org.uk/" target="_blank" rel="noopener" class="external"><img src="https://hubers.org.uk/images/logo/cropped-hd-logo-1.png" alt="Huber Digital" class="hd-logo"></a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/performer.js"></script>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      var root = document.documentElement;
+
+      function syncButton() {
+        var t = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = t === 'dark' ? 'light' : 'dark';
+        btn.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+        btn.setAttribute('aria-label', 'Switch to ' + next + ' mode');
+      }
+      syncButton();
+
+      btn.addEventListener('click', function () {
+        var cur = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = cur === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('ls-theme', next); } catch (e) {}
+        syncButton();
+      });
+
+      var topbar = document.querySelector('.topbar');
+      function onScroll() {
+        if (!topbar) return;
+        if (window.scrollY > 4) topbar.classList.add('is-scrolled');
+        else topbar.classList.remove('is-scrolled');
+      }
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
+  <script src="js/site.js"></script>
+</body>
+</html>

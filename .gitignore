@@ -1,0 +1,12 @@
+# --- Generated build artifacts (regenerate with: node scripts/build-all.mjs) ---
+build/
+
+# --- Generated client data shards (code-only repo: regenerate from the pipeline) ---
+web/data/
+
+# --- Commercial typeface (Plantin MT Pro, Monotype) — NOT redistributable ---
+web/css/fonts/
+
+# --- OS / editor cruft ---
+.DS_Store
+*.log

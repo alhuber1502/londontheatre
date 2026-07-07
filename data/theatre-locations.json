@@ -1,0 +1,1417 @@
+{
+  "_meta": {
+    "description": "Geolocations for LSD theatre codes. Coordinates are WGS84 decimal degrees for the historical building's modern location (or closest surviving identifiable point). Compound codes (dlking's, dlordg, dldg, dllif, dlandlif, dlordg, dldglif, dlorlif, bforsf) are intentionally omitted — they resolve to their constituent codes at query time. Sentinels (none, None) are also omitted.",
+    "generated": "2026-04-18",
+    "precisionLevels": {
+      "exact": "Known street address or surviving building footprint",
+      "approximate": "Known district/street but exact address uncertain",
+      "unknown": "Venue not locatable from available sources"
+    }
+  },
+  "locations": {
+    "dl": {
+      "lat": 51.5126,
+      "lng": -0.1203,
+      "precision": "exact",
+      "source": "Theatre Royal, Drury Lane — standing building on Catherine Street / Russell Street. Multiple rebuilds (1674 Wren, 1794 Holland, 1812 Wyatt) on essentially the same footprint."
+    },
+    "cg": {
+      "lat": 51.5128,
+      "lng": -0.1222,
+      "precision": "exact",
+      "source": "Royal Opera House, Bow Street, Covent Garden — occupies the site of the Theatre Royal Covent Garden from 1732 (Rich's house, rebuilt 1809 and 1858). Vol 1 'CG' references the locale; from 1732 onwards it is the theatre."
+    },
+    "hay": {
+      "lat": 51.5096,
+      "lng": -0.1314,
+      "precision": "exact",
+      "source": "Theatre Royal Haymarket — standing building, Haymarket street. Vanbrugh's 'little theatre' opened 1720; rebuilt by Nash 1821 a few doors south on the same street."
+    },
+    "king's": {
+      "lat": 51.5099,
+      "lng": -0.1316,
+      "precision": "exact",
+      "source": "Queen's / King's Theatre, Haymarket — site now occupied by Her Majesty's Theatre at the corner of Haymarket and Pall Mall. Vanbrugh's opera house opened 1705; burned 1789; rebuilt on same site."
+    },
+    "lif": {
+      "lat": 51.5170,
+      "lng": -0.1176,
+      "precision": "exact",
+      "source": "Lincoln's Inn Fields Theatre (Portugal Street / Portugal Row), converted from Lisle's Tennis Court. Used by Davenant 1661-71, Betterton 1695-1705, Rich 1714-32, Giffard 1732-33. Site now covered by the Royal College of Surgeons / Portugal Street."
+    },
+    "gf": {
+      "lat": 51.5131,
+      "lng": -0.0710,
+      "precision": "exact",
+      "source": "Goodman's Fields Theatre, Ayliffe Street (later Leman Street area), Whitechapel. Odell's 1729 house and Giffard's 1732 rebuild; site near modern Leman Street / Alie Street junction, where Garrick debuted in 1741."
+    },
+    "queen's": {
+      "lat": 51.5099,
+      "lng": -0.1316,
+      "precision": "exact",
+      "source": "Queen's Theatre, Haymarket (Vanbrugh, 1705) — renamed King's in 1714. Same site as 'king's'."
+    },
+    "dg": {
+      "lat": 51.5116,
+      "lng": -0.1065,
+      "precision": "exact",
+      "source": "Dorset Garden Theatre (Duke's Theatre / Queen's Theatre), opened 1671 on the Thames between the Temple and Blackfriars, off Salisbury Court / Dorset Street. Site now covered by the Mermaid Theatre area, Blackfriars Embankment."
+    },
+    "bridges": {
+      "lat": 51.5121,
+      "lng": -0.1199,
+      "precision": "exact",
+      "source": "First Theatre Royal on Bridges Street (Killigrew, 1663), destroyed by fire 1672. Site on Bridges (now Catherine) Street, immediately adjacent to the later DL building."
+    },
+    "vere": {
+      "lat": 51.5158,
+      "lng": -0.1191,
+      "precision": "exact",
+      "source": "Theatre in Vere Street (Gibbon's Tennis Court), used by Killigrew's King's Company 1660-63. Site off Clare Market / Vere Street, near modern Aldwych / Kingsway (Clare Market was cleared c. 1900 for the LSE / Aldwych redevelopment)."
+    },
+    "sw": {
+      "lat": 51.5295,
+      "lng": -0.1063,
+      "precision": "exact",
+      "source": "Sadler's Wells Theatre, Rosebery Avenue, Islington — continuous site since Richard Sadler's 1683 music house; current building is the 1998 reconstruction on the same plot."
+    },
+    "nwc": {
+      "lat": 51.5272,
+      "lng": -0.1069,
+      "precision": "approximate",
+      "source": "New Wells, London Spa, Clerkenwell — near Exmouth Street / Rosoman Street, close to Sadler's Wells. Exact plot not firmly identified."
+    },
+    "nwgf": {
+      "lat": 51.5133,
+      "lng": -0.0716,
+      "precision": "approximate",
+      "source": "New Wells, Goodman's Fields — on Lemon Street / Ayliffe Street area, Whitechapel. Rival to the licensed GF house in the 1740s."
+    },
+    "nwls": {
+      "lat": 51.5134,
+      "lng": -0.0697,
+      "precision": "approximate",
+      "source": "New Wells, Lemon Street (present-day Leman Street area), Whitechapel."
+    },
+    "nwmf": {
+      "lat": 51.5085,
+      "lng": -0.1481,
+      "precision": "approximate",
+      "source": "New Wells, Mayfair — near the traditional May Fair site at Shepherd Market."
+    },
+    "nwsm": {
+      "lat": 51.5084,
+      "lng": -0.1478,
+      "precision": "approximate",
+      "source": "New Wells, Shepherd's Market, Mayfair — in the old May Fair ground cleared in the 1730s-40s."
+    },
+    "smmf": {
+      "lat": 51.5084,
+      "lng": -0.1478,
+      "precision": "approximate",
+      "source": "Shepherd's Market, Mayfair — same locale as the May Fair grounds."
+    },
+    "bf": {
+      "lat": 51.5192,
+      "lng": -0.0997,
+      "precision": "approximate",
+      "source": "Bartholomew Fair — held annually in West Smithfield, City of London, from 1133 until 1855. Booths pitched across the open market square."
+    },
+    "sf": {
+      "lat": 51.5033,
+      "lng": -0.0911,
+      "precision": "approximate",
+      "source": "Southwark Fair — held in the Borough, on and around Borough High Street between St Margaret's Hill and St George's Church, abolished 1762."
+    },
+    "mf": {
+      "lat": 51.5083,
+      "lng": -0.1478,
+      "precision": "approximate",
+      "source": "May Fair — held at Shepherd Market (Brook Field), off Piccadilly, suppressed as a nuisance from 1708 but revived intermittently to 1764."
+    },
+    "mef": {
+      "lat": 51.5237,
+      "lng": -0.0407,
+      "precision": "approximate",
+      "source": "Mile End Fair — held on Mile End Green, east of the City, near modern Mile End tube."
+    },
+    "meg": {
+      "lat": 51.5237,
+      "lng": -0.0407,
+      "precision": "approximate",
+      "source": "Mile End Green — open space alongside Mile End Road, used for drolls and sideshows."
+    },
+    "tc": {
+      "lat": 51.5232,
+      "lng": -0.1320,
+      "precision": "approximate",
+      "source": "Tottenham Court Fair — held at the junction of Tottenham Court Road and the New Road (now Euston Road), near the village of Tottenham Court."
+    },
+    "wf": {
+      "lat": 51.5127,
+      "lng": -0.1080,
+      "precision": "approximate",
+      "source": "Vol 1 'WF' = Music School, White Fryars (Whitefriars, between Fleet Street and the Thames, west of Dorset Garden). Vol 3 'WF' = Welch Fair, held in London (site uncertain). Coordinate given is for the Whitefriars precinct, the Vol 1 reading."
+    },
+    "marly": {
+      "lat": 51.5238,
+      "lng": -0.1511,
+      "precision": "exact",
+      "source": "Marylebone Gardens — bounded by Marylebone High Street, Weymouth Street, Beaumont Street and Devonshire Street; closed 1778, site now Devonshire Place / Beaumont Street."
+    },
+    "ranelagh": {
+      "lat": 51.4866,
+      "lng": -0.1585,
+      "precision": "exact",
+      "source": "Ranelagh Gardens, Chelsea — site now within the grounds of the Royal Hospital Chelsea (Ranelagh Gardens). The Rotunda stood where the modern gardens lie, east of the hospital."
+    },
+    "vaux": {
+      "lat": 51.4850,
+      "lng": -0.1247,
+      "precision": "exact",
+      "source": "Vauxhall (Spring) Gardens, Lambeth — bounded by modern Kennington Lane and Goding Street; most of the site is now Spring Gardens / Vauxhall Pleasure Gardens park."
+    },
+    "pan": {
+      "lat": 51.5148,
+      "lng": -0.1393,
+      "precision": "exact",
+      "source": "Pantheon, Oxford Street — James Wyatt's 1772 assembly rotunda at 173 Oxford Street; site now occupied by the Marks & Spencer Pantheon store."
+    },
+    "pant": {
+      "lat": 51.5148,
+      "lng": -0.1393,
+      "precision": "exact",
+      "source": "The Pantheon, Oxford Street — same site as 'pan'."
+    },
+    "roy": {
+      "lat": 51.5099,
+      "lng": -0.0686,
+      "precision": "exact",
+      "source": "Royalty Theatre, Well Street (now Ensign Street), Wellclose Square, Goodman's Fields — opened by John Palmer 1787."
+    },
+    "chr": {
+      "lat": 51.4998,
+      "lng": -0.0489,
+      "precision": "approximate",
+      "source": "China Hall Theatre, Lower Road, Rotherhithe — short-lived 1776-78 converted warehouse; Lower Road is now Jamaica Road / Lower Road, Rotherhithe."
+    },
+    "nursery": {
+      "lat": 51.5223,
+      "lng": -0.0871,
+      "precision": "approximate",
+      "source": "The Nursery — training playhouses at Moorfields, Bunhill, or Hatton Garden (the key is ambiguous). Coordinate given is for Bunhill / Moorfields, the best-attested Restoration nursery site."
+    },
+    "redbull": {
+      "lat": 51.5245,
+      "lng": -0.1040,
+      "precision": "exact",
+      "source": "Red Bull Theatre, St John Street / Red Bull Yard, Clerkenwell — Elizabethan playhouse reused briefly 1660-64. Site approximately at modern Hayward's Place, off St John Street."
+    },
+    "salisbury": {
+      "lat": 51.5135,
+      "lng": -0.1070,
+      "precision": "exact",
+      "source": "Salisbury Court Theatre, Whitefriars — converted barn/playhouse in Salisbury Court, off Fleet Street; used 1660-61 before the company moved to LIF. Now the Salisbury Court / Dorset Rise area."
+    },
+    "salsbury": {
+      "lat": 51.5135,
+      "lng": -0.1070,
+      "precision": "exact",
+      "source": "Salisbury Court Theatre (spelling variant of 'salisbury')."
+    },
+    "cockpit": {
+      "lat": 51.5148,
+      "lng": -0.1205,
+      "precision": "exact",
+      "source": "Cockpit in Drury Lane (Phoenix), Pit Place / Pitt's Head Mews off Drury Lane. Used briefly 1660-62 by Rhodes / Davenant companies."
+    },
+    "atcourt": {
+      "lat": 51.5036,
+      "lng": -0.1276,
+      "precision": "approximate",
+      "source": "Whitehall or St James's Palace (Court performance). Coordinate given for the Palace of Whitehall / Banqueting House on Whitehall; many court performances took place in the Hall Theatre, Whitehall (destroyed 1698), but St James's Palace was also used."
+    },
+    "stjames": {
+      "lat": 51.5045,
+      "lng": -0.1369,
+      "precision": "exact",
+      "source": "St James's Palace, Pall Mall — standing building."
+    },
+    "sjp": {
+      "lat": 51.5045,
+      "lng": -0.1369,
+      "precision": "exact",
+      "source": "St James's Palace — same as 'stjames'."
+    },
+    "windsor": {
+      "lat": 51.4839,
+      "lng": -0.6044,
+      "precision": "exact",
+      "source": "Windsor Castle — standing royal residence."
+    },
+    "hc": {
+      "lat": 51.4035,
+      "lng": -0.3380,
+      "precision": "exact",
+      "source": "Hampton Court Palace — standing royal residence."
+    },
+    "kg": {
+      "lat": 51.4787,
+      "lng": -0.2956,
+      "precision": "exact",
+      "source": "Kew Gardens / Kew Palace, Richmond upon Thames."
+    },
+    "oxford": {
+      "lat": 51.7548,
+      "lng": -1.2544,
+      "precision": "approximate",
+      "source": "Oxford University — Sheldonian and college halls used by touring companies. Coordinate for the Sheldonian / central university area."
+    },
+    "dover": {
+      "lat": 51.1279,
+      "lng": 1.3134,
+      "precision": "approximate",
+      "source": "Dover, England — 1670 Duke's Company performance for Charles II at the Treaty of Dover."
+    },
+    "brussels": {
+      "lat": 50.8476,
+      "lng": 4.3572,
+      "precision": "approximate",
+      "source": "Brussels, Belgium — 1679 exile performance."
+    },
+    "ri": {
+      "lat": 51.4613,
+      "lng": -0.3037,
+      "precision": "approximate",
+      "source": "Richmond — various Richmond-upon-Thames venues used by summer touring companies. Coordinate for Richmond Green, the usual playhouse site (Cibber's / Chapman's Richmond Theatre stood on Richmond Hill / the Green)."
+    },
+    "richmond": {
+      "lat": 51.4611,
+      "lng": -0.3041,
+      "precision": "approximate",
+      "source": "New Wells Richmond — Richmond-upon-Thames, site on or near Richmond Green / The Rosary."
+    },
+    "riw": {
+      "lat": 51.4611,
+      "lng": -0.3041,
+      "precision": "approximate",
+      "source": "Richmond Wells — on Richmond Hill, spa and music room, 1696-c.1755."
+    },
+    "acad": {
+      "lat": 51.4605,
+      "lng": -0.3011,
+      "precision": "approximate",
+      "source": "Cibber's Histrionic Academy on the Bowling Green, Richmond Hill — Richmond-upon-Thames."
+    },
+    "ks": {
+      "lat": 51.4085,
+      "lng": -0.3064,
+      "precision": "approximate",
+      "source": "Kingston, The Playhouse by the Hand — Kingston upon Thames; exact plot unknown."
+    },
+    "hamm": {
+      "lat": 51.4921,
+      "lng": -0.2229,
+      "precision": "approximate",
+      "source": "Windsor Castle Inn, King Street, Hammersmith — King Street is the modern A315, Hammersmith Broadway area."
+    },
+    "rlsn": {
+      "lat": 51.5630,
+      "lng": -0.0825,
+      "precision": "approximate",
+      "source": "Red-Lion Inn, Lordship Road (now Lordship Park / Stoke Newington Church Street area), Stoke Newington."
+    },
+    "cii": {
+      "lat": 51.5390,
+      "lng": -0.0993,
+      "precision": "approximate",
+      "source": "Crown Inn, Lower Street (now Essex Road), Islington."
+    },
+    "och": {
+      "lat": 51.5716,
+      "lng": -0.1461,
+      "precision": "approximate",
+      "source": "Old Crown Inn, Highgate — location not precisely documented."
+    },
+    "whf": {
+      "lat": 51.4757,
+      "lng": -0.2010,
+      "precision": "approximate",
+      "source": "White Horse Inn, Parsons Green, Fulham — at the south end of Parsons Green."
+    },
+    "khs": {
+      "lat": 51.5021,
+      "lng": -0.0918,
+      "precision": "exact",
+      "source": "King's Head Inn, Borough High Street, Southwark — galleried coaching inn at 25-27 Borough High Street (site adjacent to the George Inn)."
+    },
+    "wlws": {
+      "lat": 51.5132,
+      "lng": -0.1179,
+      "precision": "approximate",
+      "source": "White-Lion Inn, Wych Street — Wych Street was the former south continuation of Drury Lane, cleared c. 1900 for the Aldwych redevelopment."
+    },
+    "bhb": {
+      "lat": 51.4690,
+      "lng": 0.0094,
+      "precision": "approximate",
+      "source": "The Tiled Booth, Blackheath — coordinate for Blackheath common."
+    },
+    "bla": {
+      "lat": 51.4690,
+      "lng": 0.0094,
+      "precision": "approximate",
+      "source": "Blackheath — open common south-east of Greenwich."
+    },
+    "wrsg": {
+      "lat": 51.4826,
+      "lng": 0.0077,
+      "precision": "approximate",
+      "source": "Wheatley's Riding School, Greenwich — key notes 'location unknown'; coordinate is Greenwich town centre as a fallback."
+    },
+    "dept": {
+      "lat": 51.4790,
+      "lng": -0.0266,
+      "precision": "approximate",
+      "source": "Deptford — key notes 'location of theatre unknown'; coordinate is Deptford centre as a fallback."
+    },
+    "ha": {
+      "lat": 51.5558,
+      "lng": -0.1780,
+      "precision": "approximate",
+      "source": "Hampstead — coordinate for Hampstead village / Well Walk area."
+    },
+    "ham": {
+      "lat": 51.5558,
+      "lng": -0.1780,
+      "precision": "approximate",
+      "source": "The Long Room, Hampstead — on Well Walk, Hampstead (the assembly room attached to Hampstead Wells)."
+    },
+    "haw": {
+      "lat": 51.5562,
+      "lng": -0.1760,
+      "precision": "approximate",
+      "source": "Hampstead Wells — Well Walk, Hampstead; spa and assembly rooms from 1698."
+    },
+    "che": {
+      "lat": 51.4871,
+      "lng": -0.1686,
+      "precision": "approximate",
+      "source": "Chelsea — general locale; specific venues not differentiated."
+    },
+    "chelsea": {
+      "lat": 51.4871,
+      "lng": -0.1686,
+      "precision": "approximate",
+      "source": "Priest's Boarding School in Chelsea — exact address unrecorded."
+    },
+    "ful": {
+      "lat": 51.4747,
+      "lng": -0.1970,
+      "precision": "approximate",
+      "source": "Fulham — village west of London; specific venue unspecified."
+    },
+    "houn": {
+      "lat": 51.4685,
+      "lng": -0.3617,
+      "precision": "approximate",
+      "source": "Hounslow — coaching town west of London."
+    },
+    "clk": {
+      "lat": 51.5252,
+      "lng": -0.1050,
+      "precision": "approximate",
+      "source": "Clerkenwell — general locale."
+    },
+    "clkcs": {
+      "lat": 51.5242,
+      "lng": -0.1055,
+      "precision": "approximate",
+      "source": "Clerkenwell Charity School — at St James's Clerkenwell; exact address unrecorded."
+    },
+    "blo": {
+      "lat": 51.5194,
+      "lng": -0.1269,
+      "precision": "approximate",
+      "source": "Bloomsbury — general district."
+    },
+    "bca": {
+      "lat": 51.5029,
+      "lng": -0.0874,
+      "precision": "approximate",
+      "source": "Bird Cage Alley, Southwark."
+    },
+    "mo": {
+      "lat": 51.5200,
+      "lng": -0.0873,
+      "precision": "approximate",
+      "source": "Moorfields — open ground immediately north of the City wall (now Finsbury Circus / Moorgate)."
+    },
+    "moorfields": {
+      "lat": 51.5200,
+      "lng": -0.0873,
+      "precision": "approximate",
+      "source": "Moorfields, London — same locale as 'mo'."
+    },
+    "um": {
+      "lat": 51.5225,
+      "lng": -0.0866,
+      "precision": "approximate",
+      "source": "Upper Moorfields — northern portion of the Moorfields ground, now Finsbury Square area."
+    },
+    "sou": {
+      "lat": 51.5019,
+      "lng": -0.0917,
+      "precision": "approximate",
+      "source": "Southwark — general locale; Borough High Street and environs."
+    },
+    "ntw": {
+      "lat": 51.5068,
+      "lng": -0.0605,
+      "precision": "approximate",
+      "source": "New Theatre, Mr Bradley's Distiller, Old Gravel Lane (now Wapping Lane), Wapping."
+    },
+    "bg": {
+      "lat": 51.5115,
+      "lng": -0.1243,
+      "precision": "approximate",
+      "source": "Bedford Gate, Charles Street, Covent Garden — Charles Street is now Wellington Street."
+    },
+    "vendu": {
+      "lat": 51.5115,
+      "lng": -0.1243,
+      "precision": "approximate",
+      "source": "Vendu (auction room), Charles Street, Covent Garden — same street as BG."
+    },
+    "ys": {
+      "lat": 51.5114,
+      "lng": -0.1248,
+      "precision": "approximate",
+      "source": "York Street, Covent Garden — now Tavistock Street."
+    },
+    "pcr": {
+      "lat": 51.5119,
+      "lng": -0.1237,
+      "precision": "exact",
+      "source": "Great Piazza Coffee Room, Covent Garden — at the north-east corner of Covent Garden Piazza."
+    },
+    "pcgr": {
+      "lat": 51.5112,
+      "lng": -0.1269,
+      "precision": "approximate",
+      "source": "Great Room, Peter's Court — off St Martin's Lane, near Long Acre."
+    },
+    "hic": {
+      "lat": 51.5115,
+      "lng": -0.1361,
+      "precision": "exact",
+      "source": "Hickford's Room — James Hickford's dancing room/concert room, James Street (Haymarket) from 1697, later Brewer Street (Soho) from 1739. Coordinate for the long-standing Brewer Street site."
+    },
+    "js": {
+      "lat": 51.5112,
+      "lng": -0.1340,
+      "precision": "approximate",
+      "source": "New Theatre in James Street (off the Haymarket), later known as the Tennis Court in James Street."
+    },
+    "tcjs": {
+      "lat": 51.5112,
+      "lng": -0.1340,
+      "precision": "approximate",
+      "source": "Old Tennis Court, James Street (off the Haymarket) — same site as 'js'."
+    },
+    "soho": {
+      "lat": 51.5134,
+      "lng": -0.1318,
+      "precision": "exact",
+      "source": "Great Room, Dean Street, Soho — 1760s-70s concert and assembly room."
+    },
+    "ss": {
+      "lat": 51.5148,
+      "lng": -0.1319,
+      "precision": "exact",
+      "source": "Soho Square — Georgian square, general locale."
+    },
+    "pm": {
+      "lat": 51.5062,
+      "lng": -0.1340,
+      "precision": "approximate",
+      "source": "Pall Mall — general locale, St James's."
+    },
+    "sg": {
+      "lat": 51.5063,
+      "lng": -0.1300,
+      "precision": "approximate",
+      "source": "Spring Garden, St James's Park — at the north end of St James's Park, near modern Spring Gardens / Cockspur Street."
+    },
+    "osg": {
+      "lat": 51.5063,
+      "lng": -0.1300,
+      "precision": "approximate",
+      "source": "Old Spring Garden — same St James's Park locale."
+    },
+    "cc": {
+      "lat": 51.5074,
+      "lng": -0.1278,
+      "precision": "approximate",
+      "source": "Charing Cross — at the top of Whitehall / bottom of The Strand."
+    },
+    "strand": {
+      "lat": 51.5115,
+      "lng": -0.1195,
+      "precision": "approximate",
+      "source": "The Strand / Society of Artists' Exhibition-Room in The Strand (Vol 4)."
+    },
+    "ec": {
+      "lat": 51.5116,
+      "lng": -0.1193,
+      "precision": "exact",
+      "source": "Exeter Change, The Strand — long arcade on the north side of the Strand, on the site of the present Strand Palace Hotel; demolished 1829."
+    },
+    "sml": {
+      "lat": 51.5108,
+      "lng": -0.1273,
+      "precision": "approximate",
+      "source": "St Martin's Lane — general street locale."
+    },
+    "yb": {
+      "lat": 51.5092,
+      "lng": -0.1222,
+      "precision": "exact",
+      "source": "York Buildings, off Villiers Street, Strand — concert room (c. 1675-c. 1734) on the site of the old York House, now near Embankment Gardens."
+    },
+    "yh": {
+      "lat": 51.5094,
+      "lng": -0.1229,
+      "precision": "exact",
+      "source": "York House, The Strand — old Villiers town house; demolished 1670s, site adjoined York Buildings."
+    },
+    "dc": {
+      "lat": 51.5118,
+      "lng": -0.1072,
+      "precision": "approximate",
+      "source": "Dorset Court, off Salisbury Court / Dorset Rise, Whitefriars."
+    },
+    "eb": {
+      "lat": 51.5126,
+      "lng": -0.1126,
+      "precision": "approximate",
+      "source": "Essex Buildings — east side of Essex Street off the Strand, on the former Essex House site."
+    },
+    "it": {
+      "lat": 51.5122,
+      "lng": -0.1099,
+      "precision": "exact",
+      "source": "Inner Temple — Temple precinct off Fleet Street."
+    },
+    "mt": {
+      "lat": 51.5124,
+      "lng": -0.1113,
+      "precision": "exact",
+      "source": "Middle Temple — Middle Temple Hall, off Fleet Street."
+    },
+    "li": {
+      "lat": 51.5172,
+      "lng": -0.1129,
+      "precision": "exact",
+      "source": "Lincoln's Inn — the Inn of Court, Chancery Lane."
+    },
+    "cl": {
+      "lat": 51.5162,
+      "lng": -0.1115,
+      "precision": "approximate",
+      "source": "Chancery Lane — general street locale."
+    },
+    "tb": {
+      "lat": 51.5138,
+      "lng": -0.1126,
+      "precision": "exact",
+      "source": "Temple Bar — formerly at the junction of Fleet Street and the Strand; the 1672 gateway now stands at Paternoster Square."
+    },
+    "fs": {
+      "lat": 51.5139,
+      "lng": -0.1080,
+      "precision": "approximate",
+      "source": "Fleet Street — general street locale."
+    },
+    "cs": {
+      "lat": 51.5115,
+      "lng": -0.0879,
+      "precision": "approximate",
+      "source": "Cannon Street — general City street locale."
+    },
+    "bos": {
+      "lat": 51.5123,
+      "lng": -0.1228,
+      "precision": "approximate",
+      "source": "Bow Street, Covent Garden."
+    },
+    "rl": {
+      "lat": 51.5203,
+      "lng": -0.1047,
+      "precision": "approximate",
+      "source": "Red Lion Street — likely Red Lion Street, Clerkenwell (multiple streets of the name; disambiguation uncertain)."
+    },
+    "hg": {
+      "lat": 51.5218,
+      "lng": -0.1085,
+      "precision": "approximate",
+      "source": "Hatton Garden (Vol 1) — street in Holborn. Vol 4 'Hampton Gardens' is unidentified; coordinate given for Hatton Garden, the dominant Vol 1 reading."
+    },
+    "sta": {
+      "lat": 51.5086,
+      "lng": -0.1324,
+      "precision": "approximate",
+      "source": "St Albans Street — formerly off the Haymarket / Pall Mall, cleared for Regent Street c. 1820."
+    },
+    "py": {
+      "lat": 51.4993,
+      "lng": -0.1256,
+      "precision": "approximate",
+      "source": "Palace Yard — New Palace Yard, Westminster."
+    },
+    "wh": {
+      "lat": 51.4990,
+      "lng": -0.1253,
+      "precision": "exact",
+      "source": "Westminster Hall, Palace of Westminster (Vol 4). Vol 2 'Whitehead' reading appears to be a private residence; coordinate given for Westminster Hall."
+    },
+    "ws": {
+      "lat": 51.4990,
+      "lng": -0.1280,
+      "precision": "exact",
+      "source": "Westminster School — College Hall, Dean's Yard, Westminster."
+    },
+    "sps": {
+      "lat": 51.5138,
+      "lng": -0.0984,
+      "precision": "exact",
+      "source": "St Paul's School — formerly at St Paul's Churchyard (site of the old school, east of the cathedral); moved to Hammersmith 1884."
+    },
+    "mts": {
+      "lat": 51.5140,
+      "lng": -0.0924,
+      "precision": "exact",
+      "source": "Merchant Taylors School — historically at Suffolk Lane, City of London (1561-1875)."
+    },
+    "mth": {
+      "lat": 51.5129,
+      "lng": -0.0866,
+      "precision": "exact",
+      "source": "Merchant Taylors' Hall, 30 Threadneedle Street, City of London — standing building."
+    },
+    "cha": {
+      "lat": 51.5227,
+      "lng": -0.1003,
+      "precision": "exact",
+      "source": "Charterhouse / Charter House School, Charterhouse Square — standing buildings."
+    },
+    "ch": {
+      "lat": 51.5227,
+      "lng": -0.1003,
+      "precision": "exact",
+      "source": "Charterhouse — same locale as 'cha'."
+    },
+    "chapel": {
+      "lat": 51.5230,
+      "lng": -0.1198,
+      "precision": "exact",
+      "source": "The Chapel at the Foundling Hospital — Coram's Fields, Bloomsbury (the 1747 chapel on Guilford Street). The key mentions the Lock Hospital Chapel (Grosvenor Place) as an alternative, but Handel-era concerts used the Foundling."
+    },
+    "hab": {
+      "lat": 51.5137,
+      "lng": -0.0978,
+      "precision": "exact",
+      "source": "Haberdashers' Hall, Maiden Lane — Maiden Lane is now Gresham Street in the City; the hall stood on the north side until destroyed in the Blitz."
+    },
+    "hh": {
+      "lat": 51.5137,
+      "lng": -0.0978,
+      "precision": "approximate",
+      "source": "Vol 2 'HH' = Haberdashers' Hall (same as 'hab'); Vol 3 'HH' = Handel's Home (25 Brook Street, Mayfair: 51.5137, -0.1482). Coordinate given for the Vol 2 reading."
+    },
+    "dh": {
+      "lat": 51.5148,
+      "lng": -0.0900,
+      "precision": "exact",
+      "source": "Drapers' Hall, Throgmorton Street, City of London — standing building."
+    },
+    "fh": {
+      "lat": 51.5085,
+      "lng": -0.0865,
+      "precision": "exact",
+      "source": "Fishmongers' Hall, London Bridge — standing 1834 building on the historic site."
+    },
+    "vh": {
+      "lat": 51.5093,
+      "lng": -0.0937,
+      "precision": "exact",
+      "source": "Vintners' Hall, Upper Thames Street — standing building."
+    },
+    "sh": {
+      "lat": 51.5141,
+      "lng": -0.1025,
+      "precision": "exact",
+      "source": "Stationers' Hall, Ave Maria Lane, off Ludgate Hill — standing building."
+    },
+    "clh": {
+      "lat": 51.5142,
+      "lng": -0.0928,
+      "precision": "exact",
+      "source": "Clothworkers' Hall, Dunster Court, Mincing Lane — standing building (rebuilt post-war)."
+    },
+    "coh": {
+      "lat": 51.5170,
+      "lng": -0.0875,
+      "precision": "approximate",
+      "source": "Coachmakers' Hall — formerly at Noble Street, City of London (destroyed 1940)."
+    },
+    "gh": {
+      "lat": 51.5175,
+      "lng": -0.0932,
+      "precision": "approximate",
+      "source": "Girdlers' Hall, Basinghall Avenue, City of London — standing building (rebuilt post-war)."
+    },
+    "lh": {
+      "lat": 51.5125,
+      "lng": -0.0916,
+      "precision": "approximate",
+      "source": "Loriners' Hall — formerly near London Wall; company no longer has a hall."
+    },
+    "ph": {
+      "lat": 51.5143,
+      "lng": -0.0988,
+      "precision": "approximate",
+      "source": "Pewterers' Hall, Oat Lane, City of London — standing (rebuilt post-war)."
+    },
+    "wch": {
+      "lat": 51.5145,
+      "lng": -0.0970,
+      "precision": "approximate",
+      "source": "Wax Chandlers' Hall, Gresham Street (corner of Gutter Lane), City of London."
+    },
+    "mr": {
+      "lat": 51.5138,
+      "lng": -0.0937,
+      "precision": "exact",
+      "source": "Mercers' Hall, Ironmonger Lane, City of London — standing building."
+    },
+    "b&s": {
+      "lat": 51.5175,
+      "lng": -0.0943,
+      "precision": "exact",
+      "source": "Barber-Surgeons' Hall, Monkwell Square, off Wood Street, City of London — standing building with 17th-c. anatomy theatre."
+    },
+    "shg": {
+      "lat": 51.5112,
+      "lng": -0.1176,
+      "precision": "exact",
+      "source": "Somerset House Garden — river front of Old Somerset House, Strand."
+    },
+    "buh": {
+      "lat": 51.5014,
+      "lng": -0.1419,
+      "precision": "exact",
+      "source": "Buckingham House — the original 1703 house; the royal residence (later Buckingham Palace) in St James's Park."
+    },
+    "ebh": {
+      "lat": 51.5091,
+      "lng": -0.1398,
+      "precision": "exact",
+      "source": "Earl of Burlington's House — Burlington House, Piccadilly (now the Royal Academy)."
+    },
+    "lei": {
+      "lat": 51.5107,
+      "lng": -0.1301,
+      "precision": "exact",
+      "source": "Leicester House — formerly on the north side of Leicester Square/Fields; demolished 1792."
+    },
+    "mh": {
+      "lat": 51.5055,
+      "lng": -0.1374,
+      "precision": "exact",
+      "source": "Marlborough House, Pall Mall — standing Wren building (1711)."
+    },
+    "grotto": {
+      "lat": 51.4985,
+      "lng": -0.1070,
+      "precision": "approximate",
+      "source": "Grotto Gardens, St George's Fields, Southwark — open fields south of the river, cleared in the 19th c. (now the St George's Circus / Lambeth Road area)."
+    },
+    "bellsize": {
+      "lat": 51.5478,
+      "lng": -0.1683,
+      "precision": "approximate",
+      "source": "Belsize House, Hampstead — Restoration mansion used as a pleasure resort from 1720; coordinate for Belsize Park."
+    },
+    "belh": {
+      "lat": 51.5478,
+      "lng": -0.1683,
+      "precision": "approximate",
+      "source": "Bellsize House, Hampstead — same as 'bellsize'."
+    },
+    "grp": {
+      "lat": 51.5098,
+      "lng": -0.1320,
+      "precision": "exact",
+      "source": "Great Room, Panton Street — Panton Street, off the Haymarket."
+    },
+    "haygr": {
+      "lat": 51.5096,
+      "lng": -0.1314,
+      "precision": "approximate",
+      "source": "Great Room, Haymarket — on Haymarket street, near the Theatre Royal."
+    },
+    "cgr": {
+      "lat": 51.5129,
+      "lng": -0.1307,
+      "precision": "approximate",
+      "source": "Coignand's Great Room — at Coignand's dancing school, Leicester Square / Panton Street area (exact address varies by year)."
+    },
+    "cds": {
+      "lat": 51.5129,
+      "lng": -0.1307,
+      "precision": "approximate",
+      "source": "Coignand's Dancing School — same locale as 'cgr'."
+    },
+    "globe": {
+      "lat": 51.5137,
+      "lng": -0.1065,
+      "precision": "exact",
+      "source": "Globe Tavern, Fleet Street — on the south side of Fleet Street near the Temple; historic coffee/tavern site."
+    },
+    "cr": {
+      "lat": 51.5129,
+      "lng": -0.1186,
+      "precision": "exact",
+      "source": "Crown and Anchor Tavern, The Strand — on the corner of Arundel Street; major 18th-century concert and political-club venue, burned 1854."
+    },
+    "crt": {
+      "lat": 51.5137,
+      "lng": -0.0872,
+      "precision": "exact",
+      "source": "Crown Tavern behind the Royal Exchange — in Threadneedle Street / Cornhill area, City of London."
+    },
+    "ct": {
+      "lat": 51.5156,
+      "lng": -0.1078,
+      "precision": "exact",
+      "source": "Castle Tavern, Paternoster Row (or the Paternoster Row / Holborn tavern of the same name) — coordinate given for Paternoster Row, the most-attested Castle Tavern for music meetings."
+    },
+    "dt": {
+      "lat": 51.5138,
+      "lng": -0.1094,
+      "precision": "exact",
+      "source": "Devil Tavern, Fleet Street — at No. 2 Fleet Street, by Temple Bar; Ben Jonson's 'Apollo Room' tavern; demolished 1787."
+    },
+    "gv": {
+      "lat": 51.5134,
+      "lng": -0.0867,
+      "precision": "exact",
+      "source": "George and Vulture Tavern, Castle Court / Lombard Street, City of London — standing building."
+    },
+    "st": {
+      "lat": 51.5112,
+      "lng": -0.0883,
+      "precision": "approximate",
+      "source": "Swan Tavern — several historic Swan taverns in the City; coordinate for the Swan, Fish Street Hill / King William Street (the best-known musical meeting-house of that name)."
+    },
+    "sun": {
+      "lat": 51.5155,
+      "lng": -0.0878,
+      "precision": "approximate",
+      "source": "Sun Tavern — 17th/18th-c. tavern behind the Royal Exchange, Cornhill (several venues of the name)."
+    },
+    "gt": {
+      "lat": 51.5143,
+      "lng": -0.0900,
+      "precision": "approximate",
+      "source": "Vol 2 'Greyhound Tavern' vs Vol 3 'George Tavern' — different venues sharing the code. Coordinate given for the Greyhound, off Fleet Street / Holborn area (Vol 2 reading)."
+    },
+    "ttt": {
+      "lat": 51.5188,
+      "lng": -0.1222,
+      "precision": "approximate",
+      "source": "Three Tuns Tavern / Three Tuns and Bull Head — several of this name; the musical-meetings Three Tuns was on Chandos Street / Holborn area."
+    },
+    "bht": {
+      "lat": 51.5128,
+      "lng": -0.1015,
+      "precision": "approximate",
+      "source": "Bull Head Tavern — Cheapside, City of London."
+    },
+    "bbt": {
+      "lat": 51.5099,
+      "lng": -0.0854,
+      "precision": "exact",
+      "source": "Black Bull Tavern, Pudding Lane, City of London."
+    },
+    "bft": {
+      "lat": 51.5140,
+      "lng": -0.1070,
+      "precision": "approximate",
+      "source": "Buffalo Tavern — not firmly identified; likely a Fleet Street / Covent Garden tavern."
+    },
+    "bt": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Buffler Tavern — single 1724 event; not firmly identified."
+    },
+    "bpt": {
+      "lat": 51.5127,
+      "lng": -0.1321,
+      "precision": "approximate",
+      "source": "Blue Posts Tavern — several historic Blue Posts taverns; Haymarket / Soho locale most likely for 1724."
+    },
+    "avt": {
+      "lat": 51.5131,
+      "lng": -0.0980,
+      "precision": "approximate",
+      "source": "Anchor and Vine Tavern — not firmly identified; single 1723 event."
+    },
+    "cac": {
+      "lat": 51.5136,
+      "lng": -0.1080,
+      "precision": "approximate",
+      "source": "Crown and Cushion — Fleet Street / Strand area tavern, exact site uncertain."
+    },
+    "ft": {
+      "lat": 51.5145,
+      "lng": -0.1080,
+      "precision": "approximate",
+      "source": "Fleece Tavern — on the corner of York Street / Covent Garden, used by Pepys (1660s). A major venue of the name stood in Covent Garden."
+    },
+    "kat": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "King's Arms Tavern — multiple taverns of this name; 1723 venue not firmly identified."
+    },
+    "lg": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Leg Tavern — not firmly identified."
+    },
+    "h&p": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Hand and Pen — not firmly identified."
+    },
+    "pt": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Pye Tavern — not firmly identified."
+    },
+    "pu": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Punch's — not firmly identified."
+    },
+    "ht": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Horshoe Tavern — not firmly identified."
+    },
+    "qt": {
+      "lat": 51.5195,
+      "lng": -0.0750,
+      "precision": "approximate",
+      "source": "Queen's Tavern, Spitalfields — on Brick Lane / Spital Square area."
+    },
+    "tt": {
+      "lat": 51.5081,
+      "lng": -0.0761,
+      "precision": "approximate",
+      "source": "Tower Tavern — near the Tower of London."
+    },
+    "lrrh": {
+      "lat": 51.5136,
+      "lng": -0.1107,
+      "precision": "approximate",
+      "source": "Lecture Room, Robin Hood Tavern, near Temple Bar — Butcher Row, off Fleet Street."
+    },
+    "bb": {
+      "lat": 51.5179,
+      "lng": -0.1145,
+      "precision": "approximate",
+      "source": "Blue Boar Inn, Holborn — a famous galleried coaching inn on High Holborn."
+    },
+    "cockpit_duplicate_marker": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "placeholder to avoid JSON parse issues — not used"
+    },
+    "ac": {
+      "lat": 51.5101,
+      "lng": -0.0881,
+      "precision": "approximate",
+      "source": "Angel Court — several courts of the name in the City and Westminster; exact site uncertain."
+    },
+    "aca": {
+      "lat": 51.5115,
+      "lng": -0.1320,
+      "precision": "approximate",
+      "source": "Academy of Vocal and Instrumental Music — meeting venues varied through the 1730s (Crown and Anchor, etc.); single-event code."
+    },
+    "acdl": {
+      "lat": 51.5128,
+      "lng": -0.1205,
+      "precision": "approximate",
+      "source": "Academy in Drury Lane — exact address unrecorded."
+    },
+    "academy": {
+      "lat": 51.5170,
+      "lng": -0.1176,
+      "precision": "approximate",
+      "source": "Academy in Lincoln's Inn Fields — private academy near LIF; exact premises not documented."
+    },
+    "aph": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Ashley's Punch House — not firmly identified."
+    },
+    "arme": {
+      "lat": 51.5213,
+      "lng": -0.0400,
+      "precision": "approximate",
+      "source": "Assembly Room, Mile End Road, Mile End — along the modern Mile End Road."
+    },
+    "bannister": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Bannister's home (private residence, 1675) — exact address unrecorded."
+    },
+    "bannster": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Dataset-typo variant of 'bannister'."
+    },
+    "bh": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Boman's House (private residence) — exact address unrecorded."
+    },
+    "br": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Beveridge's Room — not firmly identified."
+    },
+    "bra": {
+      "lat": 51.5220,
+      "lng": -0.1060,
+      "precision": "approximate",
+      "source": "Broughton's Amphitheatre — on Oxford Road near Tottenham Court (opened 1743); prize-fighting venue."
+    },
+    "ca": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Caverley's Academy — private school, exact address unrecorded."
+    },
+    "cat": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Unidentified tavern or coffee-house; two events in 1735-36 (Vol 3 period)."
+    },
+    "cdr": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Couch's Drawing Room — private residence, not identified."
+    },
+    "cla": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Clafton — unidentified."
+    },
+    "clar": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Clare's Academy — private school, exact address unrecorded."
+    },
+    "clark's": {
+      "lat": 51.5140,
+      "lng": -0.0984,
+      "precision": "approximate",
+      "source": "Clark's School, Paul's Alley — near St Paul's Churchyard."
+    },
+    "corh": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Corner House — unidentified."
+    },
+    "dr": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Dancing Room — generic; single-event code."
+    },
+    "ds": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Dancing School — generic; single-event code."
+    },
+    "ee": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Exchequer Eating House — not firmly identified."
+    },
+    "eeh": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Exchequer Eating House variant — same as 'ee'."
+    },
+    "evelyn": {
+      "lat": 51.4770,
+      "lng": -0.0252,
+      "precision": "approximate",
+      "source": "John Evelyn's home — Sayes Court, Deptford (his principal residence in the 1680s)."
+    },
+    "falkland": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Lord Falkland's residence — exact address unrecorded."
+    },
+    "fe": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Mr Fearnly's — private residence, not identified."
+    },
+    "flr": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Front Long Room — generic; venue unidentified."
+    },
+    "gb": {
+      "lat": 51.5123,
+      "lng": -0.1228,
+      "precision": "exact",
+      "source": "Golden Balls, Bow Street, Covent Garden."
+    },
+    "gg": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Green Gates — unidentified."
+    },
+    "go": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Godwins — unidentified."
+    },
+    "gr": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Great Room — generic term used in Vols 2/3 for rooms over taverns; venue unidentified without further context."
+    },
+    "grt_ship": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "unused placeholder"
+    },
+    "hdr": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Hill's Dancing Room — private premises, not identified."
+    },
+    "hds": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Home's Dancing School — private premises, not identified."
+    },
+    "hughs": {
+      "lat": 51.5130,
+      "lng": -0.0924,
+      "precision": "approximate",
+      "source": "In Freeman's Court — Freeman's Court stood off Cornhill, City of London."
+    },
+    "lr": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Long Room — generic; venue unidentified."
+    },
+    "ls": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Loe's School — private premises, not identified."
+    },
+    "ma": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Mr Mayor's — unidentified private residence."
+    },
+    "mbs": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Mrs Bellamy's School — private premises, not identified."
+    },
+    "mds": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Mrs Defenne's School — private premises, not identified."
+    },
+    "ms": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Musical Society — meeting venue not identified."
+    },
+    "nh": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "North Hall — unidentified."
+    },
+    "oldfield": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Mr Oldfield's residence — exact address unrecorded."
+    },
+    "oo": {
+      "lat": 51.5138,
+      "lng": -0.0867,
+      "precision": "approximate",
+      "source": "Outropers' Office — the Outroper was an officer of the City of London; his office stood within the Royal Exchange / Guildhall precinct."
+    },
+    "ormond's": {
+      "lat": 51.5105,
+      "lng": -0.1260,
+      "precision": "approximate",
+      "source": "Duke of Ormond's residence — likely Ormond (Ormonde) House, off St James's Square / Pall Mall area."
+    },
+    "os": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Orlibeer's School — private premises, not identified."
+    },
+    "pepys's": {
+      "lat": 51.5121,
+      "lng": -0.0836,
+      "precision": "exact",
+      "source": "Samuel Pepys's residence, Seething Lane (Navy Office), City of London (1660s-73)."
+    },
+    "pr": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Powlet's Room — unidentified."
+    },
+    "rds": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Roussau's Dancing School — private premises, not identified."
+    },
+    "roberts's": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Mr Roberts's home — private residence, not identified."
+    },
+    "slingsby": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Mr Slingsby's residence — exact address unrecorded."
+    },
+    "smith's": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Mr Smith's residence — exact address unrecorded."
+    },
+    "tec": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Tennis Court (unspecified) — several tennis-court conversions in the period; disambiguation uncertain."
+    },
+    "tgb": {
+      "lat": 51.5119,
+      "lng": -0.1305,
+      "precision": "approximate",
+      "source": "Two Golden Balls — likely a Pall Mall / Haymarket sign-name; exact address uncertain."
+    },
+    "thames": {
+      "lat": 51.5075,
+      "lng": -0.1100,
+      "precision": "approximate",
+      "source": "On the River Thames — waterborne performance; coordinate is the central London river between Whitehall and the Tower."
+    },
+    "tr": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Theatre Royal (unspecified) — single 1730s reference in Vol 3; ambiguous between DL and CG without further context."
+    },
+    "weys'": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Weys' Home — private residence, not identified."
+    },
+    "winh": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Windmill Hill — several Windmill Hills in greater London; disambiguation uncertain."
+    },
+    "yeb": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "Yeates' Booth — fairground booth operated by the Yeates family; venue varied by fair and year."
+    },
+    "grt": {
+      "lat": 51.5129,
+      "lng": -0.1186,
+      "precision": "approximate",
+      "source": "Great Room at the Ship Tavern — the Ship Tavern and Crown-and-Anchor both stood on the Strand; coordinate approximates the Strand."
+    },
+    "mef_duplicate": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "unused placeholder"
+    },
+    "bellsize_duplicate": {
+      "lat": null,
+      "lng": null,
+      "precision": "unknown",
+      "source": "unused placeholder"
+    }
+  }
+}

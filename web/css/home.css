@@ -1,0 +1,589 @@
+/* ===== Home page — Rowlandson-led redesign =====
+   Overrides and additions for index.html only. Loaded AFTER site.css.
+   The goal: let the Rowlandson watercolour do the heavy lifting and
+   build the page's composition around it rather than fencing it into
+   a small plate. */
+
+:root {
+  /* Ink sampled from the watercolour — a warm sepia-black that sits
+     nicely on top of the painting without screaming. */
+  --hero-ink:         #1a0f08;
+  --hero-ink-soft:    #3a261a;
+  --hero-fg:          #f3e6cb;   /* ivory for text over dark washes */
+  --hero-fg-soft:     #e0cfa9;
+  --hero-wash:        rgba(241, 230, 207, 0.82); /* parchment scrim */
+  --hero-wash-soft:   rgba(241, 230, 207, 0.55);
+  --hero-scrim-dark:  rgba(20, 12, 6, 0.42);
+}
+
+[data-theme="dark"] {
+  --hero-ink:         #f3e6cb;
+  --hero-ink-soft:    #d9c9a8;
+  --hero-fg:          #f3e6cb;
+  --hero-fg-soft:     #d9c9a8;
+  --hero-wash:        rgba(26, 20, 13, 0.72);
+  --hero-wash-soft:   rgba(26, 20, 13, 0.4);
+}
+
+/* ---------- Full-bleed hero ---------- */
+
+.hero {
+  position: relative;
+  width: 100%;
+  /* Hero has to leave room for the sticky topbar and never shrink
+     below a sensible minimum on short viewports. */
+  min-height: 620px;
+  height: calc(100vh - var(--topbar-h));
+  max-height: 920px;
+  overflow: hidden;
+  background: #c9b896;   /* matches the warm paper of the painting */
+  border-bottom: 1px solid var(--rule);
+  isolation: isolate;    /* so mix-blend doesn't leak into the topbar */
+}
+
+.hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The key compositional move: pan so the empty upper-left "sky"
+     of the watercolour lands where the title will sit, and the
+     pit crowd occupies the lower-right third. */
+  object-position: 65% 55%;
+  filter: var(--image-filter);
+  display: block;
+  z-index: 0;
+}
+
+/* Parchment vignettes that give the type something to sit on
+   without hiding the painting. Two pools:
+     1) upper-left — behind the display title
+     2) lower band — behind the dates/standfirst (the darkest,
+        figure-densest part of the watercolour)
+   Tuned so the centre-right figures stay visually untouched. */
+.hero-wash {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    /* upper-left title wash */
+    radial-gradient(
+      ellipse 65% 70% at 22% 32%,
+      var(--hero-wash) 0%,
+      var(--hero-wash-soft) 35%,
+      rgba(241, 230, 207, 0) 70%
+    ),
+    /* lower-left text wash — an ellipse pulled to the left so the
+       right-hand pit figures stay legible */
+    radial-gradient(
+      ellipse 60% 55% at 18% 92%,
+      var(--hero-wash) 0%,
+      var(--hero-wash-soft) 45%,
+      rgba(241, 230, 207, 0) 78%
+    );
+  mix-blend-mode: normal;
+  transition: opacity 200ms ease;
+}
+
+/* In dark mode, the scrim is a dark parchment and the painting's
+   ink-washed foreground goes even darker underneath. Give the bottom
+   block its own band using the dark wash tokens. */
+[data-theme="dark"] .hero-wash {
+  background:
+    radial-gradient(
+      ellipse 65% 70% at 22% 32%,
+      var(--hero-wash) 0%,
+      var(--hero-wash-soft) 35%,
+      rgba(26, 20, 13, 0) 70%
+    ),
+    radial-gradient(
+      ellipse 60% 55% at 18% 92%,
+      var(--hero-wash) 0%,
+      var(--hero-wash-soft) 45%,
+      rgba(26, 20, 13, 0) 78%
+    );
+}
+
+/* Content grid sits above the image + wash. */
+.hero-frame {
+  position: relative;
+  z-index: 2;
+  max-width: var(--maxw-broadside);
+  margin: 0 auto;
+  padding: 2.25rem 1.5rem 2rem;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+  color: var(--hero-ink);
+}
+
+.hero-kicker {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.85rem;
+  color: var(--hero-ink-soft);
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.hero-kicker::before,
+.hero-kicker::after {
+  content: '';
+  width: 1.6rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+.hero-kicker::before { display: none; }  /* only trailing rule in kicker */
+
+/* The display title — the single loudest piece of type on the page.
+   Set tight and condensed, pulled to the left so the right-hand
+   figures stay visible. The third line (dates) runs as a caption
+   under a hairline rule, like a broadside imprint. */
+.hero-title {
+  grid-row: 2;
+  align-self: center;
+  margin: 0;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  line-height: 0.85;
+  color: var(--hero-ink);
+  /* Clamp scales from mobile to very wide screens. The top end
+     intentionally pushes well past the old title. */
+  font-size: clamp(4rem, 13vw, 11rem);
+  max-width: 10ch;
+  text-wrap: balance;
+}
+.hero-title .ht-london  { display: block; }
+.hero-title .ht-theatre {
+  display: block;
+  margin-left: 0.28em;
+  color: var(--brick);
+}
+[data-theme="dark"] .hero-title .ht-theatre { color: var(--brick); }
+
+.hero-dates {
+  grid-row: 3;
+  align-self: end;
+  justify-self: start;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 55ch;
+  /* Gentle parchment pad behind the dates so the standfirst never
+     loses contrast against the dark pit-floor. Pulled in close on
+     all sides so it still reads as "type over picture" not "box". */
+  padding: 0.9rem 1.1rem 1rem;
+  margin-left: -1.1rem;   /* align visual left edge with the title */
+  background:
+    linear-gradient(
+      to right,
+      var(--hero-wash) 0%,
+      var(--hero-wash) 70%,
+      rgba(241, 230, 207, 0) 100%
+    );
+  border-left: 1px solid rgba(42, 31, 20, 0.25);
+  backdrop-filter: blur(1.5px);
+}
+[data-theme="dark"] .hero-dates {
+  background:
+    linear-gradient(
+      to right,
+      var(--hero-wash) 0%,
+      var(--hero-wash) 70%,
+      rgba(26, 20, 13, 0) 100%
+    );
+  border-left-color: rgba(243, 230, 203, 0.25);
+}
+.hero-dates-rule {
+  display: block;
+  width: 4rem;
+  height: 0;
+  border-top: 1px solid var(--hero-ink);
+  opacity: 0.7;
+  margin: 0 0 0.25rem;
+}
+.hero-dates-range {
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  color: var(--hero-ink);
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+.hero-dates-standfirst {
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--hero-ink-soft);
+  margin: 0.3rem 0 0;
+  max-width: 42ch;
+}
+
+/* Caption plate — a letterpress-style credit pinned bottom-right
+   of the hero so the Yale attribution is visible without eating
+   into the title. */
+.hero-caption {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1rem;
+  z-index: 3;
+  max-width: 22rem;
+  padding: 0.55rem 0.8rem;
+  background: rgba(241, 230, 207, 0.82);
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  font-style: italic;
+  backdrop-filter: blur(2px);
+}
+.hero-caption strong {
+  display: block;
+  font-style: normal;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.64rem;
+  color: var(--ink);
+  margin-bottom: 0.15rem;
+}
+.hero-caption a { color: var(--brick); border-bottom-color: transparent; }
+.hero-caption a:hover { border-bottom-color: var(--brick); }
+[data-theme="dark"] .hero-caption {
+  background: rgba(26, 20, 13, 0.78);
+  color: var(--ink-soft);
+}
+
+/* Scroll hint at the bottom-centre — a small, faded indicator that
+   there's more below. Disappears once the user scrolls. */
+.hero-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 0.75rem;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.62rem;
+  color: var(--hero-ink-soft);
+  opacity: 0.7;
+  transition: opacity 200ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.hero-scroll::after {
+  content: '';
+  display: inline-block;
+  width: 1px;
+  height: 18px;
+  background: currentColor;
+  animation: heroScrollPulse 1.8s ease-in-out infinite;
+}
+@keyframes heroScrollPulse {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
+  50%      { transform: scaleY(1);   opacity: 1;   }
+}
+body.is-scrolled .hero-scroll { opacity: 0; pointer-events: none; }
+
+/* ---------- Hero variants (Tweaks) ---------- */
+
+/* v2: "split" — image on the right 55%, title on the left on paper.
+   Pulls the painting closer to its natural aspect ratio. */
+.hero[data-variant="split"] {
+  background: var(--surface-hero);
+}
+.hero[data-variant="split"] .hero-image {
+  left: 45%;
+  width: 55%;
+  object-position: 30% 55%;
+  border-left: 1px solid var(--rule);
+}
+.hero[data-variant="split"] .hero-wash {
+  background: linear-gradient(
+    to right,
+    var(--surface-hero) 0%,
+    var(--surface-hero) 44%,
+    rgba(224, 214, 189, 0) 52%
+  );
+}
+.hero[data-variant="split"] .hero-frame {
+  grid-template-columns: 44% 1fr;
+  gap: 2rem;
+}
+.hero[data-variant="split"] .hero-kicker,
+.hero[data-variant="split"] .hero-title,
+.hero[data-variant="split"] .hero-dates {
+  grid-column: 1;
+}
+.hero[data-variant="split"] .hero-title {
+  font-size: clamp(3.2rem, 8vw, 6.4rem);
+  max-width: none;
+}
+.hero[data-variant="split"] .hero-caption {
+  right: 1rem;
+  bottom: 1rem;
+}
+
+/* v3: "masked" — the painting fills the title letterforms on a
+   parchment field. A strong typographic statement. */
+.hero[data-variant="masked"] {
+  background: var(--surface-hero);
+  min-height: 520px;
+  height: auto;
+  max-height: none;
+  padding: 2.5rem 0 3rem;
+}
+.hero[data-variant="masked"] .hero-image,
+.hero[data-variant="masked"] .hero-wash,
+.hero[data-variant="masked"] .hero-caption,
+.hero[data-variant="masked"] .hero-scroll {
+  display: none;
+}
+.hero[data-variant="masked"] .hero-frame {
+  position: static;
+  height: auto;
+  padding: 0 1.5rem;
+}
+.hero[data-variant="masked"] .hero-title {
+  font-size: clamp(5rem, 18vw, 15rem);
+  line-height: 0.82;
+  max-width: none;
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  background-image: url('../images/rowlandson.jpg');
+  background-size: 140% auto;
+  background-position: 50% 55%;
+  background-repeat: no-repeat;
+  text-shadow: none;
+}
+.hero[data-variant="masked"] .hero-title .ht-theatre {
+  color: transparent;
+}
+.hero[data-variant="masked"] .hero-dates-standfirst {
+  max-width: 60ch;
+}
+.hero[data-variant="masked"] + .hero-masked-strip {
+  display: block;
+}
+
+/* Companion strip shown under masked hero: a thin band of the full
+   painting so it's still VISIBLE in this variant. */
+.hero-masked-strip { display: none; }
+.hero-masked-strip {
+  width: 100%;
+  background: var(--surface-hero);
+  border-bottom: 1px solid var(--rule);
+  padding: 0;
+}
+.hero-masked-strip img {
+  display: block;
+  width: 100%;
+  height: 42vh;
+  min-height: 280px;
+  max-height: 520px;
+  object-fit: cover;
+  object-position: center 50%;
+  filter: var(--image-filter);
+}
+
+/* v4: "plate" — a classic engraved plate laid over the image,
+   echoing 18th-c. title pages. */
+.hero[data-variant="plate"] .hero-wash {
+  background: radial-gradient(
+    ellipse 55% 58% at 50% 50%,
+    rgba(241, 230, 207, 0.88) 0%,
+    rgba(241, 230, 207, 0.55) 50%,
+    rgba(241, 230, 207, 0) 75%
+  );
+}
+.hero[data-variant="plate"] .hero-frame {
+  grid-template-columns: 1fr;
+  place-items: center;
+  padding: 3rem 1.5rem;
+}
+.hero[data-variant="plate"] .hero-kicker,
+.hero[data-variant="plate"] .hero-title,
+.hero[data-variant="plate"] .hero-dates {
+  text-align: center;
+  justify-self: center;
+  max-width: 60ch;
+}
+.hero[data-variant="plate"] .hero-kicker::before {
+  display: inline-block;
+}
+.hero[data-variant="plate"] .hero-title {
+  max-width: 12ch;
+  font-size: clamp(3.6rem, 10vw, 8.5rem);
+}
+.hero[data-variant="plate"] .hero-title .ht-theatre { margin-left: 0; }
+.hero[data-variant="plate"] .hero-dates { align-items: center; }
+.hero[data-variant="plate"] .hero-dates-rule { margin: 0 auto 0.4rem; }
+.hero[data-variant="plate"] .hero-dates-range { text-align: center; }
+.hero[data-variant="plate"] .hero-dates-standfirst { text-align: center; margin: 0.4rem auto 0; }
+
+/* ---------- "Attractions" — tighter, sits naturally below hero ---------- */
+
+/* Turn off the original broadside section (replaced by .hero) */
+.broadside { display: none !important; }
+
+/* The attractions header gets a tiny flourish when this page is used
+   as the home redesign. */
+.attractions {
+  padding-top: 3.25rem;
+}
+
+/* Small mobile adjustments */
+@media (max-width: 900px) {
+  .hero {
+    min-height: 520px;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    max-height: none;
+  }
+  .hero-image { object-position: 62% 55%; }
+  .hero-frame { padding: 1.5rem 1.1rem 1.25rem; gap: 0.6rem; }
+  .hero-title  { font-size: clamp(3.2rem, 18vw, 6rem); max-width: 8ch; }
+  .hero-dates-range { font-size: 1.2rem; }
+  .hero-dates-standfirst { font-size: 0.95rem; }
+  .hero-caption {
+    right: 0.75rem; bottom: 0.75rem; max-width: 16rem;
+    font-size: 0.66rem;
+  }
+  .hero[data-variant="split"] {
+    aspect-ratio: auto;
+    min-height: auto;
+  }
+  .hero[data-variant="split"] .hero-image {
+    position: relative;
+    left: auto; width: 100%;
+    height: 46vh; min-height: 280px;
+    border-left: none;
+    border-top: 1px solid var(--rule);
+  }
+  .hero[data-variant="split"] .hero-frame {
+    grid-template-columns: 1fr;
+    padding: 1.5rem 1.1rem 1.25rem;
+  }
+  .hero[data-variant="split"] .hero-wash { display: none; }
+  .hero[data-variant="masked"] .hero-title { font-size: clamp(3.6rem, 22vw, 8rem); }
+}
+
+/* ---------- Tweaks panel (only visible when toggled) ---------- */
+.tweaks-panel {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 100;
+  width: 280px;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  box-shadow: 0 12px 32px -8px rgba(0,0,0,0.3), 0 2px 0 var(--shadow-hair);
+  padding: 0.9rem 1rem 0.95rem;
+  font-family: 'Plantin MT Pro', serif;
+  color: var(--ink);
+  display: none;
+}
+.tweaks-panel.is-open { display: block; }
+.tweaks-panel h3 {
+  margin: 0 0 0.75rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.tweaks-panel .tw-group {
+  margin-bottom: 0.85rem;
+}
+.tweaks-panel .tw-group:last-child { margin-bottom: 0; }
+.tweaks-panel .tw-label {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.4rem;
+}
+.tweaks-panel .tw-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.35rem;
+}
+.tweaks-panel .tw-opt {
+  appearance: none;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  padding: 0.4rem 0.5rem;
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.2;
+  transition: background 120ms, color 120ms, border-color 120ms;
+}
+.tweaks-panel .tw-opt:hover { background: var(--paper-deep); color: var(--ink); }
+.tweaks-panel .tw-opt.is-on {
+  background: var(--brick);
+  border-color: var(--brick-deep);
+  color: var(--hero-fg);
+}
+.tweaks-panel .tw-range {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 18px;
+  background: transparent;
+  cursor: pointer;
+}
+.tweaks-panel .tw-range::-webkit-slider-runnable-track {
+  height: 2px; background: var(--rule);
+}
+.tweaks-panel .tw-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--brick); border: 1px solid var(--brick-deep);
+  margin-top: -6px;
+}
+.tweaks-panel .tw-range::-moz-range-track {
+  height: 2px; background: var(--rule);
+}
+.tweaks-panel .tw-range::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--brick); border: 1px solid var(--brick-deep);
+}
+.tweaks-panel .tw-note {
+  font-size: 0.7rem;
+  font-style: italic;
+  color: var(--ink-faint);
+  margin: 0.4rem 0 0;
+  line-height: 1.35;
+}

@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>People &mdash; London Theatre, 1660&ndash;1800</title>
+  <meta name="description" content="Five thousand five hundred and eighty-two performers who appeared at least twice on the London stages between 1660 and 1800 &mdash; actresses, actors, child performers, dancers, singers and composite companies.">
+
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="css/site.css">
+
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('ls-theme');
+        var theme = stored;
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {
+        document.documentElement.dataset.theme = 'light';
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <header class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a class="topbar-title" href="./index.html" aria-label="London Theatre, 1660 to 1800, home">
+        <span class="mark-london">London</span><span class="mark-stage">Theatre</span><span class="mark-dates">1660&ndash;1800</span>
+      </a>
+      <nav class="topbar-nav metadata-label" id="topbar-nav" aria-label="Primary">
+        <a href="./index.html">Home</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./map.html">Map</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./calendar.html">Calendar</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./repertoire.html">Repertoire</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./people.html" class="is-active">People</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./receipts.html">Receipts</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./graphs.html">Networks</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./games.html">Games</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="./about.html">About</a>
+      </nav>
+      <div class="topbar-controls">
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="topbar-nav">
+          <span></span><span></span><span></span>
+        </button>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+          <span class="glyph-moon" aria-hidden="true">&#9790;</span>
+          <span class="glyph-sun" aria-hidden="true">&#9728;</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="people-head rep-head" aria-labelledby="page-title">
+    <div class="rep-head-inner">
+      <p class="rep-head-kicker">A Dramatis Personae of the London Stage</p>
+      <h1 id="page-title" class="rep-head-title">People</h1>
+      <p class="rep-head-standfirst">Five thousand five hundred and eighty-two performers who appeared at least twice on the London stages: actresses, actors, child performers, dancers, singers and composite companies.</p>
+    </div>
+  </section>
+
+  <main>
+    <section class="rep-featured people-featured" aria-labelledby="featured-heading">
+      <h2 id="featured-heading" class="rep-section-heading">The most-cast performers</h2>
+      <ul class="rep-card-grid people-card-grid" id="people-featured-grid" aria-live="polite">
+        <li class="rep-card people-card" aria-hidden="true"><p class="rep-card-tag">Loading</p><p class="rep-card-title">&nbsp;</p><p class="rep-card-count">&nbsp;</p><p class="rep-card-years">&nbsp;</p></li>
+      </ul>
+      <p class="people-card-legend metadata-label" aria-hidden="true">
+        <span class="role-mix-key"><span class="role-mix-swatch is-named"></span>Named</span>
+        <span class="role-mix-key"><span class="role-mix-swatch is-titled"></span>Titled</span>
+        <span class="role-mix-key"><span class="role-mix-swatch is-generic"></span>Generic</span>
+        <span class="role-mix-key"><span class="role-mix-swatch is-ensemble"></span>Ensemble</span>
+        <span class="role-mix-key"><span class="role-mix-swatch is-paratext"></span>Paratext</span>
+      </p>
+    </section>
+
+    <section class="rep-table-section people-table-section" aria-labelledby="table-heading">
+      <h2 id="table-heading" class="rep-section-heading">The complete personae</h2>
+
+      <p class="people-note metadata-label">
+        &ldquo;Actor&rdquo; covers both explicit &ldquo;Mr&rdquo; honorifics and bare surnames, which by period convention denote men.
+      </p>
+
+      <div class="rep-chip-row metadata-label" id="people-kind-chips" role="group" aria-label="Filter by kind">
+        <button type="button" class="rep-chip" data-kind="all" aria-pressed="true">All</button>
+        <!-- kind chips injected by js -->
+      </div>
+
+      <div class="range-filter" id="people-range-filter" role="group" aria-labelledby="people-range-legend">
+        <p class="range-filter-legend metadata-label" id="people-range-legend">
+          <span class="range-filter-label">Date range</span>
+          <span class="range-filter-readout" id="people-range-readout" aria-live="polite">1660&ndash;1800</span>
+          <button type="button" class="range-filter-reset" id="people-range-reset" hidden>Reset</button>
+        </p>
+        <div class="range-filter-rail">
+          <div class="range-filter-track" aria-hidden="true"></div>
+          <div class="range-filter-fill" id="people-range-fill" aria-hidden="true"></div>
+          <input type="range" id="people-range-min" min="1660" max="1800" value="1660"
+                 aria-label="Earliest year">
+          <input type="range" id="people-range-max" min="1660" max="1800" value="1800"
+                 aria-label="Latest year">
+        </div>
+        <p class="range-filter-hint metadata-label">
+          Drag the handles to constrain, or click a year in the <em>First</em> / <em>Last</em> column to focus on that decade. Appearance counts update to reflect only what falls inside the range, useful for telling apart performers sharing a surname across different periods.
+        </p>
+      </div>
+
+      <div class="rep-table-wrap people-table-wrap" id="people-table-wrap">
+        <table class="rep-table people-table ls-datatable" id="people-table">
+          <thead>
+            <tr>
+              <th scope="col" class="rep-col-title">Name</th>
+              <th scope="col">Kind</th>
+              <th scope="col" class="rep-col-num">Appearances</th>
+              <th scope="col" class="people-col-mix">Role mix</th>
+              <th scope="col" class="rep-col-num">First</th>
+              <th scope="col" class="rep-col-num">Last</th>
+              <th scope="col">Signature role</th>
+              <th scope="col" class="rep-col-num">Count</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col-tagline">
+          <p class="footer-brand">London Theatre, 1660&ndash;1800</p>
+          <p class="footer-line">
+            A digital companion to the history of professional theatre in London, 1660&ndash;1800:
+            repertoire, receipts, performers, and playhouses.
+          </p>
+          <p class="footer-line"><a href="about.html">About this project &rarr;</a></p>
+        </div>
+        <div class="footer-col-sources">
+          <p class="footer-source-head">Data sources</p>
+          <p class="footer-line">
+            <cite>London Stage Database</cite>. University of Oregon,
+            <a href="https://londonstagedatabase.uoregon.edu/" rel="noopener" target="_blank" class="external">londonstagedatabase.uoregon.edu</a>.
+            Accessed 10&nbsp;Jun.&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+          <p class="footer-line">
+            <cite>Theatronomics: the Business of Theatre, 1732&ndash;1809</cite>
+            (O&rsquo;Shaughnessy&nbsp;et&nbsp;al., 2025),
+            <a href="https://theatronomics.com/" rel="noopener" target="_blank" class="external">theatronomics.com</a>.
+            Accessed 6&nbsp;May&nbsp;2026. <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank" class="external">CC&nbsp;BY-NC&nbsp;4.0</a>.
+          </p>
+        </div>
+      </div>
+      <p class="footer-line footer-byline">
+        Website by <a href="https://hubers.org.uk/" target="_blank" rel="noopener" class="external"><img src="https://hubers.org.uk/images/logo/cropped-hd-logo-1.png" alt="Huber Digital" class="hd-logo"></a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.min.js"></script>
+  <script src="js/people.js"></script>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      var root = document.documentElement;
+
+      function syncButton() {
+        var t = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = t === 'dark' ? 'light' : 'dark';
+        btn.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+        btn.setAttribute('aria-label', 'Switch to ' + next + ' mode');
+      }
+      syncButton();
+
+      btn.addEventListener('click', function () {
+        var cur = root.dataset.theme === 'dark' ? 'dark' : 'light';
+        var next = cur === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('ls-theme', next); } catch (e) {}
+        syncButton();
+      });
+
+      var topbar = document.querySelector('.topbar');
+      function onScroll() {
+        if (!topbar) return;
+        if (window.scrollY > 4) topbar.classList.add('is-scrolled');
+        else topbar.classList.remove('is-scrolled');
+      }
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
+  <script src="js/site.js"></script>
+</body>
+</html>
