@@ -124,12 +124,12 @@
 
     function makeTiles(theme) {
       var variant = theme === 'dark' ? 'dark' : 'light';
-      var base = L.tileLayer('https://{s}.basemaps.cartocdn.com/' + variant + '_all/{z}/{x}/{y}{r}.png', {
+      var base = L.tileLayer('https://{s}.basemaps.cartocdn.com/' + variant + '_all/{z}/{x}/{y}{r}.png?key=cb1_2kfk_1_d4200d73f8865eb2c15da6e8', {
         attribution: 'Basemap &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd',
         maxZoom: 19
       });
-      var labels = L.tileLayer('https://{s}.basemaps.cartocdn.com/' + variant + '_only_labels/{z}/{x}/{y}{r}.png', {
+      var labels = L.tileLayer('https://{s}.basemaps.cartocdn.com/' + variant + '_only_labels/{z}/{x}/{y}{r}.png?key=cb1_2kfk_1_d4200d73f8865eb2c15da6e8', {
         attribution: '',
         subdomains: 'abcd',
         maxZoom: 19,
