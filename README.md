@@ -16,21 +16,21 @@ It is built *on* the London Stage Database rather than being a republication of 
 
 | Section | What it shows | Built with |
 |---|---|---|
-| **Map** | Every geocoded playhouse, booth and pleasure garden on Rocque (1746) / Strype (1720) overlays, with a decade timeline; marker area ∝ activity | Leaflet |
-| **Calendar** | A day-by-day activity heatmap across 1660–1800; each cell one date, colour by number of bills | bespoke SVG |
-| **Repertoire** | A searchable, filterable catalogue of works with per-decade performance "arcs"; filter by genre, women playwrights, and date range | DataTables + SVG |
-| **People** | A browsable *dramatis personae* of performers with role-mix bars, careers and date-range filtering | DataTables + SVG |
-| **Receipts** | Box-office analysis: per-season median receipts with inter-quartile bands, account-book vs press comparison, benefit-night deficiencies | bespoke SVG |
-| **Networks** | Six force-directed / structured graph views: theatre↔performer, co-casting, mainpiece↔afterpiece, work↔performer, full ecosystem, and venue competition | Sigma 3 + graphology |
-| **Games** | Nine data-driven quizzes generated from the corpus | vanilla JS |
-| **Detail pages** | Per-work, per-performer, per-venue, per-role and per-day views with decade timelines, top collaborators, milestones and financials | mixed |
+| Map | Every geocoded playhouse, booth and pleasure garden on Rocque (1746) / Strype (1720) overlays, with a decade timeline; marker area ∝ activity | Leaflet |
+| Calendar | A day-by-day activity heatmap across 1660–1800; each cell one date, colour by number of bills | bespoke SVG |
+| Repertoire | A searchable, filterable catalogue of works with per-decade performance "arcs"; filter by genre, women playwrights, and date range | DataTables + SVG |
+| People | A browsable *dramatis personae* of performers with role-mix bars, careers and date-range filtering | DataTables + SVG |
+| Receipts | Box-office analysis: per-season median receipts with inter-quartile bands, account-book vs press comparison, benefit-night deficiencies | bespoke SVG |
+| Networks | Six force-directed / structured graph views: theatre↔performer, co-casting, mainpiece↔afterpiece, work↔performer, full ecosystem, and venue competition | Sigma 3 + graphology |
+| Games | Nine data-driven quizzes generated from the corpus | vanilla JS |
+| Detail pages | Per-work, per-performer, per-venue, per-role and per-day views with decade timelines, top collaborators, milestones and financials | mixed |
 
 ## How it works
 
 The project is a precompute-to-static design with two cleanly separated halves:
 
-- **`scripts/`**: a Node.js build pipeline (ES modules) reads the LSDB export and auxiliary sources, does all the heavy aggregation and normalisation once, and emits small static JSON artifacts into `web/data/`.
-- **`web/`**: a static HTML/CSS/vanilla-JS site that lazy-loads those artifacts per page. There is no server, no database and no application backend at runtime: the site deploys as plain files to any static host.
+- `scripts/`: a Node.js build pipeline (ES modules) reads the LSDB export and auxiliary sources, does all the heavy aggregation and normalisation once, and emits small static JSON artifacts into `web/data/`.
+- `web/`: a static HTML/CSS/vanilla-JS site that lazy-loads those artifacts per page. There is no server, no database and no application backend at runtime: the site deploys as plain files to any static host.
 
 Charts are hand-built inline SVG (no charting library); large tables use [DataTables](https://datatables.net/); the map uses [Leaflet](https://leafletjs.com/); the network views use [Sigma](https://www.sigmajs.org/) with [graphology](https://graphology.github.io/). The frontend modules are framework-free and run in the browser with no build step; the pipeline is modern Node ESM.
 
