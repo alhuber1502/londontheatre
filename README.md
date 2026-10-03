@@ -1,4 +1,8 @@
 # London Theatre, 1660–1800
+![](https://img.shields.io/github/last-commit/alhuber1502/londontheatre.svg?style=flat)
+![](https://img.shields.io/badge/license-CC%20BY--NC--SA-orange.svg?style=flat)
+![](https://img.shields.io/website-up-down-green-red/https/londontheatre.prisms.digital.svg?style=flat)
+![](https://img.shields.io/maintenance/yes/2026.svg?style=flat)
 
 *A public-engagement companion to the London stage: repertoire, receipts, performers, playhouses, drawn from the London Stage Database.*
 
